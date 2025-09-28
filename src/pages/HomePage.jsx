@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { pingBackend } from '../api/testApi';
 
 function HomePage() {
   const [result, setResult] = useState('');
+  const navigate = useNavigate();
   useEffect(() => {
     pingBackend()
       .then(setResult)
@@ -11,6 +13,77 @@ function HomePage() {
         setResult(`연동 실패: ${errorMsg}`);
       });
   }, []);
-  return <div>홈페이지<br />백엔드 응답: {result}</div>;
+    return (
+      <div className="homepage-container">
+        {/* 상단 네비게이션 */}
+        <nav className="main-nav">
+          <div className="logo">SkinSeal 병원</div>
+          <ul>
+            <li>진료과/센터</li>
+            <li>건강검진</li>
+            <li>고객 서비스</li>
+            <li>병원 소개</li>
+          </ul>
+          <div className="nav-actions">
+            <button onClick={() => navigate('/login')}>로그인</button>
+            <button onClick={() => navigate('/join')}>회원가입</button>
+          </div>
+        </nav>
+
+        {/* 메인 배너 */}
+        <section className="main-banner">
+          <h1>빠르고 안전한 진료, SkinSeal 병원</h1>
+          <p>진료부터 수술, 그리고 진료연계까지 믿고 맡길 수 있는 병원</p>
+          <button className="banner-btn">진료 예약 바로가기</button>
+        </section>
+
+        {/* 센터/진료과 소개 */}
+        <section className="center-section">
+          <h2>전문 센터 안내</h2>
+          <div className="center-cards">
+            <div className="center-card">척추센터</div>
+            <div className="center-card">관절센터</div>
+            <div className="center-card">뇌신경센터</div>
+            <div className="center-card">내과</div>
+            <div className="center-card">건강검진센터</div>
+          </div>
+        </section>
+
+        {/* 소셜채널/언론보도/블로그 콘텐츠 */}
+        <section className="social-section">
+          <h2>소셜채널 & 언론보도</h2>
+          <div className="social-cards">
+            <div className="social-card">유튜브 콘텐츠</div>
+            <div className="social-card">블로그 소식</div>
+            <div className="social-card">언론보도</div>
+          </div>
+        </section>
+
+        {/* 고객 후기 BEST */}
+        <section className="review-section">
+          <h2>고객 후기 BEST</h2>
+          <div className="review-cards">
+            <div className="review-card">'마리아' 건강검진 후기</div>
+            <div className="review-card">'김수용' 건강검진 후기</div>
+            <div className="review-card">'박휘순' 건강검진 후기</div>
+            <div className="review-card">'조영구' 건강검진 후기</div>
+          </div>
+        </section>
+
+        {/* 빠른 예약/상담/오시는 길 등 바로가기 */}
+        <section className="quick-links">
+          <button>진료 예약</button>
+          <button>의료 상담</button>
+          <button>오시는 길</button>
+        </section>
+
+        {/* 하단 푸터 */}
+        <footer className="main-footer">
+          <div>이용약관 | 개인정보처리방침 | 채용정보</div>
+          <div>서울특별시 성북구 동소문로 47길 8 | 대표번호 1599-0033</div>
+          <div>Copyright © 2025 SkinSeal Hospital. All Rights reserved.</div>
+        </footer>
+      </div>
+    );
 }
-export default HomePage;
+  export default HomePage;
