@@ -30,27 +30,10 @@ function RegisterModal({ onClose }) {
   return (
     <div className="modal">
       <h2>회원가입</h2>
-      <input
-        placeholder="이메일"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-      />
-      <input
-        placeholder="비밀번호"
-        type="password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-      />
-      <input
-        placeholder="역할 (user/admin)"
-        value={role}
-        onChange={e => setRole(e.target.value)}
-      />
-      <input
-        placeholder="전화번호"
-        value={phoneNumber}
-        onChange={e => setPhoneNumber(e.target.value)}
-      />
+      <input placeholder="이메일" value={email} onChange={e => setEmail(e.target.value)} />
+      <input placeholder="비밀번호" type="password" value={password} onChange={e => setPassword(e.target.value)} />
+      <input placeholder="역할 (user/admin)" value={role} onChange={e => setRole(e.target.value)} />
+      <input placeholder="전화번호" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} />
       <button onClick={handleRegister}>회원가입</button>
       <button onClick={onClose}>취소</button>
     </div>

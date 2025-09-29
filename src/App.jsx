@@ -19,15 +19,13 @@ function App() {
       <Header />
       <main style={{ minHeight: '80vh' }}>
         <div>
-          <button onClick={() => setShowLoginModal(true)}>로그인</button>
-          <button onClick={() => setShowRegisterModal(true)}>회원가입</button>
           {/* 버튼 클릭 시에만 팝업이 뜨도록 */}
-          {showLoginModal && (
+          {/* {showLoginModal && (
             <LoginModal onClose={() => setShowLoginModal(false)} />
           )}
           {showRegisterModal && (
             <RegisterModal onClose={() => setShowRegisterModal(false)} />
-          )}
+          )} */}
           <h1>Skin Front</h1>
           {/* ...기타 메인 페이지 내용... */}
           <button

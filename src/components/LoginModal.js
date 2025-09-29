@@ -8,7 +8,7 @@ function LoginModal() {
 
   const handleLogin = async () => {
     try {
-      const res = await fetch('http://localhost:3000/login', {
+      const res = await fetch('http://localhost:8090/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -24,7 +24,7 @@ function LoginModal() {
 
   return (
     <div>
-      <button onClick={() => setOpen(true)}>로그인</button>
+      <button onClick={() => setOpen(false)}>로그인</button>
       {/* 회원가입 버튼은 별도 RegisterModal에서 구현 */}
       {open && (
         <div className="modal">
