@@ -28,22 +28,7 @@ function App() {
           )} */}
           <h1>Skin Front</h1>
           {/* ...기타 메인 페이지 내용... */}
-          <button
-            onClick={async () => {
-              try {
-                const res = await fetch('http://localhost:8090/health');
-                if (res.ok) {
-                  alert('백엔드 연결 성공!');
-                } else {
-                  alert('백엔드 연결 실패!');
-                }
-              } catch (e) {
-                alert('백엔드 연결 실패!');
-              }
-            }}
-          >
-            백엔드 연결 테스트
-          </button>
+          
         </div>
 
         <Routes>

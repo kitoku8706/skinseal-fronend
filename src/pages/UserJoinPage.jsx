@@ -29,7 +29,7 @@ function UserJoinPage() {
         setEmailChecked(true);
       }
     } catch (err) {
-      setEmailCheckMsg('이메일 확인 중 오류 발생');
+      setEmailCheckMsg('이메일 확인 중 오류 발생: ' + (err.response?.data?.message || err.message || '서버 오류'));
       setEmailChecked(false);
     }
   };
