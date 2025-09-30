@@ -1,8 +1,39 @@
+/* 전체 화면 꽉차게 */
+body, #root {
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+}
+
+/* 메인 컨테이너 */
+main {
+  width: 100vw;
+  min-height: 80vh;
+  margin: 0;
+  padding: 0 2vw;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  /* align-items: flex-start; */
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  text-align: center;
+  flex: 1;
+  background: #f0f0f0;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  transition: background 0.3s, color 0.3s;
+  
 }
 
 .logo {
@@ -39,4 +70,52 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.ai-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  z-index: 2000;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  padding: 32px;
+}
+.ai-popup-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 반응형 폰트 및 레이아웃 */
+h1, h2, h3 {
+  word-break: keep-all;
+  font-size: clamp(1.5rem, 4vw, 3rem);
+}
+
+@media (max-width: 900px) {
+  main {
+    padding: 0 1vw;
+  }
+  .card, .join-container {
+    width: 100%;
+    min-width: 0;
+    max-width: 100vw;
+    margin: 0;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  main {
+    padding: 0 0.5vw;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  .card, .join-container {
+    padding: 0.5rem;
+  }
 }
