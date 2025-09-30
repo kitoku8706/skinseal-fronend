@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { pingBackend } from '../api/testApi';
+import NoticeListPage from './NoticeListPage';
 
 function HomePage() {
   const [result, setResult] = useState('');
@@ -59,14 +60,12 @@ function HomePage() {
           </div>
         </section>
 
-        {/* 고객 후기 BEST */}
+        {/* 공지사항 */}
         <section className="review-section">
-          <h2>고객 후기 BEST</h2>
-          <div className="review-cards">
-            <div className="review-card">'마리아' 건강검진 후기</div>
-            <div className="review-card">'김수용' 건강검진 후기</div>
-            <div className="review-card">'박휘순' 건강검진 후기</div>
-            <div className="review-card">'조영구' 건강검진 후기</div>
+          <h2>공지사항</h2>
+          <div>
+            {/* 기존 고객후기 부분을 아래로 교체 */}
+            <NoticeListPage />
           </div>
         </section>
 
