@@ -1,14 +1,4 @@
-import express from 'express';
-import pool from './db';
 import React, { useEffect, useState } from 'react';
-
-const router = express.Router();
-
-// GET /notice
-router.get('/notice', async (req, res) => {
-  const result = await pool.query('SELECT * FROM ss_notice ORDER BY created_at DESC');
-  res.json(result.rows);
-});
 
 function NoticeListPage() {
   const [notices, setNotices] = useState([]);
@@ -22,7 +12,7 @@ function NoticeListPage() {
 
   return (
     <div>
-      <h2>공지사항 목록</h2>
+      <h2></h2>
       <ul>
         {notices.map(notice => (
           <li key={notice.notice_id}>
