@@ -3,25 +3,26 @@ import axios from 'axios';
 import './UserJoinPage.css';
 
 function UserJoinPage() {
-  // username 필드 제거
-  const [email, setEmail] = useState('');
-  const [emailChecked, setEmailChecked] = useState(false);
-  const [emailCheckMsg, setEmailCheckMsg] = useState('');
+  const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [name, setName] = useState('');
+  const [birth, setBirth] = useState('');
+  const [email, setEmail] = useState('');
+  const [emailChecked, setEmailChecked] = useState(false);
+  const [emailCheckMsg, setEmailCheckMsg] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [error, setError] = useState('');
 
-  // 이메일 중복확인 (GET /api/user/check-email?email=xxx)
+  // 이메일 중복확인
   const handleEmailCheck = async () => {
     if (!email) {
       setEmailCheckMsg('이메일을 입력하세요.');
       return;
     }
     try {
-      const res = await axios.get(`/api/user/check-email?email=${encodeURIComponent(email)}`);
-      if (res.data === true) {
+      const res = await axios.post('http://localhost:8090/email-check', { email });
+      if (res.data.exists) {
         setEmailCheckMsg('이미 사용 중인 이메일입니다.');
         setEmailChecked(false);
       } else {
@@ -36,7 +37,7 @@ function UserJoinPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password || !passwordConfirm || !name || !phoneNumber) {
+    if (!userId || !password || !passwordConfirm || !name || !birth || !email || !phoneNumber) {
       setError('모든 항목을 입력하세요.');
       return;
     }
@@ -51,13 +52,15 @@ function UserJoinPage() {
     setError('');
     try {
       const reqData = {
+        user_id: userId,
         password,
-        role: 'USER',
-        email,
         name,
-        phoneNumber
+        birth,
+        email,
+        role: 'user',
+        phone_number: phoneNumber
       };
-      const res = await axios.post('/api/user', reqData);
+      const res = await axios.post('http://localhost:8090/register', reqData);
       alert('회원가입 성공!');
       // TODO: 필요 시 회원가입 후 로그인/이동 처리
     } catch (err) {
@@ -70,13 +73,11 @@ function UserJoinPage() {
       <h2>회원가입</h2>
       <form onSubmit={handleSubmit} className="join-form">
         <input
-          type="email"
-          placeholder="이메일"
-          value={email}
-          onChange={e => { setEmail(e.target.value); setEmailChecked(false); setEmailCheckMsg(''); }}
+          type="text"
+          placeholder="아이디"
+          value={userId}
+          onChange={e => setUserId(e.target.value)}
         />
-        <button type="button" className="email-check-btn" onClick={handleEmailCheck}>이메일 중복확인</button>
-        {emailCheckMsg && <div className="email-check-msg">{emailCheckMsg}</div>}
         <input
           type="password"
           placeholder="비밀번호"
@@ -95,6 +96,30 @@ function UserJoinPage() {
           value={name}
           onChange={e => setName(e.target.value)}
         />
+        <input
+          type="text"
+          placeholder="생년월일 (예시: 90.09.09)"
+          value={birth}
+          onChange={e => setBirth(e.target.value)}
+        />
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <input
+            type="email"
+            placeholder="이메일"
+            value={email}
+            onChange={e => { setEmail(e.target.value); setEmailChecked(false); setEmailCheckMsg(''); }}
+            style={{ flex: 1 }}
+          />
+          <button
+            type="button"
+            className="email-check-btn"
+            onClick={handleEmailCheck}
+            style={{ whiteSpace: 'nowrap' }}
+          >
+            이메일 중복확인
+          </button>
+        </div>
+        {emailCheckMsg && <div className="email-check-msg">{emailCheckMsg}</div>}
         <input
           type="text"
           placeholder="전화번호"

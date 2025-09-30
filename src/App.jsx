@@ -26,7 +26,7 @@ function App() {
           {showRegisterModal && (
             <RegisterModal onClose={() => setShowRegisterModal(false)} />
           )} */}
-          <h1>Skin Front</h1>
+          <h1>여기뭐지</h1>
           {/* ...기타 메인 페이지 내용... */}
           
         </div>
