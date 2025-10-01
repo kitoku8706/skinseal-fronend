@@ -6,13 +6,13 @@ function NoticeForm({ authorId }) {
 
   const handleSubmit = async () => {
     try {
-      const res = await fetch('http://localhost:8090/notice', {
+      const res = await fetch('http://localhost:8090/api/notice', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title,
           content,
-          author_id: authorId
+          authorId // author_id → authorId
         })
       });
       const data = await res.json();
@@ -36,7 +36,7 @@ function NoticeList() {
   const [notices, setNotices] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8090/notice')
+    fetch('http://localhost:8090/api/notice')
       .then(res => res.json())
       .then(data => setNotices(data))
       .catch(() => setNotices([]));

@@ -119,3 +119,35 @@ h1, h2, h3 {
     padding: 0.5rem;
   }
 }
+
+/* 예시: App.css 또는 HomePage.module.css 등 */
+.nav-menu {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.nav-item {
+  position: relative;
+  margin-right: 24px;
+}
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #ddd;
+  min-width: 140px;
+  z-index: 10;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.dropdown-item {
+  padding: 8px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.dropdown-item:hover {
+  background: #f0f0f0;
+}
