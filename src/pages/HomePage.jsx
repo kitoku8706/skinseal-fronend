@@ -10,6 +10,8 @@ function HomePage() {
   // 드롭다운 상태 관리
   const [openMenu, setOpenMenu] = useState(null);
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   useEffect(() => {
     pingBackend()
       .then(setResult)
@@ -17,7 +19,17 @@ function HomePage() {
         const errorMsg = error?.message || error?.toString() || '알 수 없는 오류';
         setResult(`연동 실패: ${errorMsg}`);
       });
+
+    const token = localStorage.getItem('accessToken');
+    setIsLoggedIn(!!token);
   }, []);
+
+  const handleLogout = () => {
+        localStorage.removeItem('accessToken'); 
+        setIsLoggedIn(false); 
+        alert('로그아웃 되었습니다.'); 
+        navigate('/'); 
+    };
 
   // 메뉴 항목 정의
   const menuItems = [
@@ -97,9 +109,15 @@ function HomePage() {
           ))}
         </ul>
         <div className="nav-actions">
-          <button onClick={() => navigate('/login')}>로그인</button>
-          <button onClick={() => navigate('/join')}>회원가입</button>
-        </div>
+                    {isLoggedIn ? (
+                        <button onClick={handleLogout}>로그아웃</button>
+                    ) : (
+                        <>
+                            <button onClick={() => navigate('/login')}>로그인</button>
+                            <button onClick={() => navigate('/join')}>회원가입</button>
+                        </>
+                    )}
+                </div>
       </nav>
 
       {/* 메인 배너 */}
