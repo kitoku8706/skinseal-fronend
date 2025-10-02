@@ -21,7 +21,7 @@ function NoticeListPage() {
       <table className="notice-table">
         <tbody>
           {notices.map(notice => (
-            <tr key={notice.notice_id}>
+            <tr key={notice.notice_id || notice.title + notice.created_at}>
               <td style={{width: '110px'}}>
                 <span className={`notice-label ${getLabelClass(notice.type)}`}>
                   {notice.type}
