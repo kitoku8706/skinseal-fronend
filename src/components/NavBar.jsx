@@ -1,23 +1,25 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function NavBar() {
   const navigate = useNavigate();
   const [openMenu, setOpenMenu] = useState(null);
+
+  const [diseaseList, setDiseaseList] = useState([]);
+
+  useEffect(() => {
+    axios.get('/api/disease/list')
+      .then(res => setDiseaseList(res.data))
+      .catch(() => setDiseaseList(['병명1', '병명2', '병명3'])); // 예시 fallback
+  }, []);
 
   const menuItems = [
     { label: '공지사항', link: '/notice' },
     {
       label: '질환 진단',
       submenu: [
-        { label: '병명 1', link: '/diagnosis/1' },
-        { label: '병명 2', link: '/diagnosis/2' },
-        { label: '병명 3', link: '/diagnosis/3' },
-        { label: '병명 4', link: '/diagnosis/4' },
-        { label: '병명 5', link: '/diagnosis/5' },
-        { label: '병명 6', link: '/diagnosis/6' },
-        { label: '병명 7', link: '/diagnosis/7' },
-        { label: '병명 8', link: '/diagnosis/8' },
+  ...diseaseList.map((disease, idx) => ({ label: disease.diseaseName, link: `/diagnosis/${disease.diseaseId}` })),
         { label: '자가 진단', link: '/self-diagnosis' },
         { label: '진단 결과', link: '/diagnosis/result' },
       ],

@@ -121,6 +121,7 @@ function App() {
           <Route path="/ai/diagnose" element={<AiDiagnosisPage />} />
           <Route path="/reservation/consult" element={<ReservationConsultPage />} />
           <Route path="/diagnosis" element={<DiagnosisPage />} />
+          <Route path="/diagnosis/:id" element={<DiagnosisPage />} />
         </Routes>
         <RightSidebar onOpenAIPopup={() => setShowAIPopup(true)} />
         {showAIPopup && (
