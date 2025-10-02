@@ -11,6 +11,10 @@ import LoginModal from "./components/LoginModal.jsx";
 import RegisterModal from "./components/RegisterModal.jsx";
 import RightSidebar from "./components/RightSidebar";
 import IntroPage from "./pages/IntroPage";
+
+import ReservationConsultPage from './pages/ReservationConsultPage';
+import NavBar from './components/NavBar';
+
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
 
@@ -93,7 +97,9 @@ function App() {
 
   return (
     <Router>
+
       <Header />
+      <NavBar />
       <main style={{ minHeight: "80vh" }}>
         <div>
           <TestConnection />
@@ -115,7 +121,9 @@ function App() {
           <Route path="/notice" element={<NoticeListPage />} />
           <Route path="/ai/diagnose" element={<AiDiagnosisPage />} />
           <Route path="/intro" element={<IntroPage />} />
+          <Route path="/reservation/consult" element={<ReservationConsultPage />} />
         </Routes>
+
         <RightSidebar onOpenAIPopup={() => setShowAIPopup(true)} />
         {showAIPopup && (
           <div className="ai-popup">
