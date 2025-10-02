@@ -1,0 +1,70 @@
+.notice-list-container {
+  width: 100%;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 0;
+}
+
+.notice-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.notice-table th, .notice-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 1em;
+}
+
+.notice-table th {
+  background: #f6f6f6;
+  font-weight: 600;
+  color: #444;
+  text-align: center;
+}
+
+.notice-title {
+  text-align: left;
+  font-weight: 500;
+}
+
+.pin-icon {
+  color: #e74c3c;
+  margin-right: 4px;
+}
+
+.new-icon {
+  display: inline-block;
+  background: #e74c3c;
+  color: #fff;
+  font-size: 0.8em;
+  border-radius: 4px;
+  padding: 1px 5px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.notice-writer {
+  text-align: center;
+  color: #666;
+}
+
+.notice-views {
+  text-align: center;
+  color: #888;
+}
+
+.views-icon {
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.notice-date {
+  text-align: center;
+  color: #888;
+  font-size: 0.98em;
+  white-space: nowrap;
+}

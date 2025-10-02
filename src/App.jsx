@@ -14,6 +14,7 @@ import IntroPage from "./pages/IntroPage";
 
 import ReservationConsultPage from './pages/ReservationConsultPage';
 import NavBar from './components/NavBar';
+import DiagnosisPage from './pages/DiagnosisPage';
 
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
@@ -122,6 +123,7 @@ function App() {
           <Route path="/ai/diagnose" element={<AiDiagnosisPage />} />
           <Route path="/intro" element={<IntroPage />} />
           <Route path="/reservation/consult" element={<ReservationConsultPage />} />
+          <Route path="/diagnosis" element={<DiagnosisPage />} />
         </Routes>
 
         <RightSidebar onOpenAIPopup={() => setShowAIPopup(true)} />

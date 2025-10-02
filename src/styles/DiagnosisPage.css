@@ -1,0 +1,68 @@
+.diagnosis-layout {
+  display: flex;
+  gap: 32px;
+  padding: 32px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.diagnosis-sidebar {
+  width: 200px;
+  background: #f5f8fa;
+  border-radius: 12px;
+  padding: 18px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.sidebar-title {
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.sidebar-btn {
+  background: #dbeafe;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 0;
+  margin-bottom: 6px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background 0.2s;
+}
+.sidebar-btn:hover {
+  background: #93c5fd;
+}
+
+.diagnosis-content {
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+  min-height: 300px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.content-image {
+  width: 220px;
+  height: 220px;
+  background: #bcd;
+  border-radius: 8px;
+  margin-right: 24px;
+}
+
+.content-desc {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.1em;
+  gap: 12px;
+}
