@@ -8,9 +8,10 @@ body, #root {
 }
 
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
   text-align: center;
 }
 
@@ -123,6 +124,7 @@ h1, h2, h3 {
 /* 예시: App.css 또는 HomePage.module.css 등 */
 .nav-menu {
   display: flex;
+  flex-direction: row; /* 가로 배치 */
   list-style: none;
   padding: 0;
   margin: 0;

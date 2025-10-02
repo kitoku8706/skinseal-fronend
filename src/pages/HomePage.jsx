@@ -63,7 +63,7 @@ function HomePage() {
     <div className="homepage-container">
       {/* 상단 네비게이션 */}
       <nav className="main-nav">
-        <div className="logo">SkinSeal 병원</div>
+        <div className="logo">로고</div>
         <ul className="nav-menu">
           {menuItems.map((item, idx) => (
             <li
