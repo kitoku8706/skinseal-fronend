@@ -102,11 +102,24 @@ function HomePage() {
         </div>
       </nav>
 
+      {/* 공지사항 */}
+      <section className="review-section">
+        <h2>공지사항</h2>
+        <div>
+          <NoticeListPage />
+        </div>
+      </section>
+
       {/* 메인 배너 */}
       <section className="main-banner">
         <h1>빠르고 안전한 진료, SkinSeal 병원</h1>
         <p>진료부터 수술, 그리고 진료연계까지 믿고 맡길 수 있는 병원</p>
-        <button className="banner-btn">진료 예약 바로가기</button>
+        <button
+          className="banner-btn"
+          onClick={() => navigate('/reservation/consult')}
+        >
+          진료 예약 바로가기
+        </button>
       </section>
 
       {/* 센터/진료과 소개 */}
@@ -128,14 +141,6 @@ function HomePage() {
           <div className="social-card">유튜브 콘텐츠</div>
           <div className="social-card">블로그 소식</div>
           <div className="social-card">언론보도</div>
-        </div>
-      </section>
-
-      {/* 공지사항 */}
-      <section className="review-section">
-        <h2>공지사항</h2>
-        <div>
-          <NoticeListPage />
         </div>
       </section>
 

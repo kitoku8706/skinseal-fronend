@@ -10,6 +10,7 @@ import AiDiagnosisPage from "./pages/AiDiagnosisPage";
 import LoginModal from "./components/LoginModal.jsx";
 import RegisterModal from "./components/RegisterModal.jsx";
 import RightSidebar from "./components/RightSidebar";
+import ReservationConsultPage from './pages/ReservationConsultPage';
 
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
@@ -114,6 +115,7 @@ function App() {
           <Route path="/join" element={<UserJoinPage />} />
           <Route path="/notice" element={<NoticeListPage />} />
           <Route path="/ai/diagnose" element={<AiDiagnosisPage />} />
+          <Route path="/reservation/consult" element={<ReservationConsultPage />} />
         </Routes>
         <RightSidebar onOpenAIPopup={() => setShowAIPopup(true)} />
         {showAIPopup && (

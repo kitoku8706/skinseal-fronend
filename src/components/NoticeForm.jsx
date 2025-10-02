@@ -48,6 +48,9 @@ function NoticeList() {
       <ul>
         {notices.map(notice => (
           <li key={notice.notice_id}>
+            <span className={`notice-label ${getLabelClass(notice.type)}`}>
+              {notice.type}
+            </span>{' '}
             <strong>{notice.title}</strong>
             <div>{notice.content}</div>
             <small>{notice.created_at}</small>
