@@ -11,6 +11,7 @@ import LoginModal from "./components/LoginModal.jsx";
 import RegisterModal from "./components/RegisterModal.jsx";
 import RightSidebar from "./components/RightSidebar";
 import ReservationConsultPage from './pages/ReservationConsultPage';
+import NavBar from './components/NavBar';
 
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
@@ -94,7 +95,9 @@ function App() {
 
   return (
     <Router>
+
       <Header />
+      <NavBar />
       <main style={{ minHeight: "80vh" }}>
         <div>
           <TestConnection />
