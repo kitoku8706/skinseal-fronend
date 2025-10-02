@@ -9,26 +9,30 @@ function NoticeListPage() {
       .then(data => setNotices(data))
       .catch(() => setNotices([]));
   }, []);
-  // useEffect(() => {
-  //   // 실제 서버 대신 더미 데이터로 테스트
-  //   setNotices([
-  //     { notice_id: 1, title: '공지사항 1', content: '공지 내용 1', created_at: '2025-10-01' },
-  //     { notice_id: 2, title: '공지사항 2', content: '공지 내용 2', created_at: '2025-09-28' },
-  //   ]);
-  // }, []);
+
+  // 타입별 라벨 색상
+  const getLabelClass = (type) => {
+    if (type === '이벤트') return 'label-patch';
+    return 'label-notice';
+  };
 
   return (
-    <div>
-      <h2></h2>
-      <ul>
-        {notices.map(notice => (
-          <li key={notice.notice_id}>
-            <strong>{notice.title}</strong>
-            <div>{notice.content}</div>
-            <small>{notice.created_at}</small>
-          </li>
-        ))}
-      </ul>
+    <div className="notice-list-container">
+      <table className="notice-table">
+        <tbody>
+          {notices.map(notice => (
+            <tr key={notice.notice_id}>
+              <td style={{width: '110px'}}>
+                <span className={`notice-label ${getLabelClass(notice.type)}`}>
+                  {notice.type}
+                </span>
+              </td>
+              <td className="notice-title">{notice.title}</td>
+              <td className="notice-date">{notice.created_at}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
