@@ -1,0 +1,103 @@
+/* NavBar 전용 스타일 */
+.main-nav {
+  width: 100vw;
+  min-width: 0;
+  margin: 0;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  min-height: 64px;
+}
+
+.logo {
+  font-size: 1.7rem;
+  font-weight: bold;
+  color: #223;
+  cursor: pointer;
+  margin-right: 32px;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  background: transparent;
+  width: auto;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.nav-item {
+  position: relative;
+  flex: none;
+  margin-right: 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #223;
+  cursor: pointer;
+  transition: color 0.2s;
+  width: auto;
+  min-width: unset;
+  max-width: unset;
+  box-sizing: border-box;
+}
+
+.nav-item:hover > span {
+  color: #1976d2;
+  text-decoration: underline;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #ddd;
+  min-width: 140px;
+  z-index: 10;
+  list-style: none !important;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-item {
+  padding: 8px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  color: #222;
+  list-style: none !important;
+  background: none;
+  border: none;
+  text-align: left;
+}
+
+.dropdown-item:hover {
+  background: #f0f0f0;
+}
+
+.nav-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-right: 0;
+}
+.nav-actions button {
+  padding: 6px 18px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #d0d0d0;
+  background: #f8f8f8;
+  color: #223;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.nav-actions button:hover {
+  background: #1976d2;
+  color: #fff;
+  border-color: #1976d2;
+}
