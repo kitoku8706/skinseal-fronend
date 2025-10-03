@@ -4,10 +4,7 @@ function NoticeListPage() {
   const [notices, setNotices] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8090/api/notice")
-      .then((res) => res.json())
-      .then((data) => setNotices(data))
-    fetch('http://localhost:8090/api/notice')
+    fetch('/api/notice')
       .then(res => res.json())
       .then(data => setNotices(data))
       .catch(() => setNotices([]));
