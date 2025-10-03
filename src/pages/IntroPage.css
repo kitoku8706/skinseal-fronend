@@ -1,0 +1,39 @@
+/* 전체 페이지 컨테이너 */
+.company-intro-container {
+  width: 80%;
+  margin: 50px auto;
+  padding: 20px;
+  font-family: "Noto Sans KR", sans-serif;
+  color: #333;
+}
+
+/* 큰 제목 */
+.company-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #f28b82; /* 강조색 */
+  padding-bottom: 10px;
+}
+
+/* 박스 */
+.company-box {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #0e0505;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 소제목 */
+.company-subtitle {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* 내용 */
+.company-content {
+  font-size: 1rem;
+  line-height: 1.6;
+}

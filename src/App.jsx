@@ -10,6 +10,8 @@ import AiDiagnosisPage from "./pages/AiDiagnosisPage";
 import LoginModal from "./components/LoginModal.jsx";
 import RegisterModal from "./components/RegisterModal.jsx";
 import RightSidebar from "./components/RightSidebar";
+import IntroPage from "./pages/IntroPage";
+
 import ReservationConsultPage from './pages/ReservationConsultPage';
 import NavBar from './components/NavBar';
 import DiagnosisPage from './pages/DiagnosisPage';
@@ -119,10 +121,12 @@ function App() {
           <Route path="/join" element={<UserJoinPage />} />
           <Route path="/notice" element={<NoticeListPage />} />
           <Route path="/ai/diagnose" element={<AiDiagnosisPage />} />
+          <Route path="/intro" element={<IntroPage />} />
           <Route path="/reservation/consult" element={<ReservationConsultPage />} />
           <Route path="/diagnosis" element={<DiagnosisPage />} />
           <Route path="/diagnosis/:id" element={<DiagnosisPage />} />
         </Routes>
+
         <RightSidebar onOpenAIPopup={() => setShowAIPopup(true)} />
         {showAIPopup && (
           <div className="ai-popup">

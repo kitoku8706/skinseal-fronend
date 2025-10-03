@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 function NoticeListPage() {
   const [notices, setNotices] = useState([]);
@@ -21,6 +21,17 @@ function NoticeListPage() {
   const isNew = (notice) => notice.is_new;    // 예시: is_new 필드가 true면 새글
 
   return (
+    <div>
+      <h2></h2>
+      <ul>
+        {notices.map((notice) => (
+          <li key={notice.notice_id}>
+            <strong>{notice.title}</strong>
+            <div>{notice.content}</div>
+            <small>{notice.created_at}</small>
+          </li>
+        ))}
+      </ul>
     <div className="notice-list-container">
       <table className="notice-table">
         <thead>
