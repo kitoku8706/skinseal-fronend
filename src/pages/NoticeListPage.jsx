@@ -23,8 +23,9 @@ function NoticeListPage() {
   return (
     <div>
       <h2></h2>
+      {/*
       <ul>
-        {notices.map((notice) => (
+        {notices.map((notice) => (                // 리스트부분
           <li key={notice.notice_id}>
             <strong>{notice.title}</strong>
             <div>{notice.content}</div>
@@ -32,37 +33,39 @@ function NoticeListPage() {
           </li>
         ))}
       </ul>
-    <div className="notice-list-container">
-      <table className="notice-table">
-        <thead>
-          <tr>
-            <th style={{textAlign: 'left'}}>제목</th>
-            <th>작성자</th>
-            <th>조회수</th>
-            <th>작성일</th>
-          </tr>
-        </thead>
-        <tbody>
-          {notices.map(notice => (
-            <tr key={notice.notice_id || notice.title + notice.created_at}>
-              <td className="notice-title" style={{textAlign: 'left'}}>
-                {/* 고정(핀) 표시 */}
-                {isPinned(notice) && <span className="pin-icon" title="고정">📌</span>}
-                {/* 제목 */}
-                <span>{notice.title}</span>
-                {/* 새글 표시 */}
-                {isNew(notice) && <span className="new-icon">N</span>}
-              </td>
-              <td className="notice-writer">{notice.writer || '공지'}</td>
-              <td className="notice-views">
-                <span className="views-icon" role="img" aria-label="조회수">👁️</span>
-                {notice.views ? notice.views.toLocaleString() : '0'}
-              </td>
-              <td className="notice-date">{notice.created_at}</td>
+      */}
+      <div className="notice-list-container">
+        <table className="notice-table">
+          <thead>
+            <tr>
+              <th style={{textAlign: 'left'}}>제목</th>
+              <th>작성자</th>
+              <th>조회수</th>
+              <th>작성일</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {notices.map(notice => (
+              <tr key={notice.notice_id || notice.title + notice.created_at}>
+                <td className="notice-title" style={{textAlign: 'left'}}>
+                  {/* 고정(핀) 표시 */}
+                  {isPinned(notice) && <span className="pin-icon" title="고정">📌</span>}
+                  {/* 제목 */}
+                  <span>{notice.title}</span>
+                  {/* 새글 표시 */}
+                  {isNew(notice) && <span className="new-icon">N</span>}
+                </td>
+                <td className="notice-writer">{notice.writer || '공지'}</td>
+                <td className="notice-views">
+                  <span className="views-icon" role="img" aria-label="조회수">👁️</span>
+                  {notice.views ? notice.views.toLocaleString() : '0'}
+                </td>
+                <td className="notice-date">{notice.created_at}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

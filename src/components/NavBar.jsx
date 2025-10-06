@@ -21,7 +21,7 @@ function NavBar() {
       label: '질환 진단',
       submenu: [
   ...diseaseList.map((disease, idx) => ({ label: disease.diseaseName, link: `/diagnosis/${disease.diseaseId}` })),
-        { label: '자가 진단', link: '/self-diagnosis' },
+        { label: '자가 진단', link: '/ai/diagnose' },
         { label: '진단 결과', link: '/diagnosis/result' },
       ],
     },
