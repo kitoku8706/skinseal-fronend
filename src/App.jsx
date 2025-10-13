@@ -12,6 +12,7 @@ import RegisterModal from "./components/RegisterModal.jsx";
 import RightSidebar from "./components/RightSidebar";
 import IntroPage from "./pages/IntroPage";
 import { NoticeForm } from './components/NoticeForm';
+import NoticeEditPage from "./pages/NoticeEditPage";
 import ManagementTeam from "./pages/ManagementTeam";
 import Directions from "./pages/Directions";
 import ReservationConsultPage from "./pages/ReservationConsultPage";
@@ -134,6 +135,7 @@ function App() {
           <Route path="/diagnosis" element={<DiagnosisPage />} />
           <Route path="/diagnosis/:id" element={<DiagnosisPage />} />
           <Route path="/notice/write" element={<NoticeForm />} />
+          <Route path="/notice/edit/:id" element={<NoticeEditPage />} />
           <Route path="/mypage" element={<MyPage />} />
 
         </Routes>
