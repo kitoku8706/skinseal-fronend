@@ -102,7 +102,7 @@ function App() {
       <NavBar />
       <main style={{ minHeight: "80vh" }}>
         <div>
-          <TestConnection />
+          {/* <TestConnection /> */}
           {/* 버튼 클릭 시에만 팝업이 뜨도록 */}
           {/* {showLoginModal && (
             <LoginModal onClose={() => setShowLoginModal(false)} />
