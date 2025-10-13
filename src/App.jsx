@@ -11,10 +11,10 @@ import LoginModal from "./components/LoginModal.jsx";
 import RegisterModal from "./components/RegisterModal.jsx";
 import RightSidebar from "./components/RightSidebar";
 import IntroPage from "./pages/IntroPage";
-
 import ReservationConsultPage from "./pages/ReservationConsultPage";
 import NavBar from "./components/NavBar";
 import DiagnosisPage from "./pages/DiagnosisPage";
+import { NoticeForm } from './components/NoticeForm';
 
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
@@ -127,6 +127,7 @@ function App() {
           />
           <Route path="/diagnosis" element={<DiagnosisPage />} />
           <Route path="/diagnosis/:id" element={<DiagnosisPage />} />
+          <Route path="/notice/write" element={<NoticeForm />} />
         </Routes>
 
         <RightSidebar onOpenAIPopup={() => setShowAIPopup(true)} />
