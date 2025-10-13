@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { pingBackend } from '../api/testApi';
-import NoticeListPage from './NoticeListPage';
-import NavBar from '../components/NavBar';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { pingBackend } from "../api/testApi";
+import NoticeListPage from "./NoticeListPage";
+import NavBar from "../components/NavBar";
 
 function HomePage() {
-  const [result, setResult] = useState('');
+  const [result, setResult] = useState("");
   const navigate = useNavigate();
 
   // 드롭다운 상태 관리
@@ -17,26 +17,24 @@ function HomePage() {
     pingBackend()
       .then(setResult)
       .catch((error) => {
-        const errorMsg = error?.message || error?.toString() || '알 수 없는 오류';
+        const errorMsg =
+          error?.message || error?.toString() || "알 수 없는 오류";
         setResult(`연동 실패: ${errorMsg}`);
       });
 
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     setIsLoggedIn(!!token);
   }, []);
 
   const handleLogout = () => {
-        localStorage.removeItem('accessToken'); 
-        setIsLoggedIn(false); 
-        alert('로그아웃 되었습니다.'); 
-        navigate('/'); 
-    };
-
-
+    localStorage.removeItem("accessToken");
+    setIsLoggedIn(false);
+    alert("로그아웃 되었습니다.");
+    navigate("/");
+  };
 
   return (
     <div className="homepage-container">
-      
       {/* 공지사항 */}
       <section className="review-section">
         <h2>공지사항</h2>
@@ -51,7 +49,7 @@ function HomePage() {
         <p>진료부터 수술, 그리고 진료연계까지 믿고 맡길 수 있는 병원</p>
         <button
           className="banner-btn"
-          onClick={() => navigate('/reservation/consult')}
+          onClick={() => navigate("/reservation/consult")}
         >
           진료 예약 바로가기
         </button>
@@ -85,13 +83,6 @@ function HomePage() {
         <button>의료 상담</button>
         <button>오시는 길</button>
       </section>
-
-      {/* 하단 푸터 */}
-      <footer className="main-footer">
-        <div>이용약관 | 개인정보처리방침 | 채용정보</div>
-        <div>서울특별시 성북구 동소문로 47길 8 | 대표번호 1599-0033</div>
-        <div>Copyright © 2025 SkinSeal Hospital. All Rights reserved.</div>
-      </footer>
     </div>
   );
 }
