@@ -64,6 +64,7 @@ function NoticeListPage() {
         </tbody>
       </table>
     </div>
+    </div>
   );
 }
 
