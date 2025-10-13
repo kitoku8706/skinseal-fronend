@@ -1,0 +1,9 @@
+/* 하단 위치 */
+.main-footer {
+  width: 100%;
+  padding: 10px 0;
+  background-color: #f6f6f6;
+  text-align: center;
+  border-top: 1px solid #ddd;
+  position: relative; /* 기본 위치 */
+}

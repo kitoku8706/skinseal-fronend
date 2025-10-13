@@ -2,19 +2,16 @@ import React, { useState, useEffect } from "react";
 import "./IntroPage.css"; // 해당 페이지 전용 CSS
 
 const IntroPage = () => {
-  const [introData, setIntroData] = useState(null); // 회사소개 데이터를 저장할 상태
-  const [loading, setLoading] = useState(true); // 로딩 상태
-  const [error, setError] = useState(null); // 에러 상태
+  const [introData, setIntroData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // 백엔드 API의 기본 URL
-  // --- 이 부분 추가/수정: API_URL을 절대 경로로 지정했습니다. ---
   const API_URL = "http://localhost:8090/api/intro";
 
   useEffect(() => {
     const fetchIntroData = async () => {
       try {
-        // 모든 회사소개 항목을 가져오는 API (getAllIntros) 호출
-        const response = await fetch(API_URL); // GET 요청 (기본값)
+        const response = await fetch(API_URL);
 
         if (!response.ok) {
           throw new Error(`HTTP 오류! 상태 코드: ${response.status}`);
@@ -22,47 +19,41 @@ const IntroPage = () => {
 
         const data = await response.json();
 
-        // --- 이 부분 추가/수정: 백엔드에서 받은 데이터 처리 로직입니다. ---
-        // 백엔드에서 `List<IntroDTO>` 형태로 데이터를 받으므로,
-        // 이 리스트 중에서 "회사소개"에 해당하는 데이터를 찾아야 합니다.
         if (data && data.length > 0) {
           const companyIntro = data.find(
             (item) => item.menuType === "회사소개"
-          ); // "회사소개" 타입의 데이터 찾기
+          );
           if (companyIntro) {
-            // 백엔드 DTO 필드명에 맞춰서 데이터 설정
             setIntroData(companyIntro);
           } else {
-            // "회사소개" 타입 데이터가 없을 경우 기본 메시지
             setIntroData({
-              greeting: "정보 없음", // DTO 필드명에 맞춤
-              location: "아직 등록된 회사소개 내용이 없습니다.", // DTO 필드명에 맞춤
+              greeting: "버전 1. [전문적이고 신뢰감 있는 의료기업형]",
+              location:
+                "AI로 피부 진단의 새로운 기준을 만듭니다.\n\n저희 피부씰(PIBUSEAL)은 인공지능(AI) 기술을 통해 피부 질환의 진단 과정을 혁신하는 헬스케어 스타트업입니다.\nAI 모델을 기반으로 한 피부 이미지 분석 시스템을 개발하여, 누구나 간편하게 피부 상태를 확인하고 조기 진단에 도움을 받을 수 있도록 합니다.\n\n의료 전문성과 데이터 기술력을 결합하여, 정확하고 신뢰할 수 있는 AI 진단 서비스를 제공하고자 합니다.\n피부질환의 조기 발견과 예방을 통해, 더 많은 사람들이 건강한 피부로 자신감을 되찾을 수 있도록 돕겠습니다.\n\n<strong>피부씰 — 피부 건강의 미래를 AI로 새기다.</strong>",
               menuType: "회사소개",
             });
           }
         } else {
-          // 데이터 자체가 없을 경우 기본 메시지
           setIntroData({
-            greeting: "정보 없음", // DTO 필드명에 맞춤
-            location: "아직 등록된 회사소개 내용이 없습니다.", // DTO 필드명에 맞춤
+            greeting: "버전 1. [전문적이고 신뢰감 있는 의료기업형]",
+            location:
+              "AI로 피부 진단의 새로운 기준을 만듭니다.\n\n저희 피부씰(PIBUSEAL)은 인공지능(AI) 기술을 통해 피부 질환의 진단 과정을 혁신하는 헬스케어 스타트업입니다.\nAI 모델을 기반으로 한 피부 이미지 분석 시스템을 개발하여, 누구나 간편하게 피부 상태를 확인하고 조기 진단에 도움을 받을 수 있도록 합니다.\n\n의료 전문성과 데이터 기술력을 결합하여, 정확하고 신뢰할 수 있는 AI 진단 서비스를 제공하고자 합니다.\n피부질환의 조기 발견과 예방을 통해, 더 많은 사람들이 건강한 피부로 자신감을 되찾을 수 있도록 돕겠습니다.\n\n<strong>피부씰 — 피부 건강의 미래를 AI로 새기다.</strong>",
             menuType: "회사소개",
           });
         }
-        // --- 추가/수정된 부분 끝 ---
       } catch (e) {
         console.error("회사소개 데이터를 가져오는 중 오류 발생:", e);
         setError(
           "회사소개 정보를 불러오지 못했습니다. 서버 상태를 확인해주세요."
         );
       } finally {
-        setLoading(false); // 로딩 완료
+        setLoading(false);
       }
     };
 
     fetchIntroData();
-  }, []); // 컴포넌트가 처음 마운트될 때만 실행
+  }, []);
 
-  // 로딩 중일 때 표시할 내용
   if (loading) {
     return (
       <div className="company-intro-container">
@@ -74,7 +65,6 @@ const IntroPage = () => {
     );
   }
 
-  // 오류 발생 시 표시할 내용
   if (error) {
     return (
       <div className="company-intro-container">
@@ -88,24 +78,21 @@ const IntroPage = () => {
     );
   }
 
-  // 모든 준비가 되면 실제 내용 표시
   return (
     <div className="company-intro-container">
-      {/* 페이지 제목 */}
-      {/* --- 이 부분 수정: introData의 menuType을 사용하거나 기본값 "회사소개" 표시 --- */}
       <h1 className="company-title">{introData?.menuType || "회사소개"}</h1>
 
       {/* 소개 박스 */}
       <div className="company-box">
-        {/* --- 이 부분 수정: 백엔드 DTO 필드명(greeting, location)에 맞춰 사용 --- */}
         <h2 className="company-subtitle">
           {introData?.greeting || "제목 없음"}
         </h2>
-        <p className="company-content">{introData?.location || "내용 없음"}</p>
-        {/*
-          만약 백엔드 엔티티에 `createdAt`, `authorId` 같은 필드가 추가되었다면
-          여기서 `introData.createdAt` 등으로 접근하여 표시할 수 있습니다.
-        */}
+        <p
+          className="company-content"
+          dangerouslySetInnerHTML={{
+            __html: introData?.location || "내용 없음",
+          }}
+        ></p>
       </div>
 
       {/* 대현님께서 스토리보드에서 언급하신 관리자 수정 버튼은 아래와 같이 추가될 수 있습니다. */}

@@ -12,9 +12,9 @@ import RegisterModal from "./components/RegisterModal.jsx";
 import RightSidebar from "./components/RightSidebar";
 import IntroPage from "./pages/IntroPage";
 
-import ReservationConsultPage from './pages/ReservationConsultPage';
-import NavBar from './components/NavBar';
-import DiagnosisPage from './pages/DiagnosisPage';
+import ReservationConsultPage from "./pages/ReservationConsultPage";
+import NavBar from "./components/NavBar";
+import DiagnosisPage from "./pages/DiagnosisPage";
 
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
@@ -98,7 +98,6 @@ function App() {
 
   return (
     <Router>
-
       <Header />
       <NavBar />
       <main style={{ minHeight: "80vh" }}>
@@ -122,7 +121,10 @@ function App() {
           <Route path="/notice" element={<NoticeListPage />} />
           <Route path="/ai/diagnose" element={<AiDiagnosisPage />} />
           <Route path="/intro" element={<IntroPage />} />
-          <Route path="/reservation/consult" element={<ReservationConsultPage />} />
+          <Route
+            path="/reservation/consult"
+            element={<ReservationConsultPage />}
+          />
           <Route path="/diagnosis" element={<DiagnosisPage />} />
           <Route path="/diagnosis/:id" element={<DiagnosisPage />} />
         </Routes>
