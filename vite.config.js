@@ -38,20 +38,15 @@ function getLocalIpAddress() {
 
 // 2. IP 주소 및 포트 설정
 const localIp = getLocalIpAddress();
-const backendPort = 8090; // 백엔드 서버 포트를 8090으로 설정합니다.
 
 export default defineConfig({
   plugins: [react()],
   server: {
-    // 3. Vite 개발 서버가 모든 네트워크 인터페이스에서 접근 가능하도록 설정합니다.
-    host: '0.0.0.0', 
-    
     proxy: {
       '/api': {
-        // 4. 자동으로 감지된 IP와 8090 포트로 target을 설정합니다.
-        target: `http://${localIp}:${backendPort}`, 
+        target: 'http://localhost:8090',
         changeOrigin: true,
-        secure: false, 
+        secure: false,
       },
     },
   },
