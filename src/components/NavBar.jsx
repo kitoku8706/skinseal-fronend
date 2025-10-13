@@ -18,6 +18,39 @@ function NavBar() {
             .catch(() => setDiseaseList(['병명1', '병명2', '병명3']));
     }, [navigate]); 
 
+  const menuItems = [
+    { label: "공지사항", link: "/notice" },
+    {
+      label: "질환 진단",
+      submenu: [
+        ...diseaseList.map((disease, idx) => ({
+          label: disease.diseaseName,
+          link: `/diagnosis/${disease.diseaseId}`,
+        })),
+        { label: "자가 진단", link: "/ai/diagnose" },
+        { label: "진단 결과", link: "/diagnosis/result" },
+      ],
+    },
+    {
+      label: "예약 안내",
+      submenu: [
+        { label: "상담 예약", link: "/reservation/consult" },
+        { label: "상담 시간표", link: "/reservation/timetable" },
+        { label: "예약 조회", link: "/reservation/check" },
+        { label: "AI 챗봇 간편상담", link: "/reservation/chatbot" },
+      ],
+    },
+    {
+      label: "소개",
+      submenu: [
+        { label: "회사소개", link: "/intro" },
+        { label: "운영진", link: "/management" },
+        { label: "오시는 길", link: "/directions" },
+      ],
+    },
+  ];
+
+    // [⭐ 2. 로그아웃 함수 유지]
     const handleLogout = () => {
         localStorage.removeItem('accessToken');
         setIsLoggedIn(false);
@@ -25,6 +58,8 @@ function NavBar() {
         navigate('/');
     };
 
+
+    // [⭐ 3. menuItems 정의 유지]
     const menuItems = [
         { label: '공지사항', link: '/notice' },
         {

@@ -1,9 +1,37 @@
-/* 하단 위치 */
+/* Footer.css */
+
 .main-footer {
-  width: 100%;
-  padding: 10px 0;
-  background-color: #f6f6f6;
+  /* 기존 푸터 전체 스타일 */
+  background-color: #f8f8f8; /* 예시 색상 */
+  color: #666;
+  padding: 20px 0;
   text-align: center;
-  border-top: 1px solid #ddd;
-  position: relative; /* 기본 위치 */
+  font-family: "Noto Sans KR", sans-serif;
+  border-top: 1px solid #eee;
+}
+
+.footer-links {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  color: #666;
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.address-info {
+  font-size: 13px; /* 크기 조절 */
+  margin-bottom: 5px;
+  color: #888; /* 색상 조정 */
+}
+
+.copyright-info {
+  font-size: 12px; /* 카피라이트도 더 작게 만들 수 있습니다. */
+  color: #999;
 }
