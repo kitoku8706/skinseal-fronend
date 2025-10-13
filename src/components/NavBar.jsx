@@ -42,8 +42,8 @@ function NavBar() {
       label: "소개",
       submenu: [
         { label: "회사소개", link: "/intro" },
-        { label: "운영진", link: "/about/team" },
-        { label: "오시는 길", link: "/about/location" },
+        { label: "운영진", link: "/management" },
+        { label: "오시는 길", link: "/directions" },
       ],
     },
   ];
