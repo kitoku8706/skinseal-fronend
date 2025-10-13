@@ -85,9 +85,9 @@ function NavBar() {
             label: '소개',
             submenu: [
                 // kcm 블록의 경로 기준으로 통일
-                { label: '회사소개', link: '/about/company' },
-                { label: '운영진', link: '/about/team' },
-                { label: '오시는 길', link: '/about/location' },
+                { label: '회사소개', link: '/intro' },   // /intro -> /about/company
+                { label: '운영진', link: '/management' }, // /management -> /about/team
+                { label: '오시는 길', link: '/directions' }, // /directions -> /about/location
             ],
         },
     ];
