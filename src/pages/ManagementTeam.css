@@ -1,0 +1,150 @@
+/* 전체 컨테이너 스타일 */
+.management-team-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 20px;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+/* 제목 스타일 */
+.management-team-title {
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+/* 부제목 스타일 */
+.management-team-subtitle {
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 50px;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* 멤버 목록 레이아웃 */
+.member-list {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+/* 개별 멤버 카드 스타일 */
+.member-card {
+  flex: 1;
+  min-width: 280px;
+  max-width: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+.member-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* 멤버 사진 스타일 */
+.member-photo {
+  width: 150px;
+  height: 150px;
+  border-radius: 75px;
+  background-size: cover;
+  background-position: center;
+  margin-bottom: 20px;
+  border: 4px solid #f0f0f0;
+  transition: all 0.3s ease;
+}
+
+.member-card:hover .member-photo {
+  border-color: #8f94fb;
+}
+
+/* 멤버 이름 스타일 */
+.member-name {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+/* 멤버 직책 스타일 */
+.member-position {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 15px;
+  color: #8f94fb;
+}
+
+/* 멤버 소개 스타일 */
+.member-intro {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #555;
+  line-height: 1.6;
+  height: 80px;
+  overflow: hidden;
+}
+
+/* 예약 버튼 스타일 */
+.reservation-button {
+  padding: 12px 24px;
+  background-color: #8f94fb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  max-width: 200px;
+}
+
+.reservation-button:hover {
+  background-color: #7a7ff5;
+  transform: scale(1.05);
+}
+
+.reservation-button:active {
+  transform: scale(0.98);
+}
+
+/* 반응형 디자인을 위한 미디어 쿼리 */
+@media (max-width: 992px) {
+  .member-list {
+    justify-content: center;
+  }
+
+  .member-card {
+    min-width: 45%;
+  }
+}
+
+@media (max-width: 768px) {
+  .member-card {
+    min-width: 100%;
+  }
+
+  .management-team-title {
+    font-size: 28px;
+  }
+
+  .management-team-subtitle {
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+
+  .member-photo {
+    width: 120px;
+    height: 120px;
+  }
+}
