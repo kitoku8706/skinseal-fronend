@@ -2,11 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-// 필요한 다른 import (setUsername, setIsLoggedIn, setDiseaseList 등 상태 관리 함수는 컴포넌트 내부나 상위에서 정의되었다고 가정)
+import './NavBar.css';
 
-function NavBar({ setUsername, setIsLoggedIn, setDiseaseList, username, isLoggedIn, diseaseList, setOpenMenu, openMenu }) {
+function NavBar() {
     const navigate = useNavigate();
-    // const [username, setUsername] = useState(''); // 상태 관리는 상위에서 이루어지는 경우가 많으므로 주석 처리
+    const [username, setUsername] = useState('');  // 상태 관리는 상위에서 이루어지는 경우가 많으므로 주석 처리
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [diseaseList, setDiseaseList] = useState([]);
+    const [openMenu, setOpenMenu] = useState(null);
 
     useEffect(() => {
         // 1. 로그인 상태 확인 및 localUsername 폴백 세팅
@@ -60,8 +63,8 @@ function NavBar({ setUsername, setIsLoggedIn, setDiseaseList, username, isLogged
         {
             label: '질환 진단',
             submenu: [
-                // 질환 리스트 매핑
-                ...diseaseList.map((disease) => ({
+                // 배열이고, 요소가 있을 때만 매핑 (안전성 강화)
+                ...(Array.isArray(diseaseList) ? diseaseList : []).map((disease) => ({
                     label: disease.diseaseName,
                     link: `/diagnosis/${disease.diseaseId}`
                 })),
