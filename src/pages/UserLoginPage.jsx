@@ -19,7 +19,6 @@ function UserLoginPage() {
         setError('');
         
         try {
-            
             const res = await axios.post('http://localhost:8090/member/login', {
                 username: username, 
                 password
@@ -27,8 +26,14 @@ function UserLoginPage() {
             
             if (res.data && res.data.token) { 
                 localStorage.setItem('accessToken', res.data.token);
-                
-                navigate('/'); 
+
+                // username, role, userId 등 추가 저장
+                localStorage.setItem('username', res.data.username || username);
+                if (res.data.role) localStorage.setItem('role', res.data.role);
+                if (res.data.userId) localStorage.setItem('userId', res.data.userId);
+
+                window.location.href = '/'; // 새로고침으로 NavBar 갱신
+                // 또는 navigate('/') 후 window.location.reload();
             } else {
                 setError('로그인 응답 형식이 올바르지 않습니다.');
             }
