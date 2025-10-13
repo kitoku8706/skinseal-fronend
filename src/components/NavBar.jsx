@@ -143,4 +143,4 @@ function NavBar({ setUsername, setIsLoggedIn, setDiseaseList, username, isLogged
     );
 }
 
-// export default NavBar;
+export default NavBar;
