@@ -6,13 +6,13 @@ import { useNavigate } from 'react-router-dom';
 function UserLoginPage() {
     const navigate = useNavigate(); 
     
-    const [username, setUsername] = useState('');
+    const [loginId, setLoginId] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!username || !password) {
+        if (!loginId || !password) {
             setError('아이디와 비밀번호를 모두 입력하세요.');
             return;
         }
@@ -20,20 +20,21 @@ function UserLoginPage() {
         
         try {
             const res = await axios.post('http://localhost:8090/member/login', {
-                username: username, 
+                loginId: loginId, 
                 password
             });
             
             if (res.data && res.data.token) { 
                 localStorage.setItem('accessToken', res.data.token);
 
-                // username, role, userId 등 추가 저장
-                localStorage.setItem('username', res.data.username || username);
+                if (res.data.loginId) localStorage.setItem('loginId', res.data.loginId);
+
+                localStorage.setItem('username', res.data.username || loginId); 
+
                 if (res.data.role) localStorage.setItem('role', res.data.role);
                 if (res.data.userId) localStorage.setItem('userId', res.data.userId);
 
-                window.location.href = '/'; // 새로고침으로 NavBar 갱신
-                // 또는 navigate('/') 후 window.location.reload();
+                window.location.href = '/'; 
             } else {
                 setError('로그인 응답 형식이 올바르지 않습니다.');
             }
@@ -50,8 +51,8 @@ function UserLoginPage() {
                 <input
                     type="text" 
                     placeholder="아이디" 
-                    value={username} 
-                    onChange={e => setUsername(e.target.value)}
+                    value={loginId} 
+                    onChange={e => setLoginId(e.target.value)}
                     required
                 />
                 <input

@@ -6,7 +6,9 @@ import './MyPage.css';
 const MyInfoEdit = ({ navigate }) => { 
     
     const [userInfo, setUserInfo] = useState({
-        username: '로딩 중...',
+        loginId: '로딩 중...', 
+        username: '로딩 중...', 
+        birth: '로딩 중...', 
         phoneNumber: '',
         email: '',
     });
@@ -18,9 +20,9 @@ const MyInfoEdit = ({ navigate }) => {
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
         if (!token) {
-             console.error("로그인 정보가 없습니다.");
-             navigate('/login'); 
-             return; 
+            console.error("로그인 정보가 없습니다.");
+            navigate('/login'); 
+            return; 
         }
 
         axios.get('http://localhost:8090/member/info', {
@@ -31,7 +33,9 @@ const MyInfoEdit = ({ navigate }) => {
         .then(response => {
             const data = response.data;
             setUserInfo({
-                username: data.username || '정보 없음', 
+                loginId: data.loginId || '정보 없음',
+                username: data.username || '정보 없음',
+                birth: data.birth || '정보 없음',
                 phoneNumber: data.phoneNumber || '',
                 email: data.email || '',
             });
@@ -44,7 +48,7 @@ const MyInfoEdit = ({ navigate }) => {
     }, [navigate]); 
 
     const handleCancel = () => {
-         navigate('/'); 
+        navigate('/'); 
     }
     
     const handleSave = async () => {
@@ -74,18 +78,26 @@ const MyInfoEdit = ({ navigate }) => {
             });
             
             alert('회원정보가 수정되었습니다.'); 
-            navigate('/mypage'); 
+            navigate('/mypage/edit'); 
             
         } catch (error) {
             console.error("정보 수정 실패:", error.response ? error.response.data : error.message);
-            alert('정보 수정 실패: ' + (error.response?.data || '서버 오류'));
+            alert('정보 수정 실패: ' + (error.response?.data?.message || '서버 오류'));
         }
     }
     
     return (
         <div className="info-edit-form">
             <div className="info-group">
-                <label>아이디</label><input type="text" value={userInfo.username + "(수정 불가)"} readOnly />
+                <label>아이디</label><input type="text" value={userInfo.loginId + "(수정 불가)"} readOnly />
+            </div>
+            
+            <div className="info-group">
+                <label>이름</label><input type="text" value={userInfo.username + "(수정 불가)"} readOnly />
+            </div>
+            
+            <div className="info-group">
+                <label>생년월일</label><input type="text" value={userInfo.birth + "(수정 불가)"} readOnly />
             </div>
             
             <h3>비밀번호 변경</h3>

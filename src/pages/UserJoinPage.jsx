@@ -6,54 +6,52 @@ import { useNavigate } from 'react-router-dom';
 function UserJoinPage() {
     const navigate = useNavigate();
 
-    const [userId, setUserId] = useState('');
+    const [loginId, setLoginId] = useState(''); 
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [name, setName] = useState('');
     const [birth, setBirth] = useState('');
     const [email, setEmail] = useState('');
-    const [userIdChecked, setUserIdChecked] = useState(false);
-    const [userIdCheckMsg, setUserIdCheckMsg] = useState('');
+    
+    const [loginIdChecked, setLoginIdChecked] = useState(false); 
+    const [loginIdCheckMsg, setLoginIdCheckMsg] = useState(''); 
     
     
     const [phoneNumber, setPhoneNumber] = useState('');
     const [error, setError] = useState('');
 
-    // [⭐ 추가] 아이디 중복확인 함수
     const handleIdCheck = async () => {
-        if (!userId) {
-            setUserIdCheckMsg('아이디를 입력하세요.');
-            setUserIdChecked(false);
+        if (!loginId) {
+            setLoginIdCheckMsg('아이디를 입력하세요.');
+            setLoginIdChecked(false);
             return;
         }
         
         try {
-            const res = await axios.post('http://localhost:8090/member/id-check', { userId });
+            const res = await axios.post('http://localhost:8090/member/id-check', { loginId }); 
             
             if (res.data.exists) { 
-                setUserIdCheckMsg('이미 사용 중인 아이디입니다.');
-                setUserIdChecked(false);
+                setLoginIdCheckMsg('이미 사용 중인 아이디입니다.');
+                setLoginIdChecked(false);
             } else {
-                setUserIdCheckMsg('사용 가능한 아이디입니다.');
-                setUserIdChecked(true);
+                setLoginIdCheckMsg('사용 가능한 아이디입니다.');
+                setLoginIdChecked(true);
             }
         } catch (err) {
-            setUserIdCheckMsg('아이디 확인 중 오류 발생: ' + (err.response?.data?.message || err.message || '서버 오류'));
-            setUserIdChecked(false);
+            setLoginIdCheckMsg('아이디 확인 중 오류 발생: ' + (err.response?.data?.message || err.message || '서버 오류'));
+            setLoginIdChecked(false);
         }
     };
-    
-    const handleEmailCheck = () => { /* 제거 */ }; 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        if (!userId || !password || !passwordConfirm || !name || !birth || !email || !phoneNumber) {
+        if (!loginId || !password || !passwordConfirm || !name || !birth || !email || !phoneNumber) {
             setError('모든 항목을 입력하세요.');
             return;
         }
         
-        if (!userIdChecked) {
+        if (!loginIdChecked) {
             setError('아이디 중복확인을 해주세요.');
             return;
         }
@@ -67,9 +65,9 @@ function UserJoinPage() {
 
         try {
             const reqData = {
-                username: userId,
+                loginId,
                 password,
-                name,
+                username: name, 
                 birth,
                 email,
                 role: 'USER', 
@@ -94,8 +92,8 @@ function UserJoinPage() {
                     <input
                         type="text"
                         placeholder="아이디"
-                        value={userId}
-                        onChange={e => { setUserId(e.target.value); setUserIdChecked(false); setUserIdCheckMsg(''); }} 
+                        value={loginId}
+                        onChange={e => { setLoginId(e.target.value); setLoginIdChecked(false); setLoginIdCheckMsg(''); }} 
                         style={{ flex: 1 }}
                         required
                     />
@@ -104,20 +102,20 @@ function UserJoinPage() {
                         className="email-check-btn"
                         onClick={handleIdCheck}
                         style={{ whiteSpace: 'nowrap' }}
-                        disabled={userIdChecked} 
+                        disabled={loginIdChecked} 
                     >
                         아이디 중복확인
                     </button>
                 </div>
-                {userIdCheckMsg && 
-                    <div className="email-check-msg" style={{ color: userIdChecked ? '#4CAF50' : '#D32F2F' }}>
-                        {userIdCheckMsg}
+                {loginIdCheckMsg && 
+                    <div className="email-check-msg" style={{ color: loginIdChecked ? '#4CAF50' : '#D32F2F' }}>
+                        {loginIdCheckMsg}
                     </div>
                 }
                 
                 <input type="password" placeholder="비밀번호" value={password} onChange={e => setPassword(e.target.value)} required />
                 <input type="password" placeholder="비밀번호 확인" value={passwordConfirm} onChange={e => setPasswordConfirm(e.target.value)} required />
-                <input type="text" placeholder="이름" value={name} onChange={e => setName(e.target.value)} required />
+                <input type="text" placeholder="이름" value={name} onChange={e => setName(e.target.value)} required /> 
                 <input type="text" placeholder="생년월일 (예시: 90.09.09)" value={birth} onChange={e => setBirth(e.target.value)} required />
                 
                 <input
