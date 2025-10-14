@@ -1,13 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-function NoticeForm({ authorId }) {
+const TITLE_MAX = 255;
+const CONTENT_MAX = 2000;
+
+function NoticeForm() {
   const { id } = useParams(); // 수정 시 공지 ID
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [type, setType] = useState('공지'); // 기본값 "공지"
+  const [author, setAuthor] = useState('');
   const isEdit = !!id;
+
+  // 로그인된 사용자 정보 가져오기 (예: localStorage, context, API 등)
+  useEffect(() => {
+    // 예시: localStorage에 username이 저장되어 있다고 가정
+    const username = localStorage.getItem('username');
+    if (username) {
+      setAuthor(username);
+    }
+  }, []);
 
   // 수정 폼일 때 기존 데이터 불러오기
   useEffect(() => {
@@ -18,6 +31,10 @@ function NoticeForm({ authorId }) {
           setTitle(data.title || '');
           setContent(data.content || '');
           setType(data.type || '공지');
+          // 작성자 정보도 불러오되, 로그인 정보가 있으면 우선 사용
+          if (!localStorage.getItem('username')) {
+            setAuthor(data.writer || '');
+          }
         })
         .catch(() => {
           alert('공지사항 정보를 불러오지 못했습니다.');
@@ -26,7 +43,8 @@ function NoticeForm({ authorId }) {
     }
   }, [id, isEdit, navigate]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       const url = isEdit
         ? `http://localhost:8090/api/notice/${id}`
@@ -40,7 +58,7 @@ function NoticeForm({ authorId }) {
           title,
           content,
           type,
-          authorId
+          writer: author
         })
       });
       const data = await res.json();
@@ -56,24 +74,117 @@ function NoticeForm({ authorId }) {
   };
 
   return (
-    <div>
+    <div style={{ maxWidth: 800, margin: '0 auto', padding: 20 }}>
       <h2>{isEdit ? '공지사항 수정' : '공지사항 등록'}</h2>
-      <select value={type} onChange={e => setType(e.target.value)}>
-        <option value="공지">공지</option>
-        <option value="이벤트">이벤트</option>
-      </select>
-      <input
-        type="text"
-        placeholder="제목"
-        value={title}
-        onChange={e => setTitle(e.target.value)}
-      />
-      <textarea
-        placeholder="내용"
-        value={content}
-        onChange={e => setContent(e.target.value)}
-      />
-      <button onClick={handleSubmit}>{isEdit ? '수정' : '등록'}</button>
+      <form onSubmit={handleSubmit} style={{ marginTop: 20 }}>
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ display: 'block', marginBottom: 8, fontWeight: 'bold' }}>
+            제목
+          </label>
+          <input
+            type="text"
+            name="title"
+            value={title}
+            onChange={e => {
+              if (e.target.value.length > TITLE_MAX) {
+                alert(`제목은 최대 ${TITLE_MAX}자까지 입력 가능합니다.`);
+                return;
+              }
+              setTitle(e.target.value);
+            }}
+            style={{
+              width: '100%',
+              padding: 12,
+              border: '1px solid #ddd',
+              borderRadius: 4,
+              fontSize: 16
+            }}
+            placeholder="제목을 입력하세요"
+          />
+          <div style={{ fontSize: 13, color: '#888', marginTop: 4, textAlign: 'right' }}>
+            {title.length} / {TITLE_MAX}자
+          </div>
+        </div>
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ display: 'block', marginBottom: 8, fontWeight: 'bold' }}>
+            작성자
+          </label>
+          <input
+            type="text"
+            name="writer"
+            value={author}
+            readOnly
+            style={{
+              width: '100%',
+              padding: 12,
+              border: '1px solid #ddd',
+              borderRadius: 4,
+              fontSize: 16
+            }}
+            placeholder="작성자를 입력하세요"
+          />
+        </div>
+        <div style={{ marginBottom: 20 }}>
+          <label style={{ display: 'block', marginBottom: 8, fontWeight: 'bold' }}>
+            내용
+          </label>
+          <textarea
+            name="content"
+            value={content}
+            onChange={e => {
+              if (e.target.value.length > CONTENT_MAX) {
+                alert(`내용은 최대 ${CONTENT_MAX}자까지 입력 가능합니다.`);
+                return;
+              }
+              setContent(e.target.value);
+            }}
+            rows={10}
+            style={{
+              width: '100%',
+              padding: 12,
+              border: '1px solid #ddd',
+              borderRadius: 4,
+              fontSize: 16,
+              resize: 'vertical'
+            }}
+            placeholder="내용을 입력하세요"
+          />
+          <div style={{ fontSize: 13, color: '#888', marginTop: 4, textAlign: 'right' }}>
+            {content.length} / {CONTENT_MAX}자
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: 12 }}>
+          <button
+            type="submit"
+            style={{
+              padding: '12px 24px',
+              backgroundColor: '#1976d2',
+              color: 'white',
+              border: 'none',
+              borderRadius: 4,
+              fontSize: 16,
+              cursor: 'pointer'
+            }}
+          >
+            {isEdit ? '수정' : '등록'}
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate('/notice')}
+            style={{
+              padding: '12px 24px',
+              backgroundColor: '#666',
+              color: 'white',
+              border: 'none',
+              borderRadius: 4,
+              fontSize: 16,
+              cursor: 'pointer'
+            }}
+          >
+            취소
+          </button>
+        </div>
+      </form>
     </div>
   );
 }

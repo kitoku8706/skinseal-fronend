@@ -11,6 +11,9 @@ function NoticeEditPage() {
   });
   const [loading, setLoading] = useState(true);
 
+  const TITLE_MAX = 255;
+  const CONTENT_MAX = 2000;
+
   // 공지사항 데이터 로드
   useEffect(() => {
     if (id) {
@@ -54,6 +57,16 @@ function NoticeEditPage() {
   // 입력값 변경 핸들러
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "title" && value.length > TITLE_MAX) {
+      alert(`제목은 최대 ${TITLE_MAX}자까지 입력 가능합니다.`);
+      return;
+    }
+    if (name === "content" && value.length > CONTENT_MAX) {
+      alert(`내용은 최대 ${CONTENT_MAX}자까지 입력 가능합니다.`);
+      return;
+    }
+
     setNotice(prev => ({
       ...prev,
       [name]: value
@@ -131,6 +144,9 @@ function NoticeEditPage() {
             }}
             placeholder="제목을 입력하세요"
           />
+          <div style={{ fontSize: 13, color: '#888', marginTop: 4, textAlign: 'right' }}>
+            {notice.title.length} / {TITLE_MAX}자
+          </div>
         </div>
 
         <div style={{ marginBottom: 16 }}>
@@ -172,6 +188,9 @@ function NoticeEditPage() {
             }}
             placeholder="내용을 입력하세요"
           />
+          <div style={{ fontSize: 13, color: '#888', marginTop: 4, textAlign: 'right' }}>
+            {notice.content.length} / {CONTENT_MAX}자
+          </div>
         </div>
 
         <div style={{ display: 'flex', gap: 12 }}>
