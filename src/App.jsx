@@ -11,7 +11,7 @@ import LoginModal from "./components/LoginModal.jsx";
 import RegisterModal from "./components/RegisterModal.jsx";
 import RightSidebar from "./components/RightSidebar";
 import IntroPage from "./pages/IntroPage";
-import { NoticeForm } from './components/NoticeForm';
+import { NoticeForm } from "./components/NoticeForm";
 import NoticeEditPage from "./pages/NoticeEditPage";
 import ManagementTeam from "./pages/ManagementTeam";
 import Directions from "./pages/Directions";
@@ -19,7 +19,6 @@ import ReservationConsultPage from "./pages/ReservationConsultPage";
 import NavBar from "./components/NavBar";
 import DiagnosisPage from "./pages/DiagnosisPage";
 import MyPage from "./pages/MyPage.jsx";
-
 
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
@@ -45,7 +44,7 @@ const TestConnection = () => {
 
       // 응답을 JSON으로 파싱 (DB에 저장된 사용자 목록이 여기에 포함됨)
       const data = await res.json();
-      
+
       setResponse(
         <>
           <p className="text-green-600 font-bold">
@@ -115,7 +114,6 @@ function App() {
           {showRegisterModal && (
             <RegisterModal onClose={() => setShowRegisterModal(false)} />
           )} */}
-          <h1>여기뭐지</h1>
           {/* ...기타 메인 페이지 내용... */}
         </div>
 
@@ -137,7 +135,6 @@ function App() {
           <Route path="/notice/write" element={<NoticeForm />} />
           <Route path="/notice/edit/:id" element={<NoticeEditPage />} />
           <Route path="/mypage" element={<MyPage />} />
-
         </Routes>
 
         <RightSidebar onOpenAIPopup={() => setShowAIPopup(true)} />
