@@ -77,12 +77,14 @@ function NoticeListPage() {
                     {/* 새글 표시 */}
                     {isNew(notice) && <span className="new-icon">N</span>}
                   </td>
-                  <td className="notice-writer">{notice.writer || '공지'}</td>
+                  <td className="notice-writer">{notice.username || '관리자'}</td>
                   <td className="notice-views">
                     <span className="views-icon" role="img" aria-label="조회수">👁️</span>
                     {(notice.views || 0).toLocaleString()}
                   </td>
-                  <td className="notice-date">{notice.created_at}</td>
+                  <td className="notice-date">
+                    {notice.createdAt ? notice.createdAt.slice(0, 10) : '-'}
+                  </td>
                   <td>
                     <button className="notice-edit-btn" onClick={() => handleEdit(notice)}>
                       수정
