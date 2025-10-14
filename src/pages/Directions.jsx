@@ -2,10 +2,16 @@ import React, { useEffect, useRef } from "react";
 import "./Directions.css";
 
 const Directions = () => {
-  const API_KEY = "030468d1c53703f283ac815f1518a5e1";
+  const API_KEY = import.meta.env.VITE_KAKAO_API_KEY;
+
   const mapContainerRef = useRef(null);
 
   useEffect(() => {
+    if (!API_KEY) {
+      console.error("카카오 API 키가 설정되어 있지 않습니다.");
+      return;
+    }
+
     const script = document.createElement("script");
     script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${API_KEY}&autoload=false`;
     script.async = true;
