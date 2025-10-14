@@ -12,8 +12,9 @@ function NoticeDetailPage() {
     if (didFetch.current) return;
     didFetch.current = true;
 
-    fetch(`/api/notice/${id}/view`, { method: 'POST' })
-      .then(() => fetch(`/api/notice/${id}`))
+   // fetch(`/api/notice/${id}/view`, { method: 'POST' })
+      //.then(() => fetch(`/api/notice/${id}`))
+    fetch(`/api/notice/${id}`, { method: 'get' })
       .then(res => res.json())
       .then(data => setNotice(data))
       .catch(() => {
@@ -28,7 +29,7 @@ function NoticeDetailPage() {
     <div style={{ maxWidth: 800, margin: "0 auto", padding: 20 }}>
       <h2>{notice.title || '제목 없음'}</h2>
       <div style={{ color: "#888", marginBottom: 8 }}>
-        작성자: {notice.writer || "공지"} | 작성일: {notice.created_at || '-'} | 조회수: {notice.views ?? 0}
+        작성자: {notice.writer || "공지"} | 작성일: {notice.createdAt.slice(0, 10) || '-'} | 조회수: {notice.views ?? 0}
       </div>
       <div style={{ whiteSpace: "pre-line", marginBottom: 24 }}>
         {notice.content || '내용이 없습니다.'}
