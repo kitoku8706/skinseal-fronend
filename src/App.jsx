@@ -20,6 +20,8 @@ import NavBar from "./components/NavBar";
 import DiagnosisPage from "./pages/DiagnosisPage";
 import MyPage from "./pages/MyPage.jsx";
 import NoticeDetailPage from './pages/NoticeDetailPage';
+import MyInfoEdit from "./pages/MyInfoEdit.jsx";
+import UserWithdrawal from "./pages/UserWithdrawal.jsx";
 
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
@@ -136,7 +138,13 @@ function App() {
           <Route path="/notice/write" element={<NoticeForm />} />
           <Route path="/notice/edit/:id" element={<NoticeEditPage />} />
           <Route path="/notice/:id" element={<NoticeDetailPage />} />
-          <Route path="/mypage" element={<MyPage />} />
+
+          <Route path="/mypage" element={<MyPage />} >
+            <Route path="edit" element={<MyInfoEdit />} />
+            <Route path="withdraw" element={<UserWithdrawal />} />
+            <Route path="reservation" element={<ReservationConsultPage />} />
+            <Route path="diagnosis" element={<DiagnosisPage />} />
+          </Route>
         </Routes>
 
         <RightSidebar onOpenAIPopup={() => setShowAIPopup(true)} />
