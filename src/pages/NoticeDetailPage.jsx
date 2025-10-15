@@ -5,6 +5,7 @@ function NoticeDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [notice, setNotice] = useState(null);
+  const [role, setRole] = useState(""); // 역할 상태 추가
   const didFetch = useRef(false);
 
   useEffect(() => {
@@ -12,8 +13,6 @@ function NoticeDetailPage() {
     if (didFetch.current) return;
     didFetch.current = true;
 
-   // fetch(`/api/notice/${id}/view`, { method: 'POST' })
-      //.then(() => fetch(`/api/notice/${id}`))
     fetch(`/api/notice/${id}`, { method: 'get' })
       .then(res => res.json())
       .then(data => setNotice(data))
@@ -21,6 +20,10 @@ function NoticeDetailPage() {
         alert("공지사항을 불러오지 못했습니다.");
         navigate("/notice");
       });
+
+    // role 정보 로컬스토리지에서 가져오기 (예시)
+    const userRole = localStorage.getItem("role");
+    setRole(userRole);
   }, [id, navigate]);
 
   if (!notice) return <div>로딩 중...</div>;
@@ -36,12 +39,14 @@ function NoticeDetailPage() {
       </div>
       <div style={{ display: "flex", gap: 8 }}>
         <button onClick={() => navigate("/notice")}>목록으로</button>
-        <button
-          className="notice-edit-btn"
-          onClick={() => navigate(`/notice/edit/${notice.noticeId}`)}
-        >
-          수정
-        </button>
+        {role === "ADMIN" && (
+          <button
+            className="notice-edit-btn"
+            onClick={() => navigate(`/notice/edit/${notice.noticeId}`)}
+          >
+            수정
+          </button>
+        )}
       </div>
     </div>
   );
