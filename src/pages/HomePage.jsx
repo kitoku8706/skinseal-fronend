@@ -37,7 +37,9 @@ function HomePage() {
 
   return (
     <>
+
       <div className="homepage-container">
+
         <section className="review-section">
           <h2>공지사항</h2>
           <div>

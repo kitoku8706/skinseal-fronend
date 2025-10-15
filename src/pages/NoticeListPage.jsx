@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./NoticeListPage.css";
 
 function NoticeListPage() {
   const [notices, setNotices] = useState([]);
+  const [role, setRole] = useState(""); // 역할 상태 추가
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -12,6 +14,10 @@ function NoticeListPage() {
         setNotices(data);
       })
       .catch(() => setNotices([]));
+
+    // 예시: localStorage에서 role 가져오기 (실제 구현에 맞게 수정)
+    const userRole = localStorage.getItem("role");
+    setRole(userRole);
   }, []);
 
   // 타입별 라벨 색상
@@ -46,10 +52,12 @@ function NoticeListPage() {
 
   return (
     <div>
-      {/* 상단에 글쓰기 버튼 추가 */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <button className="notice-write-btn" onClick={handleWrite}>글쓰기</button>
-      </div>
+      {/* 상단에 글쓰기 버튼: ADMIN만 보임 */}
+      {role === "ADMIN" && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          <button className="notice-write-btn" onClick={handleWrite}>글쓰기</button>
+        </div>
+      )}
       <div className="notice-list-container">
         <table className="notice-table">
           <thead>
@@ -58,7 +66,7 @@ function NoticeListPage() {
               <th>작성자</th>
               <th>조회수</th>
               <th>작성일</th>
-              <th>수정</th>
+              {role === "ADMIN" && <th>수정</th>}
             </tr>
           </thead>
           <tbody>
@@ -85,19 +93,14 @@ function NoticeListPage() {
                   <td className="notice-date">
                     {notice.createdAt ? notice.createdAt.slice(0, 10) : '-'}
                   </td>
-                  <td>
-                    <button className="notice-edit-btn" onClick={() => handleEdit(notice)}>
-                      수정
-                    </button>
-                  </td>
-                </tr>
-                {/* {openNoticeId === notice.notice_id && (
-                  <tr>
-                    <td colSpan={5} style={{background: "#f9f9f9", padding: "16px"}}>
-                      <div style={{whiteSpace: "pre-line"}}>{notice.content}</div>
+                  {role === "ADMIN" && (
+                    <td>
+                      <button className="notice-edit-btn" onClick={() => handleEdit(notice)}>
+                        수정
+                      </button>
                     </td>
-                  </tr>
-                )} */}
+                  )}
+                </tr>               
               </React.Fragment>
             ))}
           </tbody>

@@ -36,13 +36,16 @@ function getLocalIpAddress() {
 
 // 2. IP 주소 및 포트 설정
 const localIp = getLocalIpAddress();
+const backendPort = 8090; // 백엔드 서버 포트를 8090으로 설정합니다.
 
 export default defineConfig({
   plugins: [react()],
   server: {
+    host: '0.0.0.0',
     proxy: {
-      "/api": {
-        target: "http://localhost:8090",
+
+      '/api': {
+        target: `http://${localIp}:${backendPort}`,
         changeOrigin: true,
         secure: false,
       },

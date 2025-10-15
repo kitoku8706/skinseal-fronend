@@ -1,21 +1,22 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './RightSidebar.css'; // ← 이 위치가 가장 명확합니다
 
 function RightSidebar({ onOpenAIPopup }) {
   const navigate = useNavigate();
 
   return (
     <div className="right-sidebar">
-      <button className="sidebar-btn" onClick={() => navigate('/reservation')}>
+      <button className="sidebar-btn" onClick={() => navigate('/reservation/consult')}>
         상담예약
       </button>
       <button className="sidebar-btn" onClick={() => window.open('https://pf.kakao.com/_카카오상담URL', '_blank')}>
         카톡상담
       </button>
-      <button className="sidebar-btn" onClick={() => navigate('/map')}>
+      <button className="sidebar-btn" onClick={() => navigate('/directions')}>
         오시는길
       </button>
-      <button className="sidebar-btn" onClick={onOpenAIPopup}>
+      <button className="sidebar-btn" onClick={() => navigate("/reservation/chatbot")}>
         AI상담
       </button>
     </div>

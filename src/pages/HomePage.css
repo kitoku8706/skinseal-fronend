@@ -1,0 +1,156 @@
+.homepage-container {
+  width: 100%;
+  min-height: 100vh;
+  background: #fff;
+  padding: 0 0 40px 0;
+}
+
+.review-section {
+  max-width: 800px;
+  margin: 40px auto 0 auto;
+  padding: 0 16px;
+}
+
+.review-section h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: #222;
+  text-align: center;
+}
+
+.main-banner {
+  max-width: 900px;
+  margin: 48px auto 0 auto;
+  padding: 32px 16px;
+  background: #f8fafd;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  text-align: center;
+}
+
+.main-banner h1 {
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: #26324b;
+  margin-bottom: 12px;
+}
+
+.main-banner p {
+  font-size: 1.1rem;
+  color: #444;
+  margin-bottom: 22px;
+}
+
+.banner-btn {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.banner-btn:hover {
+  background: #2563eb;
+}
+
+.center-section {
+  max-width: 900px;
+  margin: 48px auto 0 auto;
+  padding: 0 16px;
+}
+
+.center-section h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #26324b;
+}
+
+.center-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.center-card {
+  background: #f3f4f6;
+  border-radius: 10px;
+  padding: 18px 28px;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #222;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  flex: 1 1 160px;
+  text-align: center;
+}
+
+.social-section {
+  max-width: 900px;
+  margin: 48px auto 0 auto;
+  padding: 0 16px;
+}
+
+.social-section h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #26324b;
+}
+
+.social-cards {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.social-card {
+  background: #e0e7ff;
+  border-radius: 10px;
+  padding: 18px 28px;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #222;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  flex: 1 1 160px;
+  text-align: center;
+}
+
+.quick-links {
+  max-width: 900px;
+  margin: 48px auto 0 auto;
+  padding: 0 16px;
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+}
+
+.quick-links button {
+  background: #fff;
+  border: 1.5px solid #3b82f6;
+  color: #3b82f6;
+  border-radius: 8px;
+  padding: 10px 26px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.quick-links button:hover {
+  background: #3b82f6;
+  color: #fff;
+}
+
+@media (max-width: 700px) {
+  .main-banner, .center-section, .social-section, .review-section, .quick-links {
+    max-width: 100%;
+    padding: 0 4vw;
+  }
+  .center-cards, .social-cards {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

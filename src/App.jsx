@@ -9,7 +9,6 @@ import NoticeListPage from "./pages/NoticeListPage";
 import AiDiagnosisPage from "./pages/AiDiagnosisPage";
 import LoginModal from "./components/LoginModal.jsx";
 import RegisterModal from "./components/RegisterModal.jsx";
-import RightSidebar from "./components/RightSidebar";
 import IntroPage from "./pages/IntroPage";
 import { NoticeForm } from "./components/NoticeForm";
 import NoticeEditPage from "./pages/NoticeEditPage";
@@ -19,10 +18,11 @@ import ReservationConsultPage from "./pages/ReservationConsultPage";
 import NavBar from "./components/NavBar";
 import DiagnosisPage from "./pages/DiagnosisPage";
 import MyPage from "./pages/MyPage.jsx";
-
+import ChatbotConsultPage from "./pages/ChatbotConsultPage";
 import NoticeDetailPage from "./pages/NoticeDetailPage";
 import MyInfoEdit from "./pages/MyInfoEdit.jsx";
 import UserWithdrawal from "./pages/UserWithdrawal.jsx";
+
 
 
 const TestConnection = () => {
@@ -140,6 +140,7 @@ function App() {
           <Route path="/notice/write" element={<NoticeForm />} />
           <Route path="/notice/edit/:id" element={<NoticeEditPage />} />
           <Route path="/notice/:id" element={<NoticeDetailPage />} />
+          <Route path="/reservation/chatbot" element={<ChatbotConsultPage />} />
 
           <Route path="/mypage" element={<MyPage />} >
             <Route path="edit" element={<MyInfoEdit />} />
@@ -147,18 +148,10 @@ function App() {
             <Route path="reservation" element={<ReservationConsultPage />} />
             <Route path="diagnosis" element={<DiagnosisPage />} />
           </Route>
+
         </Routes>
 
-        <RightSidebar onOpenAIPopup={() => setShowAIPopup(true)} />
-        {showAIPopup && (
-          <div className="ai-popup">
-            <div className="ai-popup-content">
-              <h2>AI상담</h2>
-              {/* AI상담 컴포넌트 또는 내용 */}
-              <button onClick={() => setShowAIPopup(false)}>닫기</button>
-            </div>
-          </div>
-        )}
+       
       </main>
       <Footer />
     </Router>

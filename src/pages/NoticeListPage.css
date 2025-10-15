@@ -1,0 +1,104 @@
+.notice-list-container {
+  width: 100%;
+  max-width: 700px;      /* 최대 너비 지정 */
+  margin: 40px auto 0;   /* 위 40px, 좌우 auto로 가운데 정렬 */
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 0 0 16px 0;
+}
+
+.notice-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 1rem;
+  background: #fff;
+}
+
+.notice-table th, .notice-table td {
+  padding: 12px 10px;
+  text-align: center;
+}
+
+.notice-table th {
+  background: #f8f8f8;
+  font-weight: 600;
+  border-bottom: 2px solid #eee;
+  color: #222;
+}
+
+.notice-table td {
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+}
+
+.notice-title {
+  text-align: left;
+  font-weight: 500;
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.notice-writer {
+  color: #444;
+}
+
+.notice-views {
+  color: #222;
+  font-size: 1rem;
+}
+
+.views-icon {
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.notice-date {
+  color: #666;
+  font-size: 0.98rem;
+}
+
+.notice-edit-btn {
+  background: #f2f2f2;
+  border: none;
+  border-radius: 8px;
+  padding: 4px 16px;
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.notice-edit-btn:hover {
+  background: #e0e0e0;
+}
+
+.pin-icon {
+  margin-right: 4px;
+  color: #ffb300;
+  font-size: 1.1em;
+}
+
+.new-icon {
+  display: inline-block;
+  margin-left: 6px;
+  background: #ff5252;
+  color: #fff;
+  font-size: 0.85em;
+  border-radius: 8px;
+  padding: 2px 7px;
+  vertical-align: middle;
+  font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  .notice-table th, .notice-table td {
+    padding: 8px 4px;
+    font-size: 0.95rem;
+  }
+  .notice-title {
+    max-width: 120px;
+  }
+}
