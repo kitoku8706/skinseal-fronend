@@ -10,10 +10,20 @@
     margin-top: 20px;
 }
 
+/* 마이페이지 사이드바 스타일 */
 .mypage-sidebar {
-    flex: 0 0 200px; 
+    /* 1. flex 속성을 유지하되, width와 flex-shrink를 명확히 지정하여 고정 */
+    width: 200px; /* 명확한 너비 지정 */
+    flex-shrink: 0; /* 내용물에 의해 너비가 줄어들지 않도록 설정 */
+    
     padding: 10px 0;
     border-right: 1px solid #eee;
+}
+
+/* 사이드바 항목 (NavLink) 공통 스타일 */
+.mypage-sidebar a {
+    text-decoration: none;
+    display: block;
 }
 
 .sidebar-item {
@@ -21,66 +31,31 @@
     cursor: pointer;
     font-size: 1.1em;
     color: #555;
+    transition: background-color 0.2s, color 0.2s;
 }
 
 .sidebar-item:hover {
     background-color: #f0f0f0;
 }
 
+/* NavLink의 'active' 상태를 위한 스타일 추가 */
+.sidebar-item.active {
+    background-color: #e6e6ff;
+    color: #646cff;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+/* 메인 콘텐츠 영역 스타일 */
 .mypage-content {
-    flex: 1;
+    flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
+    min-width: 0; /* 콘텐츠가 넘쳐도 레이아웃이 깨지지 않도록 방지 */
     padding: 0 20px;
 }
 
+/* 콘텐츠 영역 제목 스타일 (자식 라우트의 제목) */
 .mypage-content h2 {
     border-bottom: 2px solid #ccc;
     padding-bottom: 10px;
     margin-bottom: 20px;
-}
-
-.info-edit-form {
-    max-width: 600px;
-}
-
-.info-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.info-group label {
-    flex: 0 0 120px; 
-    font-weight: bold;
-    color: #333;
-}
-
-.info-group input {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-.button-actions {
-    margin-top: 30px;
-    text-align: right;
-}
-
-.button-actions button {
-    padding: 10px 20px;
-    margin-left: 10px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1em;
-}
-
-.btn-cancel {
-    background: #ccc;
-    color: #333;
-}
-
-.btn-save {
-    background: #646cff;
-    color: #fff;
 }

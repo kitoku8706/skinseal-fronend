@@ -1,0 +1,47 @@
+/* MyPage.css에서 분리된 스타일들 */
+.info-edit-form {
+    max-width: 600px;
+}
+
+.info-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.info-group label {
+    flex: 0 0 120px; 
+    font-weight: bold;
+    color: #333;
+}
+
+.info-group input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.button-actions {
+    margin-top: 30px;
+    text-align: right;
+}
+
+.button-actions button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.btn-cancel {
+    background: #ccc;
+    color: #333;
+}
+
+.btn-save {
+    background: #646cff;
+    color: #fff;
+}
