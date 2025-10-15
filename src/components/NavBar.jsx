@@ -55,7 +55,11 @@ function NavBar() {
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
-    localStorage.removeItem("username"); // username도 삭제
+    localStorage.removeItem("username");
+    localStorage.removeItem("loginId"); 
+    localStorage.removeItem("role");    
+    localStorage.removeItem("userId");  
+    
     setIsLoggedIn(false);
     setUsername("");
     alert("로그아웃 되었습니다.");
