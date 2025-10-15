@@ -1,69 +1,105 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import "./ManagementTeam.css";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-const ManagementTeam = ({ members }) => {
-  // 페이지 이동을 위한 navigate훅 사용
-  const navigate = useNavigate();
+const ManagementTeam = () => {
+  const [teamMembers, setTeamMembers] = useState([]);
 
-  // 기본 데이터(나중에 DB에서 가져올 수 있음)
-  const defaultMembers = [
-    {
-      id: 1,
-      name: "김충만",
-      position: "피부씰 상담사",
-      photo: "/images/team1.jpg",
-      intro:
-        "10년 경력의 전문 상담사입니다. 따뜻한 대화로 여러분의 고민을 함께 나누겠습니다.",
-    },
-    {
-      id: 2,
-      name: "신대현",
-      position: "피부씰 상담사",
-      photo: "/images/team2.jpg",
-      intro:
-        "다양한 상담 경험을 가지고 있습니다. 편안한 마음으로 찾아와 주세요.",
-    },
-    {
-      id: 3,
-      name: "정승환",
-      position: "피부씰 상담사",
-      photo: "/images/team3.jpg",
-      intro: "피부에 전문성을 가지고 있습니다. 함께 해결해봐요.",
-    },
-  ];
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/api/management")
+      .then((response) => {
+        setTeamMembers(response.data);
+      })
+      .catch((error) => {
+        console.error("운영진 데이터 로딩 실패:", error);
+      });
+  }, []);
 
-  // props로 전달받은 데이터가 있으면 사용, 없으면 기본 데이터 사용
-  const teamMembers = members || defaultMembers;
-
-  // 상담 예약 페이지 이동 함수
-  const handleReservationClick = () => {
-    // App.js의 Route에 정의된 경로로 이동
-    navigate("/reservation/consult");
+  const handleReservationClick = (reservationLink) => {
+    if (reservationLink) {
+      window.location.href = reservationLink;
+    } else {
+      alert("예약 페이지 링크가 없습니다.");
+    }
   };
 
   return (
-    <section className="management-team-container">
-      <h2 className="management-team-title">전문 상담사 소개</h2>
-      <p className="management-team-subtitle">
+    <section
+      style={{
+        maxWidth: "900px",
+        margin: "0 auto",
+        padding: "2rem",
+        textAlign: "center",
+      }}
+    >
+      <h2
+        style={{
+          fontWeight: "bold",
+          fontSize: "1.7rem",
+          marginBottom: "0.5rem",
+        }}
+      >
+        전문 상담사 소개
+      </h2>
+      <p style={{ color: "#555", marginBottom: "2rem" }}>
         여러분의 고민을 함께 나눌 준비가 되어있는 전문 상담사를 소개합니다.
       </p>
 
-      <div className="member-list">
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          gap: "1rem",
+        }}
+      >
         {teamMembers.map((member) => (
-          <div key={member.id} className="member-card">
+          <div
+            key={member.id}
+            style={{
+              boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+              borderRadius: "10px",
+              padding: "1.5rem",
+              width: "30%",
+              backgroundColor: "#fff",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
             <div
-              className="member-photo"
-              style={{ backgroundImage: `url(${member.photo})` }}
-              aria-label={`${member.name} 사진`}
+              style={{
+                width: "80px",
+                height: "80px",
+                borderRadius: "50%",
+                backgroundColor: "#eee",
+                backgroundImage: member.profileImage
+                  ? `url(${member.profileImage})`
+                  : "none",
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+                marginBottom: "1rem",
+              }}
             />
-            <h3 className="member-name">{member.name}</h3>
-            <h4 className="member-position">{member.position}</h4>
-            <p className="member-intro">{member.intro}</p>
+            <h3 style={{ margin: "0.5rem 0" }}>{member.name}</h3>
+            <p style={{ color: "#7a79e1", margin: "0.2rem 0" }}>
+              {member.position}
+            </p>
+            <p style={{ fontSize: "0.9rem", color: "#666", minHeight: "60px" }}>
+              {member.description}
+            </p>
             <button
-              className="reservation-button"
-              onClick={handleReservationClick}
-              aria-label={`${member.name} 상담 예약`}
+              onClick={() => handleReservationClick(member.consultReservation)}
+              style={{
+                marginTop: "auto",
+                backgroundColor: "#7a79e1",
+                color: "#fff",
+                border: "none",
+                padding: "0.6rem 1rem",
+                borderRadius: "6px",
+                cursor: "pointer",
+                width: "100%",
+                fontWeight: "bold",
+              }}
             >
               상담 예약하기
             </button>
