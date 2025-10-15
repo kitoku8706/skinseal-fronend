@@ -84,3 +84,26 @@
 .chatbot-input-area button:hover {
   background: #ffd43b;
 }
+
+.chatbot-quick-replies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px 0 0 0;
+  justify-content: flex-start;
+}
+
+.quick-reply-btn {
+  background: #fff;
+  border: 1.5px solid #bbb;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 6px;
+  transition: background 0.2s, border 0.2s;
+}
+.quick-reply-btn:hover {
+  background: #ffe066;
+  border-color: #ffe066;
+}
