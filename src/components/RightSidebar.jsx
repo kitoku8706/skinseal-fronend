@@ -15,7 +15,7 @@ function RightSidebar({ onOpenAIPopup }) {
       <button className="sidebar-btn" onClick={() => navigate('/directions')}>
         오시는길
       </button>
-      <button className="sidebar-btn" onClick={onOpenAIPopup}>
+      <button className="sidebar-btn" onClick={() => navigate("/reservation/chatbot")}>
         AI상담
       </button>
     </div>
