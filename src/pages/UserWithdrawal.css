@@ -1,0 +1,53 @@
+.withdrawal-container {
+    max-width: 600px;
+    /* info-edit-form 대신 전용 클래스 사용 */
+}
+
+/* 유의사항 섹션 스타일 */
+.withdrawal-notice h3 {
+    color: #D32F2F;
+    margin-bottom: 20px;
+}
+
+.withdrawal-notice p {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+/* 비밀번호 입력 필드 그룹 (MyInfoEdit.css의 info-group을 재활용한다고 가정) */
+/* .info-group은 공통 CSS에 있다면 그대로 사용 */
+
+/* 동의 체크박스 그룹 스타일 */
+.agreement-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.agreement-group input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+    flex: none;
+}
+
+.agreement-group label {
+    font-size: 0.9em;
+    flex: 1;
+}
+
+/* 오류 메시지 스타일 (공통) */
+.error-msg {
+    color: #D32F2F;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* 버튼 스타일 (MyInfoEdit.css의 button-actions 재활용) */
+/* 탈퇴 버튼 전용 스타일 */
+.button-actions .btn-withdraw {
+    background-color: #D32F2F;
+    color: #fff;
+    margin-left: 0; /* 버튼이 하나일 때 중앙 정렬 */
+}

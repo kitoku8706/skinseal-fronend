@@ -10,15 +10,23 @@ function UserJoinPage() {
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [name, setName] = useState('');
-    const [birth, setBirth] = useState('');
+    
+    const [selectedYear, setSelectedYear] = useState('');
+    const [selectedMonth, setSelectedMonth] = useState('');
+    const [selectedDay, setSelectedDay] = useState('');
+    
     const [email, setEmail] = useState('');
     
     const [loginIdChecked, setLoginIdChecked] = useState(false); 
     const [loginIdCheckMsg, setLoginIdCheckMsg] = useState(''); 
     
-    
     const [phoneNumber, setPhoneNumber] = useState('');
     const [error, setError] = useState('');
+    
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
+    const months = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
+    const days = Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, '0'));
 
     const handleIdCheck = async () => {
         if (!loginId) {
@@ -42,11 +50,30 @@ function UserJoinPage() {
             setLoginIdChecked(false);
         }
     };
+    
+    const handlePhoneNumberChange = (e) => {
+        const value = e.target.value.replace(/[^0-9]/g, '');
+        let formattedValue = '';
+
+        if (value.length < 4) {
+            formattedValue = value;
+        } else if (value.length < 8) {
+            formattedValue = `${value.slice(0, 3)}-${value.slice(3)}`;
+        } else if (value.length < 11) {
+            formattedValue = `${value.slice(0, 3)}-${value.slice(3, 7)}-${value.slice(7)}`;
+        } else {
+            formattedValue = `${value.slice(0, 3)}-${value.slice(3, 7)}-${value.slice(7, 11)}`;
+        }
+        
+        setPhoneNumber(formattedValue);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        if (!loginId || !password || !passwordConfirm || !name || !birth || !email || !phoneNumber) {
+        const finalBirth = `${selectedYear}.${selectedMonth}.${selectedDay}`;
+
+        if (!loginId || !password || !passwordConfirm || !name || !selectedYear || !selectedMonth || !selectedDay || !email || !phoneNumber) {
             setError('모든 항목을 입력하세요.');
             return;
         }
@@ -68,10 +95,10 @@ function UserJoinPage() {
                 loginId,
                 password,
                 username: name, 
-                birth,
+                birth: finalBirth, 
                 email,
                 role: 'USER', 
-                phoneNumber: phoneNumber
+                phoneNumber: phoneNumber.replace(/-/g, '') 
             };
             
             const res = await axios.post('http://localhost:8090/member/signup', reqData);
@@ -116,8 +143,22 @@ function UserJoinPage() {
                 <input type="password" placeholder="비밀번호" value={password} onChange={e => setPassword(e.target.value)} required />
                 <input type="password" placeholder="비밀번호 확인" value={passwordConfirm} onChange={e => setPasswordConfirm(e.target.value)} required />
                 <input type="text" placeholder="이름" value={name} onChange={e => setName(e.target.value)} required /> 
-                <input type="text" placeholder="생년월일 (예시: 90.09.09)" value={birth} onChange={e => setBirth(e.target.value)} required />
                 
+                <div className="birth-select-group">
+                    <select value={selectedYear} onChange={e => setSelectedYear(e.target.value)} required>
+                        <option value="">년</option>
+                        {years.map(year => <option key={year} value={year}>{year}년</option>)}
+                    </select>
+                    <select value={selectedMonth} onChange={e => setSelectedMonth(e.target.value)} required>
+                        <option value="">월</option>
+                        {months.map(month => <option key={month} value={month}>{month}월</option>)}
+                    </select>
+                    <select value={selectedDay} onChange={e => setSelectedDay(e.target.value)} required>
+                        <option value="">일</option>
+                        {days.map(day => <option key={day} value={day}>{day}일</option>)}
+                    </select>
+                </div>
+
                 <input
                     type="email"
                     placeholder="이메일"
@@ -128,10 +169,11 @@ function UserJoinPage() {
                 
                 <input
                     type="text"
-                    placeholder="전화번호"
+                    placeholder="전화번호 (예: 010-1234-5678)"
                     value={phoneNumber}
-                    onChange={e => setPhoneNumber(e.target.value)}
+                    onChange={handlePhoneNumberChange} 
                     required
+                    maxLength={13} 
                 />
                 
                 <button type="submit">회원가입</button>
