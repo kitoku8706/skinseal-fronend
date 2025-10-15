@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { pingBackend } from "../api/testApi";
 import NoticeListPage from "./NoticeListPage";
 import NavBar from "../components/NavBar";
+import "./HomePage.css";
 
 function HomePage() {
   const [result, setResult] = useState("");
@@ -34,8 +35,7 @@ function HomePage() {
   };
 
   return (
-    <div className="homepage-container">
-      {/* 공지사항 */}
+    <div className="homepage-container">      
       <section className="review-section">
         <h2>공지사항</h2>
         <div>
