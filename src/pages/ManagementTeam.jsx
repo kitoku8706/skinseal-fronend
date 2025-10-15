@@ -1,76 +1,94 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "./ManagementTeam.css";
 
-const ManagementTeam = ({ members }) => {
-  // 페이지 이동을 위한 navigate훅 사용
-  const navigate = useNavigate();
+const ManagementTeam = () => {
+  const [team, setTeam] = useState([]); // 관계자 목록 상태
+  const [loading, setLoading] = useState(true); // 로딩 상태
+  const [error, setError] = useState(null); // 에러 메시지 상태
 
-  // 기본 데이터(나중에 DB에서 가져올 수 있음)
-  const defaultMembers = [
-    {
-      id: 1,
-      name: "김충만",
-      position: "피부씰 상담사",
-      photo: "/images/team1.jpg",
-      intro:
-        "10년 경력의 전문 상담사입니다. 따뜻한 대화로 여러분의 고민을 함께 나누겠습니다.",
-    },
-    {
-      id: 2,
-      name: "신대현",
-      position: "피부씰 상담사",
-      photo: "/images/team2.jpg",
-      intro:
-        "다양한 상담 경험을 가지고 있습니다. 편안한 마음으로 찾아와 주세요.",
-    },
-    {
-      id: 3,
-      name: "정승환",
-      position: "피부씰 상담사",
-      photo: "/images/team3.jpg",
-      intro: "피부에 전문성을 가지고 있습니다. 함께 해결해봐요.",
-    },
-  ];
+  useEffect(() => {
+    // async/await로 API 데이터 비동기 호출 함수 정의
+    const fetchManagementData = async () => {
+      setLoading(true);
+      setError(null);
 
-  // props로 전달받은 데이터가 있으면 사용, 없으면 기본 데이터 사용
-  const teamMembers = members || defaultMembers;
+      try {
+        const res = await axios.get("/management/api");
 
-  // 상담 예약 페이지 이동 함수
-  const handleReservationClick = () => {
-    // App.js의 Route에 정의된 경로로 이동
-    navigate("/reservation/consult");
-  };
+        const data = res.data;
+
+        if (Array.isArray(data)) {
+          setTeam(data);
+        } else if (data && Array.isArray(data.data)) {
+          setTeam(data.data);
+        } else {
+          setError("서버 응답 데이터 형식이 올바르지 않습니다.");
+          setTeam([]);
+          console.warn("API 응답 형식 문제:", data);
+        }
+      } catch (err) {
+        // 네트워크 오류, CORS 문제, 서버 오류 등 모든 예외 처리
+        if (err.response) {
+          setError(
+            `서버 오류: ${err.response.status} ${err.response.statusText}`
+          );
+        } else if (err.request) {
+          setError("응답 없음: 서버와 연결할 수 없습니다.");
+        } else {
+          setError(`요청 오류: ${err.message}`);
+        }
+        setTeam([]);
+        console.error("API 호출 실패:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchManagementData();
+  }, []);
+
+  if (loading) return <div className="loading">로딩 중...</div>;
+
+  if (error) return <div className="error">{error}</div>;
+
+  if (!team.length)
+    return <div className="no-data">불러올 데이터가 없습니다.</div>;
 
   return (
-    <section className="management-team-container">
-      <h2 className="management-team-title">전문 상담사 소개</h2>
-      <p className="management-team-subtitle">
-        여러분의 고민을 함께 나눌 준비가 되어있는 전문 상담사를 소개합니다.
-      </p>
-
-      <div className="member-list">
-        {teamMembers.map((member) => (
-          <div key={member.id} className="member-card">
-            <div
-              className="member-photo"
-              style={{ backgroundImage: `url(${member.photo})` }}
-              aria-label={`${member.name} 사진`}
+    <div className="management-team-container">
+      <h1>관계자 소개</h1>
+      <div className="team-cards">
+        {team.map((member) => (
+          <div key={member.id} className="card">
+            <img
+              src={member.profileImage || "/default-profile.png"}
+              alt={`${member.name} 프로필`}
+              className="profile-img"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "/default-profile.png";
+              }}
             />
-            <h3 className="member-name">{member.name}</h3>
-            <h4 className="member-position">{member.position}</h4>
-            <p className="member-intro">{member.intro}</p>
-            <button
-              className="reservation-button"
-              onClick={handleReservationClick}
-              aria-label={`${member.name} 상담 예약`}
-            >
-              상담 예약하기
-            </button>
+            <div className="card-info">
+              <h2>{member.name}</h2>
+              <h4>{member.position}</h4>
+              <p>{member.description}</p>
+              {member.reservationLink && (
+                <a
+                  href={member.reservationLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-reserve"
+                >
+                  상담 예약
+                </a>
+              )}
+            </div>
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 };
 
