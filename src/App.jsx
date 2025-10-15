@@ -19,7 +19,7 @@ import ReservationConsultPage from "./pages/ReservationConsultPage";
 import NavBar from "./components/NavBar";
 import DiagnosisPage from "./pages/DiagnosisPage";
 import MyPage from "./pages/MyPage.jsx";
-import NoticeDetailPage from './pages/NoticeDetailPage';
+import NoticeDetailPage from "./pages/NoticeDetailPage";
 
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");

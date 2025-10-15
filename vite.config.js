@@ -13,13 +13,11 @@
 
 // })
 
-
-
 // vite.config.js
 
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import os from 'os';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import os from "os";
 
 // 1. 현재 PC의 로컬 네트워크 IP 주소를 찾는 함수
 function getLocalIpAddress() {
@@ -27,13 +25,13 @@ function getLocalIpAddress() {
   for (const name in interfaces) {
     for (const net of interfaces[name]) {
       // IPv4 주소이고, 내부 주소(127.0.0.1)가 아닌 것을 찾습니다.
-      if (net.family === 'IPv4' && !net.internal) {
+      if (net.family === "IPv4" && !net.internal) {
         return net.address;
       }
     }
   }
   // 로컬 IP를 찾지 못하면 'localhost'를 반환합니다.
-  return 'localhost'; 
+  return "localhost";
 }
 
 // 2. IP 주소 및 포트 설정
@@ -43,8 +41,14 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': {
-        target: 'http://localhost:8090',
+      "/api": {
+        target: "http://localhost:8090",
+        changeOrigin: true,
+        secure: false,
+      },
+      "/management/api": {
+        // 관계자 소개 API 경로 추가
+        target: "http://localhost:8090",
         changeOrigin: true,
         secure: false,
       },

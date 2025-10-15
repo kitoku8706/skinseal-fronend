@@ -1,112 +1,94 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "./ManagementTeam.css";
 
 const ManagementTeam = () => {
-  const [teamMembers, setTeamMembers] = useState([]);
+  const [team, setTeam] = useState([]); // 관계자 목록 상태
+  const [loading, setLoading] = useState(true); // 로딩 상태
+  const [error, setError] = useState(null); // 에러 메시지 상태
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/management")
-      .then((response) => {
-        setTeamMembers(response.data);
-      })
-      .catch((error) => {
-        console.error("운영진 데이터 로딩 실패:", error);
-      });
+    // async/await로 API 데이터 비동기 호출 함수 정의
+    const fetchManagementData = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const res = await axios.get("/management/api");
+
+        const data = res.data;
+
+        if (Array.isArray(data)) {
+          setTeam(data);
+        } else if (data && Array.isArray(data.data)) {
+          setTeam(data.data);
+        } else {
+          setError("서버 응답 데이터 형식이 올바르지 않습니다.");
+          setTeam([]);
+          console.warn("API 응답 형식 문제:", data);
+        }
+      } catch (err) {
+        // 네트워크 오류, CORS 문제, 서버 오류 등 모든 예외 처리
+        if (err.response) {
+          setError(
+            `서버 오류: ${err.response.status} ${err.response.statusText}`
+          );
+        } else if (err.request) {
+          setError("응답 없음: 서버와 연결할 수 없습니다.");
+        } else {
+          setError(`요청 오류: ${err.message}`);
+        }
+        setTeam([]);
+        console.error("API 호출 실패:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchManagementData();
   }, []);
 
-  const handleReservationClick = (reservationLink) => {
-    if (reservationLink) {
-      window.location.href = reservationLink;
-    } else {
-      alert("예약 페이지 링크가 없습니다.");
-    }
-  };
+  if (loading) return <div className="loading">로딩 중...</div>;
+
+  if (error) return <div className="error">{error}</div>;
+
+  if (!team.length)
+    return <div className="no-data">불러올 데이터가 없습니다.</div>;
 
   return (
-    <section
-      style={{
-        maxWidth: "900px",
-        margin: "0 auto",
-        padding: "2rem",
-        textAlign: "center",
-      }}
-    >
-      <h2
-        style={{
-          fontWeight: "bold",
-          fontSize: "1.7rem",
-          marginBottom: "0.5rem",
-        }}
-      >
-        전문 상담사 소개
-      </h2>
-      <p style={{ color: "#555", marginBottom: "2rem" }}>
-        여러분의 고민을 함께 나눌 준비가 되어있는 전문 상담사를 소개합니다.
-      </p>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          gap: "1rem",
-        }}
-      >
-        {teamMembers.map((member) => (
-          <div
-            key={member.id}
-            style={{
-              boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-              borderRadius: "10px",
-              padding: "1.5rem",
-              width: "30%",
-              backgroundColor: "#fff",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <div
-              style={{
-                width: "80px",
-                height: "80px",
-                borderRadius: "50%",
-                backgroundColor: "#eee",
-                backgroundImage: member.profileImage
-                  ? `url(${member.profileImage})`
-                  : "none",
-                backgroundPosition: "center",
-                backgroundSize: "cover",
-                marginBottom: "1rem",
+    <div className="management-team-container">
+      <h1>관계자 소개</h1>
+      <div className="team-cards">
+        {team.map((member) => (
+          <div key={member.id} className="card">
+            <img
+              src={member.profileImage || "/default-profile.png"}
+              alt={`${member.name} 프로필`}
+              className="profile-img"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "/default-profile.png";
               }}
             />
-            <h3 style={{ margin: "0.5rem 0" }}>{member.name}</h3>
-            <p style={{ color: "#7a79e1", margin: "0.2rem 0" }}>
-              {member.position}
-            </p>
-            <p style={{ fontSize: "0.9rem", color: "#666", minHeight: "60px" }}>
-              {member.description}
-            </p>
-            <button
-              onClick={() => handleReservationClick(member.consultReservation)}
-              style={{
-                marginTop: "auto",
-                backgroundColor: "#7a79e1",
-                color: "#fff",
-                border: "none",
-                padding: "0.6rem 1rem",
-                borderRadius: "6px",
-                cursor: "pointer",
-                width: "100%",
-                fontWeight: "bold",
-              }}
-            >
-              상담 예약하기
-            </button>
+            <div className="card-info">
+              <h2>{member.name}</h2>
+              <h4>{member.position}</h4>
+              <p>{member.description}</p>
+              {member.reservationLink && (
+                <a
+                  href={member.reservationLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-reserve"
+                >
+                  상담 예약
+                </a>
+              )}
+            </div>
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 };
 
