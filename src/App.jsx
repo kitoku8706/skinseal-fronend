@@ -9,7 +9,6 @@ import NoticeListPage from "./pages/NoticeListPage";
 import AiDiagnosisPage from "./pages/AiDiagnosisPage";
 import LoginModal from "./components/LoginModal.jsx";
 import RegisterModal from "./components/RegisterModal.jsx";
-import RightSidebar from "./components/RightSidebar";
 import IntroPage from "./pages/IntroPage";
 import { NoticeForm } from "./components/NoticeForm";
 import NoticeEditPage from "./pages/NoticeEditPage";
@@ -141,16 +140,7 @@ function App() {
           <Route path="/reservation/chatbot" element={<ChatbotConsultPage />} />
         </Routes>
 
-        <RightSidebar onOpenAIPopup={() => setShowAIPopup(true)} />
-        {showAIPopup && (
-          <div className="ai-popup">
-            <div className="ai-popup-content">
-              <h2>AI상담</h2>
-              {/* AI상담 컴포넌트 또는 내용 */}
-              <button onClick={() => setShowAIPopup(false)}>닫기</button>
-            </div>
-          </div>
-        )}
+       
       </main>
       <Footer />
     </Router>

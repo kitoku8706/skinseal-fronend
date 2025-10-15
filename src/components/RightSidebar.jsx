@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './RightSidebar.css'; // ← 이 위치가 가장 명확합니다
 
 function RightSidebar({ onOpenAIPopup }) {
   const navigate = useNavigate();
