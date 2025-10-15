@@ -9,7 +9,6 @@ import NoticeListPage from "./pages/NoticeListPage";
 import AiDiagnosisPage from "./pages/AiDiagnosisPage";
 import LoginModal from "./components/LoginModal.jsx";
 import RegisterModal from "./components/RegisterModal.jsx";
-import RightSidebar from "./components/RightSidebar";
 import IntroPage from "./pages/IntroPage";
 import { NoticeForm } from "./components/NoticeForm";
 import NoticeEditPage from "./pages/NoticeEditPage";
@@ -20,6 +19,7 @@ import NavBar from "./components/NavBar";
 import DiagnosisPage from "./pages/DiagnosisPage";
 import MyPage from "./pages/MyPage.jsx";
 import NoticeDetailPage from './pages/NoticeDetailPage';
+import ChatbotConsultPage from "./pages/ChatbotConsultPage";
 
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
@@ -137,18 +137,10 @@ function App() {
           <Route path="/notice/edit/:id" element={<NoticeEditPage />} />
           <Route path="/notice/:id" element={<NoticeDetailPage />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/reservation/chatbot" element={<ChatbotConsultPage />} />
         </Routes>
 
-        <RightSidebar onOpenAIPopup={() => setShowAIPopup(true)} />
-        {showAIPopup && (
-          <div className="ai-popup">
-            <div className="ai-popup-content">
-              <h2>AI상담</h2>
-              {/* AI상담 컴포넌트 또는 내용 */}
-              <button onClick={() => setShowAIPopup(false)}>닫기</button>
-            </div>
-          </div>
-        )}
+       
       </main>
       <Footer />
     </Router>
