@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./NoticeListPage.css";
 
 function NoticeListPage() {
   const [notices, setNotices] = useState([]);
@@ -65,7 +66,7 @@ function NoticeListPage() {
               <th>작성자</th>
               <th>조회수</th>
               <th>작성일</th>
-              <th>수정</th>
+              {role === "ADMIN" && <th>수정</th>}
             </tr>
           </thead>
           <tbody>
@@ -92,11 +93,13 @@ function NoticeListPage() {
                   <td className="notice-date">
                     {notice.createdAt ? notice.createdAt.slice(0, 10) : '-'}
                   </td>
-                  <td>
-                    <button className="notice-edit-btn" onClick={() => handleEdit(notice)}>
-                      수정
-                    </button>
-                  </td>
+                  {role === "ADMIN" && (
+                    <td>
+                      <button className="notice-edit-btn" onClick={() => handleEdit(notice)}>
+                        수정
+                      </button>
+                    </td>
+                  )}
                 </tr>               
               </React.Fragment>
             ))}
