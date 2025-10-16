@@ -117,24 +117,7 @@ function HomePage() {
           <button>오시는 길</button>
         </section>
 
-        {/* DB 연동 테스트 섹션 */}
-        <div style={{ margin: '20px 0', padding: '10px', border: '1px solid #eee', background: '#fafafa' }}>
-          <h3>DB 연동 테스트</h3>
-          <button onClick={handleGetUsers}>유저 목록 조회</button>
-          {userError && <div style={{ color: 'red' }}>{userError}</div>}
-          <ul>
-            {users.map((user, idx) => (
-              <li key={user.id || idx}>{user.name || JSON.stringify(user)}</li>
-            ))}
-          </ul>
-          <button onClick={handleGetCategories}>챗봇 카테고리 조회</button>
-          {categoryError && <div style={{ color: 'red' }}>{categoryError}</div>}
-          <ul>
-            {categories.map((cat, idx) => (
-              <li key={cat.id || idx}>{cat.name || JSON.stringify(cat)}</li>
-            ))}
-          </ul>
-        </div>
+        
       </div>
       <RightSidebar /> {/* ← 바깥에 추가하면 오른쪽 고정 */}
     </>
