@@ -101,42 +101,44 @@ function NavBar() {
   ];
 
   return (
-    <nav className="main-nav">
-      <div className="logo" onClick={() => navigate("/")}>
-        로고
-      </div>
-      <ul className="nav-menu">
-        {menuItems.map((item, idx) => (
-          <li
-            key={item.label}
-            className="nav-item"
-            onMouseEnter={() => setOpenMenu(idx)}
-            onMouseLeave={() => setOpenMenu(null)}
-          >
-            <span
-              onClick={() => {
-                if (item.link) navigate(item.link);
-              }}
-              style={{ cursor: item.link ? "pointer" : "default" }}
+    <div className="main-nav">
+      <div className="nav-center">
+        <span className="logo" onClick={() => navigate("/")}>
+          로고
+        </span>
+        <ul className="nav-menu">
+          {menuItems.map((item, idx) => (
+            <li
+              key={item.label}
+              className="nav-item"
+              onMouseEnter={() => setOpenMenu(idx)}
+              onMouseLeave={() => setOpenMenu(null)}
             >
-              {item.label}
-            </span>
-            {item.submenu && openMenu === idx && (
-              <ul className="dropdown-menu">
-                {item.submenu.map((sub) => (
-                  <li
-                    key={sub.label}
-                    className="dropdown-item"
-                    onClick={() => navigate(sub.link)}
-                  >
-                    {sub.label}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </li>
-        ))}
-      </ul>
+              <span
+                onClick={() => {
+                  if (item.link) navigate(item.link);
+                }}
+                style={{ cursor: item.link ? "pointer" : "default" }}
+              >
+                {item.label}
+              </span>
+              {item.submenu && openMenu === idx && (
+                <ul className="dropdown-menu">
+                  {item.submenu.map((sub) => (
+                    <li
+                      key={sub.label}
+                      className="dropdown-item"
+                      onClick={() => navigate(sub.link)}
+                    >
+                      {sub.label}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
       <div className="nav-actions">
         {isLoggedIn ? (
           <>
@@ -152,7 +154,7 @@ function NavBar() {
           </>
         )}
       </div>
-    </nav>
+    </div>
   );
 }
 
