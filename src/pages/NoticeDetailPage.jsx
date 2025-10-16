@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import "./NoticeDetailPage.css"; // 스타일 파일 import
 
 function NoticeDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [notice, setNotice] = useState(null);
-  const [role, setRole] = useState(""); // 역할 상태 추가
+  const [role, setRole] = useState("");
   const didFetch = useRef(false);
 
   useEffect(() => {
-    //조회수 증가
     if (didFetch.current) return;
     didFetch.current = true;
 
@@ -21,7 +21,6 @@ function NoticeDetailPage() {
         navigate("/notice");
       });
 
-    // role 정보 로컬스토리지에서 가져오기 (예시)
     const userRole = localStorage.getItem("role");
     setRole(userRole);
   }, [id, navigate]);
@@ -29,16 +28,16 @@ function NoticeDetailPage() {
   if (!notice) return <div>로딩 중...</div>;
 
   return (
-    <div style={{ maxWidth: 800, margin: "0 auto", padding: 20 }}>
-      <h2>{notice.title || '제목 없음'}</h2>
-      <div style={{ color: "#888", marginBottom: 8 }}>
-        작성자: {notice.writer || "공지"} | 작성일: {notice.createdAt.slice(0, 10) || '-'} | 조회수: {notice.views ?? 0}
+    <div className="notice-detail-container">
+      <h2 className="notice-detail-title">{notice.title || '제목 없음'}</h2>
+      <div className="notice-detail-meta">
+        작성자: {notice.writer || "공지"} | 작성일: {notice.createdAt?.slice(0, 10) || '-'} | 조회수: {notice.views ?? 0}
       </div>
-      <div style={{ whiteSpace: "pre-line", marginBottom: 24 }}>
+      <div className="notice-detail-content">
         {notice.content || '내용이 없습니다.'}
       </div>
-      <div style={{ display: "flex", gap: 8 }}>
-        <button onClick={() => navigate("/notice")}>목록으로</button>
+      <div className="notice-detail-actions">
+        <button className="notice-list-btn" onClick={() => navigate("/notice")}>목록으로</button>
         {role === "ADMIN" && (
           <button
             className="notice-edit-btn"

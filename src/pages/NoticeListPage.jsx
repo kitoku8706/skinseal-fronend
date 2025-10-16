@@ -4,38 +4,42 @@ import "./NoticeListPage.css";
 
 function NoticeListPage() {
   const [notices, setNotices] = useState([]);
-  const [role, setRole] = useState(""); // 역할 상태 추가
+  const [role, setRole] = useState("");
+  const [page, setPage] = useState(1);
   const navigate = useNavigate();
+
+  const ITEMS_PER_PAGE = 5;
 
   useEffect(() => {
     fetch('/api/notice')
       .then(res => res.json())
       .then(data => {
-        setNotices(data);
+        // 작성일 기준 최신순 정렬
+        const sorted = [...data].sort((a, b) => {
+          const dateA = new Date(a.createdAt);
+          const dateB = new Date(b.createdAt);
+          return dateB - dateA;
+        });
+        setNotices(sorted);
       })
       .catch(() => setNotices([]));
 
-    // 예시: localStorage에서 role 가져오기 (실제 구현에 맞게 수정)
     const userRole = localStorage.getItem("role");
     setRole(userRole);
   }, []);
 
-  // 타입별 라벨 색상
   const getLabelClass = (type) => {
     if (type === '이벤트') return 'label-patch';
     return 'label-notice';
   };
 
-  // 고정(핀) 여부, 새글 여부 등은 notice 데이터에 따라 조건 추가
   const isPinned = (notice) => notice.pinned;
   const isNew = (notice) => notice.is_new;
 
-  // 글쓰기 버튼 클릭 시 이동
   const handleWrite = () => {
     navigate('/notice/write');
   };
 
-  // 수정 버튼 클릭 시 이동 (각 공지별)
   const handleEdit = (notice) => {
     const id = notice.noticeId || notice.notice_id;
     if (id) {
@@ -45,23 +49,27 @@ function NoticeListPage() {
     }
   };
 
-  // 제목 클릭 시 상세 페이지로 이동
   const handleTitleClick = (noticeId) => {
     navigate(`/notice/${noticeId}`);
   };
 
+  // 페이지네이션 관련
+  const totalPages = Math.ceil(notices.length / ITEMS_PER_PAGE);
+  const paginatedNotices = notices.slice(
+    (page - 1) * ITEMS_PER_PAGE,
+    page * ITEMS_PER_PAGE
+  );
+
+  const handlePrev = () => setPage((prev) => Math.max(prev - 1, 1));
+  const handleNext = () => setPage((prev) => Math.min(prev + 1, totalPages));
+
   return (
     <div>
-      {/* 상단에 글쓰기 버튼: ADMIN만 보임 */}
-      {role === "ADMIN" && (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-          <button className="notice-write-btn" onClick={handleWrite}>글쓰기</button>
-        </div>
-      )}
       <div className="notice-list-container">
         <table className="notice-table">
           <thead>
             <tr>
+              <th style={{textAlign: 'center', width: '60px'}}>번호</th>
               <th style={{textAlign: 'left'}}>제목</th>
               <th>작성자</th>
               <th>조회수</th>
@@ -70,19 +78,19 @@ function NoticeListPage() {
             </tr>
           </thead>
           <tbody>
-            {notices.map(notice => (
+            {paginatedNotices.map((notice, idx) => (
               <React.Fragment key={notice.notice_id || notice.title + notice.created_at}>
                 <tr>
+                  <td style={{textAlign: 'center'}}>
+                    {(page - 1) * ITEMS_PER_PAGE + idx + 1}
+                  </td>
                   <td
                     className="notice-title"
                     style={{textAlign: 'left', cursor: 'pointer'}}
                     onClick={() => handleTitleClick(notice.noticeId)}
                   >
-                    {/* 고정(핀) 표시 */}
                     {isPinned(notice) && <span className="pin-icon" title="고정">📌</span>}
-                    {/* 제목 */}
                     <span>{notice.title}</span>
-                    {/* 새글 표시 */}
                     {isNew(notice) && <span className="new-icon">N</span>}
                   </td>
                   <td className="notice-writer">{notice.username || '관리자'}</td>
@@ -105,6 +113,25 @@ function NoticeListPage() {
             ))}
           </tbody>
         </table>
+        {/* 페이지네이션 중앙 + 글쓰기 버튼 오른쪽 */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", margin: "20px 0" }}>
+          <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+            <button onClick={handlePrev} disabled={page === 1} style={{ marginRight: 8 }}>
+              이전
+            </button>
+            <span>
+              {page} / {totalPages}
+            </span>
+            <button onClick={handleNext} disabled={page === totalPages} style={{ marginLeft: 8 }}>
+              다음
+            </button>
+          </div>
+          {role === "ADMIN" && (
+            <button className="notice-write-btn" onClick={handleWrite} style={{ marginLeft: "auto" }}>
+              글쓰기
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
