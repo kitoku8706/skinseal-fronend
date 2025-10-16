@@ -1,13 +1,12 @@
 import React from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import './MyPage.css';
+import '../styles/MyPage.css';
 
 function MyPage() {
     const location = useLocation(); 
 
     const mypageMenuItems = [
-        { name: "대시보드", path: "" }, 
-        { name: "회원정보 수정", path: "edit" }, 
+        { name: "회원정보 수정", path: "" }, 
         { name: "예약 조회", path: "reservation" },
         { name: "진단 목록", path: "diagnosis" },
         { name: "회원 탈퇴", path: "withdraw" },
@@ -23,7 +22,7 @@ function MyPage() {
         } 
         
         if (location.pathname === '/mypage' || location.pathname.endsWith('/')) {
-             return "대시보드"; 
+             return "회원정보 수정"; 
         }
 
         return "마이페이지"; 

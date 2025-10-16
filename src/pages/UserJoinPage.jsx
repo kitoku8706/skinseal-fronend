@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './UserJoinPage.css'; 
+import '../styles/UserJoinPage.css'; 
 import { useNavigate } from 'react-router-dom';
 
 function UserJoinPage() {
@@ -23,6 +23,8 @@ function UserJoinPage() {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [error, setError] = useState('');
     
+    const [isAgreed, setIsAgreed] = useState(false); 
+    
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
     const months = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
@@ -34,6 +36,13 @@ function UserJoinPage() {
             setLoginIdChecked(false);
             return;
         }
+
+        const idRegex = /^[a-zA-Z0-9]{6,20}$/;
+        if (!idRegex.test(loginId)) {
+            setLoginIdCheckMsg('아이디는 영문 또는 숫자 6~20자로 입력해야 합니다.');
+            setLoginIdChecked(false);
+            return;
+        }
         
         try {
             const res = await axios.post('http://localhost:8090/member/id-check', { loginId }); 
@@ -42,7 +51,7 @@ function UserJoinPage() {
                 setLoginIdCheckMsg('이미 사용 중인 아이디입니다.');
                 setLoginIdChecked(false);
             } else {
-                setLoginIdCheckMsg('사용 가능한 아이디입니다.');
+                setLoginIdCheckMsg('사용 가능한 아이디입니다. (중복 확인 완료)');
                 setLoginIdChecked(true);
             }
         } catch (err) {
@@ -88,6 +97,11 @@ function UserJoinPage() {
             return;
         }
 
+        if (!isAgreed) {
+            setError('회원가입 시 정보 제공에 동의해주세요.');
+            return;
+        }
+        
         setError('');
 
         try {
@@ -115,27 +129,25 @@ function UserJoinPage() {
         <div className="join-container">
             <h2>회원가입</h2>
             <form onSubmit={handleSubmit} className="join-form">
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <div className="join-form-group id-group">
                     <input
                         type="text"
-                        placeholder="아이디"
+                        placeholder="아이디 (6~20자, 영문)"
                         value={loginId}
                         onChange={e => { setLoginId(e.target.value); setLoginIdChecked(false); setLoginIdCheckMsg(''); }} 
-                        style={{ flex: 1 }}
                         required
                     />
                     <button
                         type="button"
-                        className="email-check-btn"
+                        className="id-check-btn"
                         onClick={handleIdCheck}
-                        style={{ whiteSpace: 'nowrap' }}
                         disabled={loginIdChecked} 
                     >
                         아이디 중복확인
                     </button>
                 </div>
                 {loginIdCheckMsg && 
-                    <div className="email-check-msg" style={{ color: loginIdChecked ? '#4CAF50' : '#D32F2F' }}>
+                    <div className="check-msg" style={{ color: loginIdChecked ? '#4CAF50' : '#D32F2F' }}>
                         {loginIdCheckMsg}
                     </div>
                 }
@@ -176,6 +188,16 @@ function UserJoinPage() {
                     maxLength={13} 
                 />
                 
+                <div className="agreement-group">
+                    <input 
+                        type="checkbox" 
+                        id="agreement" 
+                        checked={isAgreed} 
+                        onChange={e => setIsAgreed(e.target.checked)}
+                    />
+                    <label htmlFor="agreement">회원가입 시 정보 제공에 동의합니다.</label>
+                </div>
+
                 <button type="submit">회원가입</button>
                 {error && <div className="error-msg">{error}</div>}
             </form>

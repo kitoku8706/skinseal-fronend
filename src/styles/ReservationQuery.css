@@ -1,0 +1,96 @@
+/* 마이페이지 레이아웃에 맞춰 스타일링 */
+.reservation-query-page {
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.reservation-query-page h3 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.reservation-table-container {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.reservation-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* 테이블 너비 고정 */
+}
+
+.reservation-table th, 
+.reservation-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.reservation-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    color: #555;
+}
+
+.reservation-table td {
+    font-size: 0.95em;
+    color: #444;
+}
+
+.reservation-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.reservation-table tr:hover {
+    background-color: #f0f8ff;
+}
+
+/* 버튼 스타일 */
+.actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.actions button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    white-space: nowrap; /* 버튼 내용 줄바꿈 방지 */
+    transition: background-color 0.2s;
+}
+
+/* 예약 취소 버튼 (붉은색 계열) */
+.cancel-btn {
+    background-color: #ef5350;
+    color: white;
+}
+.cancel-btn:hover {
+    background-color: #d32f2f;
+}
+
+/* 날짜/시간 변경 버튼 (보라색 계열) */
+.change-btn {
+    background-color: #646cff; /* 회원가입 버튼 색상과 유사하게 설정 */
+    color: white;
+}
+.change-btn:hover {
+    background-color: #535bf2;
+}
+
+.no-reservation-message {
+    text-align: center;
+    padding: 40px;
+    color: #777;
+    font-size: 1.1em;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background: #fff;
+}

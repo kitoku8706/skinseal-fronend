@@ -1,17 +1,9 @@
-/* 가장 상위에 추가 (예: App.css 또는 index.css) */
 body {
     min-height: 100vh;
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
 }
 
-/* 또는 App.jsx에서 main에 직접 스타일 적용 */
 main {
     min-height: 100vh;
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
 }
 
 .join-container {
@@ -38,14 +30,57 @@ main {
 .join-form select { 
     width: 100%;
     padding: 10px 15px;
-    height: 45px;
+    height: 45px; 
     font-size: 1em;
     border: 1px solid #ccc;
     border-radius: 6px;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.5em; 
     box-sizing: border-box; 
     background-color: #fff; 
 }
+.join-form button[type="submit"] {
+    height: 45px;
+}
+
+.join-form-group {
+    display: flex;
+    align-items: center;
+    gap: 8px; 
+    margin-bottom: 0.5em; 
+}
+.join-form-group + .check-msg {
+    margin-top: -8px; 
+    margin-bottom: 8px;
+}
+
+
+.join-form-group input {
+    width: auto; 
+    flex-grow: 1; 
+    margin-bottom: 0;
+}
+
+.id-check-btn { 
+    background: #646cff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5em 1em;
+    font-size: 0.95em;
+    cursor: pointer;
+    height: 45px; 
+    white-space: nowrap; 
+    width: 100px; 
+    flex-shrink: 0; 
+}
+.id-check-btn:hover {
+    background: #535bf2;
+}
+.id-check-btn:disabled {
+    background: #bdbdbd;
+    cursor: not-allowed;
+}
+
 
 .join-form select {
     appearance: none;
@@ -86,30 +121,45 @@ main {
     padding: 0.8em;
     font-size: 1em;
     cursor: pointer;
+    height: 45px; 
 }
 .join-form button:hover {
     background: #535bf2;
 }
 
-.email-check-btn {
-    background: #e0e0e0;
-    color: #333;
-    border: none;
-    border-radius: 6px;
-    padding: 0.5em 1em;
-    font-size: 0.95em;
-    margin-left: 0.5em;
-    cursor: pointer;
-    height: 45px;
-}
-.email-check-btn:hover {
-    background: #bdbdbd;
+.agreement-group {
+    display: flex;
+    align-items: center; 
+    gap: 8px;
+    margin-top: 5px; 
+    margin-bottom: 10px; 
 }
 
-.email-check-msg {
+.agreement-group input[type="checkbox"] {
+    width: 16px; 
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    box-sizing: content-box; 
+    margin-bottom: 0;
+}
+
+.agreement-group label {
+    font-size: 0.95em;
+    color: #333;
+    cursor: pointer;
+}
+
+
+.check-msg { 
     font-size: 0.95em;
     color: #d32f2f;
     margin-top: 4px;
+    margin-bottom: 8px; 
     text-align: left;
 }
 .error-msg {
