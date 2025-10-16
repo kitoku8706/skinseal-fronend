@@ -65,13 +65,17 @@ function HomePage() {
     <>
       <div className="homepage-container">
 
-        <section className="review-section">
-          <h2>공지사항</h2>
-          <div>
-            <NoticeListPage />
-          </div>
-        </section>
-
+        {/* 공지사항 바로가기 버튼 상단에 추가 */}
+        <div style={{ width: "100%", display: "flex", justifyContent: "center", margin: "32px 0 0 0" }}>
+          <button
+            className="banner-btn"
+            style={{ minWidth: 180 }}
+            onClick={() => navigate("/notice")}
+          >
+            공지사항 바로가기
+          </button>
+        </div>  
+      
         {/* 메인 배너 */}
         <section className="main-banner">
           <h1>빠르고 안전한 진료, SkinSeal 병원</h1>
