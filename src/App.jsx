@@ -28,7 +28,7 @@ const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
 
   // 사용자님의 서버 포트 8090에 맞춰 URL 설정
-  const API_URL = "http://localhost:8090/member/user";
+  // const API_URL = "http://localhost:8090/member/user";
 
   const checkDatabaseConnection = async () => {
     setResponse("API 요청 중...");

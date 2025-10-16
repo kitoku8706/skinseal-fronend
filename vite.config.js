@@ -42,6 +42,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: '0.0.0.0',
+    port: 5173,
     proxy: {
 
       '/api': {
@@ -52,6 +53,7 @@ export default defineConfig({
       "/management/api": {
         // 관계자 소개 API 경로 추가
         target: "http://localhost:8090",
+        // target: `http://${localIp}:${backendPort}`
         changeOrigin: true,
         secure: false,
       },
