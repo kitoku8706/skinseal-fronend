@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 function KakaoLoginButton({ onLogin }) {
   useEffect(() => {
     if (!window.Kakao.isInitialized()) {
-      window.Kakao.init('카카오_자바스크립트_키'); // 카카오 개발자 콘솔에서 발급받은 JS 키
+      window.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY); // 카카오 JavaScript 키 설정
     }
   }, []);
 
@@ -13,38 +13,27 @@ function KakaoLoginButton({ onLogin }) {
         window.Kakao.API.request({
           url: '/v2/user/me',
           success: function (res) {
-            // res.kakao_account.email 등에서 정보 추출
             const kakaoUser = {
               email: res.kakao_account.email,
               nickname: res.properties.nickname,
               kakao_id: res.id
             };
-            // 백엔드로 회원가입/로그인 요청
-            fetch('http://localhost:8090/kakao-login', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(kakaoUser)
-            })
-              .then(r => r.json())
-              .then(data => {
-                alert(data.message);
-                if (onLogin) onLogin(data);
-              });
+            onLogin(kakaoUser); // 로그인 성공 시 콜백 호출
           },
           fail: function (error) {
-            alert('카카오 사용자 정보 요청 실패');
+            console.error('카카오 사용자 정보 요청 실패:', error);
           }
         });
       },
-      fail: function (err) {
-        alert('카카오 로그인 실패');
+      fail: function (error) {
+        console.error('카카오 로그인 실패:', error);
       }
     });
   };
 
   return (
-    <button onClick={handleKakaoLogin} style={{ background: '#FEE500', border: 'none', padding: '10px 20px', borderRadius: '5px' }}>
-      카카오로 로그인/회원가입
+    <button onClick={handleKakaoLogin} style={{ backgroundColor: '#FEE500', border: 'none', padding: '10px 20px', borderRadius: '5px', cursor: 'pointer' }}>
+      카카오 로그인
     </button>
   );
 }
