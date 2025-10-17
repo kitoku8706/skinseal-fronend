@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom"; // Link 컴포넌트 import 추가
 import "./ManagementTeam.css";
 
 const ManagementTeam = () => {
-  const [team, setTeam] = useState([]); // 관계자 목록 상태
-  const [loading, setLoading] = useState(true); // 로딩 상태
-  const [error, setError] = useState(null); // 에러 메시지 상태
+  const [team, setTeam] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // 백엔드 서버 기본 URL 설정
+  const SERVER_URL = "http://localhost:8090";
 
   useEffect(() => {
-    // async/await로 API 데이터 비동기 호출 함수 정의
     const fetchManagementData = async () => {
       setLoading(true);
       setError(null);
 
       try {
         const res = await axios.get("/management/api");
-
         const data = res.data;
 
         if (Array.isArray(data)) {
@@ -28,7 +30,6 @@ const ManagementTeam = () => {
           console.warn("API 응답 형식 문제:", data);
         }
       } catch (err) {
-        // 네트워크 오류, CORS 문제, 서버 오류 등 모든 예외 처리
         if (err.response) {
           setError(
             `서버 오류: ${err.response.status} ${err.response.statusText}`
@@ -49,9 +50,7 @@ const ManagementTeam = () => {
   }, []);
 
   if (loading) return <div className="loading">로딩 중...</div>;
-
   if (error) return <div className="error">{error}</div>;
-
   if (!team.length)
     return <div className="no-data">불러올 데이터가 없습니다.</div>;
 
@@ -62,12 +61,21 @@ const ManagementTeam = () => {
         {team.map((member) => (
           <div key={member.id} className="card">
             <img
-              src={member.profileImage || "/default-profile.png"}
+              src={
+                member.profileImage
+                  ? member.profileImage.startsWith("http")
+                    ? member.profileImage
+                    : `${SERVER_URL}${
+                        member.profileImage.startsWith("/") ? "" : "/"
+                      }${member.profileImage}`
+                  : "/default-profile.png"
+              }
               alt={`${member.name} 프로필`}
               className="profile-img"
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.src = "/default-profile.png";
+                console.log(`이미지 로드 실패: ${member.profileImage}`);
               }}
             />
             <div className="card-info">
@@ -75,14 +83,9 @@ const ManagementTeam = () => {
               <h4>{member.position}</h4>
               <p>{member.description}</p>
               {member.reservationLink && (
-                <a
-                  href={member.reservationLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-reserve"
-                >
+                <Link to="/reservation/consult" className="btn-reserve">
                   상담 예약
-                </a>
+                </Link>
               )}
             </div>
           </div>

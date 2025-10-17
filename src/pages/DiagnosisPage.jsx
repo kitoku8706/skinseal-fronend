@@ -83,7 +83,12 @@ function DiagnosisPage() {
       </aside>
       {/* 2. 컨텐츠 영역 */}
       <main className="diagnosis-content">
-        <div className="content-image" />
+        {/* <div className="content-image" /> */}
+        <img 
+          src={diseaseInfo?.imageUrl} 
+          alt={diseaseInfo?.diseaseName + " 이미지"} 
+          className="content-image" 
+          />
         <div className="content-desc">
           <div style={{ fontWeight: 'bold', fontSize: 20 }}>
             {diseaseInfo?.diseaseName || '병명'}

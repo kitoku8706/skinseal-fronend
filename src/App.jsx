@@ -22,7 +22,8 @@ import ChatbotConsultPage from "./pages/ChatbotConsultPage";
 import NoticeDetailPage from "./pages/NoticeDetailPage";
 import MyInfoEdit from "./pages/MyInfoEdit.jsx";
 import UserWithdrawal from "./pages/UserWithdrawal.jsx";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ReservationQuery from "./pages/ReservationQuery.jsx";
+
 
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
@@ -136,6 +137,7 @@ function App() {
           <Route path="/notice/edit/:id" element={<ProtectedRoute requiredRole="ADMIN"><NoticeEditPage /></ProtectedRoute>} />
           <Route path="/notice/write" element={<ProtectedRoute requiredRole="ADMIN"><NoticeForm /></ProtectedRoute>} />
         </Routes>        
+
       </main>
       <Footer />
     </Router>

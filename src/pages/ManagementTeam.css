@@ -79,6 +79,20 @@
   background-color: #1c5d8b;
 }
 
+/* 프로필 이미지 기본 스타일 */
+.profile-img {
+  width: 100%; /* 부모 요소의 가로폭에 맞춰 늘림 */
+  height: 280px; /* 고정 높이 지정 (원하는 크기로 조절) */
+  object-fit: cover; /* 이미지가 영역에 맞게 잘림 없이 꽉 차도록 조정 */
+  border-radius: 8px; /* 둥근 모서리 (필요 시) */
+  border-bottom: 1px solid #ddd; /* 이미지 아래 구분선 */
+}
+
+@media (max-width: 768px) {
+  .profile-img {
+    height: 200px;
+  }
+}
 @media (max-width: 768px) {
   .team-cards {
     flex-direction: column;
