@@ -1,68 +1,193 @@
+/* src/styles/DiagnosisPage.css */
+
+/* 전체 레이아웃 컨테이너 */
 .diagnosis-layout {
-  display: flex;
-  gap: 32px;
-  padding: 32px 0;
-  max-width: 1200px;
-  margin: 0 auto;
+    display: flex;
+    gap: 2rem; /* 사이드바와 컨텐츠 사이 간격 */
+    max-width: 1200px;
+    margin: 2rem auto; /* 페이지 중앙 정렬 및 상하 여백 */
+    padding: 0 1rem; /* 모바일 화면을 위한 좌우 여백 */
+    align-items: flex-start; /* 사이드바와 컨텐츠가 상단에 정렬되도록 */
 }
 
+/* 사이드바 스타일 */
 .diagnosis-sidebar {
-  width: 200px;
-  background: #f5f8fa;
-  border-radius: 12px;
-  padding: 18px 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    flex: 0 0 240px; /* 사이드바 너비 고정 */
+    background-color: #f8f9fa; /* 밝은 회색 배경 */
+    padding: 1.5rem; /* 내부 여백 */
+    border-radius: 12px; /* 둥근 모서리 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* 부드러운 그림자 */
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem; /* 버튼 사이 간격 */
 }
 
+/* 사이드바 제목 */
 .sidebar-title {
-  font-weight: bold;
-  font-size: 1.1em;
-  margin-bottom: 10px;
-  text-align: center;
+    font-size: 1.25rem; /* 글자 크기 */
+    font-weight: 600; /* 글자 두께 */
+    color: #343a40; /* 어두운 글자색 */
+    margin-bottom: 1.5rem; /* 제목 아래 여백 */
+    padding-bottom: 0.75rem; /* 하단 경계선과 텍스트 사이 여백 */
+    border-bottom: 1px solid #dee2e6; /* 하단 경계선 */
+    text-align: left; /* 왼쪽 정렬 */
 }
 
+/* 사이드바 버튼 공통 스타일 */
 .sidebar-btn {
-  background: #dbeafe;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 0;
-  margin-bottom: 6px;
-  cursor: pointer;
-  font-size: 1em;
-  transition: background 0.2s;
+    display: block;
+    width: 100%; /* 너비를 100%로 설정 */
+    padding: 0.8rem 1rem; /* 내부 여백 */
+    border: none; /* 테두리 없음 */
+    background-color: transparent; /* 배경 투명 */
+    text-align: left; /* 텍스트 왼쪽 정렬 */
+    font-size: 1rem; /* 글자 크기 */
+    color: #495057; /* 기본 글자색 */
+    cursor: pointer; /* 마우스 오버 시 포인터 변경 */
+    border-radius: 8px; /* 둥근 모서리 */
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease; /* 부드러운 전환 효과 */
+    white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 */
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis; /* 넘치는 텍스트 ... 처리 */
 }
+
+/* 사이드바 버튼 호버 시 스타일 */
 .sidebar-btn:hover {
-  background: #93c5fd;
+    background-color: #e9ecef; /* 호버 시 배경색 */
+    color: #000; /* 호버 시 글자색 */
+    transform: translateX(3px); /* 약간 오른쪽으로 이동하는 효과 */
 }
 
+/* 활성화된 사이드바 버튼 스타일 */
+.sidebar-btn.active {
+    background-color: #0d6efd; /* 활성화 시 파란색 배경 */
+    color: white; /* 활성화 시 흰색 글자 */
+    font-weight: 600; /* 활성화 시 글자 두께 */
+    box-shadow: 0 2px 5px rgba(13, 110, 253, 0.3); /* 활성화 시 그림자 */
+}
+
+/* 메인 컨텐츠 영역 */
 .diagnosis-content {
-  flex: 1;
-  background: #fff;
-  border-radius: 12px;
-  padding: 32px 24px;
-  display: flex;
-  align-items: flex-start;
-  gap: 32px;
-  min-height: 300px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    flex: 1; /* 남은 공간을 모두 차지 */
+    background-color: #ffffff; /* 흰색 배경 */
+    padding: 2rem; /* 내부 여백 */
+    border-radius: 12px; /* 둥근 모서리 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* 부드러운 그림자 */
+    display: flex;
+    flex-direction: column; /* 이미지와 설명을 세로로 배치 */
+    align-items: flex-start; /* 좌측 정렬 */
 }
 
+/* 컨텐츠 내 이미지 */
 .content-image {
-  width: 220px;
-  height: 220px;
-  background: #bcd;
-  border-radius: 8px;
-  margin-right: 24px;
+    width: 100%; /* 너비를 부모 컨테이너에 맞춤 */
+    max-width: 450px; /* 최대 너비 설정 (너무 커지지 않도록) */
+    height: auto; /* 높이는 자동으로 조절 */
+    object-fit: contain; /* 이미지 비율을 유지하면서 컨테이너에 맞게 */
+    border-radius: 8px; /* 둥근 모서리 */
+    margin-bottom: 2rem; /* 이미지 아래 여백 */
+    border: 1px solid #e0e0e0; /* 이미지 테두리 추가 (깔끔하게) */
+    padding: 10px; /* 이미지 내부 여백 */
+    box-sizing: border-box; /* 패딩이 너비에 포함되도록 */
 }
 
+/* 컨텐츠 내 설명 */
 .content-desc {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  font-size: 1.1em;
-  gap: 12px;
+    color: #333; /* 기본 글자색 */
+    line-height: 1.6; /* 줄 간격 */
+    width: 100%; /* 너비를 100%로 설정 */
+}
+
+.content-desc > div {
+    margin-bottom: 1.25rem; /* 각 설명 블록 아래 여백 */
+}
+
+.content-desc b {
+    color: #000; /* 볼드 텍스트 색상 */
+    margin-right: 0.5rem; /* 볼드 텍스트 뒤 여백 */
+}
+
+/* 반응형 웹 디자인 */
+@media (max-width: 992px) {
+    .diagnosis-layout {
+        gap: 1.5rem; /* 태블릿 환경에서 간격 조절 */
+    }
+    .diagnosis-sidebar {
+        flex: 0 0 200px; /* 태블릿 환경에서 사이드바 너비 조절 */
+        padding: 1rem;
+    }
+    .sidebar-title {
+        font-size: 1.15rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+    }
+    .sidebar-btn {
+        padding: 0.7rem 0.8rem;
+        font-size: 0.95rem;
+    }
+    .diagnosis-content {
+        padding: 1.5rem;
+    }
+    .content-image {
+        max-height: 300px; /* 태블릿 환경에서 이미지 높이 조절 */
+        margin-bottom: 1.5rem;
+    }
+    .content-desc > div {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .diagnosis-layout {
+        flex-direction: column; /* 모바일 환경에서 세로로 배치 */
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+        padding: 0 0.75rem;
+    }
+    .diagnosis-sidebar {
+        flex: 0 0 auto; /* 너비 고정 해제 */
+        width: 100%; /* 전체 너비 차지 */
+        order: 1; /* 사이드바가 먼저 오도록 (스크롤 시 상단) */
+        padding: 1rem;
+    }
+    .sidebar-title {
+        text-align: center; /* 모바일에서 제목 중앙 정렬 */
+        margin-bottom: 1rem;
+    }
+    .sidebar-btn {
+        font-size: 0.9rem;
+        padding: 0.6rem 0.8rem;
+        text-align: center; /* 모바일에서 버튼 텍스트 중앙 정렬 */
+    }
+    .diagnosis-content {
+        order: 2; /* 컨텐츠가 사이드바 다음으로 오도록 */
+        padding: 1.25rem;
+    }
+    .content-image {
+        max-width: 100%; /* 모바일에서 이미지 최대 너비 */
+        max-height: 250px; /* 모바일에서 이미지 높이 조절 */
+        margin-bottom: 1.25rem;
+    }
+    .content-desc {
+        font-size: 0.95rem;
+    }
+    .content-desc > div {
+        margin-bottom: 0.8rem;
+    }
+}
+
+/* 추가 스타일 */
+/* 이미지 테두리나 배경을 좀 더 명확하게 */
+.content-image[src=""] {
+    background-color: #e9ecef; /* 이미지가 없을 때 회색 배경 */
+    border: 1px dashed #ced4da; /* 이미지가 없을 때 점선 테두리 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #6c757d;
+    font-size: 1rem;
+    text-align: center;
+}
+.content-image[src=""]::after {
+    content: "이미지를 불러올 수 없습니다.";
 }
