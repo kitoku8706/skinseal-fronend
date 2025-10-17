@@ -20,20 +20,22 @@ function KakaoLoginButton({ onLogin }) {
             const kakaoUser = {
               email: res.kakao_account.email,
               nickname: res.properties.nickname,
-              kakao_id: res.id
+              kakao_id: res.id,
             };
             onLogin(kakaoUser); // 로그인 성공 시 콜백 호출
           },
           fail: function (error) {
             console.error('카카오 사용자 정보 요청 실패:', error);
-          }
+          },
         });
       },
       fail: function (error) {
         console.error('카카오 로그인 실패:', error);
-      }
+      },
     });
   };
+
+  console.log('KakaoLoginButton rendered');
 
   return (
     <button onClick={handleKakaoLogin} style={{ backgroundColor: '#FEE500', border: 'none', padding: '10px 20px', borderRadius: '5px', cursor: 'pointer' }}>
