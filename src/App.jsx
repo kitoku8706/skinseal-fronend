@@ -23,7 +23,7 @@ import NoticeDetailPage from "./pages/NoticeDetailPage";
 import MyInfoEdit from "./pages/MyInfoEdit.jsx";
 import UserWithdrawal from "./pages/UserWithdrawal.jsx";
 import ReservationQuery from "./pages/ReservationQuery.jsx";
-
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
