@@ -196,7 +196,7 @@ function NoticeListPage() {
           </thead>          <tbody>
             {paginatedNotices.length > 0 ? (
               paginatedNotices.map((notice, idx) => (
-                <React.Fragment key={notice.notice_id || notice.title + notice.created_at}>
+                <React.Fragment key={notice.notice_id || `${notice.title}_${notice.created_at}`}>
                   <tr>
                     <td style={{textAlign: 'center'}}>
                       {(page - 1) * ITEMS_PER_PAGE + idx + 1}
