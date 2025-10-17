@@ -80,17 +80,20 @@ function RegisterModal({ onClose }) {
         <input placeholder="비밀번호" type="password" value={password} onChange={e => setPassword(e.target.value)} />
         <input placeholder="비밀번호 확인" type="password" value={passwordConfirm} onChange={e => setPasswordConfirm(e.target.value)} />
         <input placeholder="이름" value={name} onChange={e => setName(e.target.value)} />
-        <input placeholder="생년월일 (예시: 90.09.09)" value={birth} onChange={e => setBirth(e.target.value)} />
+        <input placeholder="생년월일" value={birth} onChange={e => setBirth(e.target.value)} />
         <input placeholder="이메일" value={email} onChange={e => { setEmail(e.target.value); setEmailChecked(false); }} />
         <button type="button" onClick={handleEmailCheck} style={{ backgroundColor: '#007BFF', color: '#fff', padding: '10px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>중복확인</button>
-        <input placeholder="역할 (user/admin)" value={role} onChange={e => setRole(e.target.value)} />
         <input placeholder="전화번호" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} />
         <button onClick={handleRegister} style={{ backgroundColor: '#4CAF50', color: '#fff', padding: '10px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>회원가입</button>
       </form>
 
       <div style={{ marginTop: '20px', textAlign: 'center' }}>
-        <p>또는</p>
-        <KakaoLoginButton onLogin={handleKakaoRegister} />
+        <p>다른 방법으로 회원가입</p>
+        <div className="login-options" style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center' }}>
+          <KakaoLoginButton onLogin={handleKakaoRegister} />
+          <button style={{ backgroundColor: '#DB4437', color: '#fff', padding: '10px 20px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Google로 계속 진행</button>
+          <button style={{ backgroundColor: '#4267B2', color: '#fff', padding: '10px 20px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Facebook으로 계속 진행</button>
+        </div>
       </div>
 
       <button onClick={onClose} style={{ marginTop: '10px', backgroundColor: '#f44336', color: '#fff', padding: '10px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>취소</button>
