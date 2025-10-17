@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { pingBackend } from "../api/testApi";
+import { pingBackend, getUsersFromBackend, getChatbotCategories } from "../api/testApi";
 import NoticeListPage from "./NoticeListPage";
 import NavBar from "../components/NavBar";
 import "./HomePage.css";
@@ -8,6 +8,10 @@ import RightSidebar from "../components/RightSidebar"; // ← 추가
 
 function HomePage() {
   const [result, setResult] = useState("");
+  const [users, setUsers] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [userError, setUserError] = useState("");
+  const [categoryError, setCategoryError] = useState("");
   const navigate = useNavigate();
 
   // 드롭다운 상태 관리
@@ -35,18 +39,43 @@ function HomePage() {
     navigate("/");
   };
 
+  const handleGetUsers = async () => {
+    setUserError("");
+    try {
+      const data = await getUsersFromBackend();
+      setUsers(data);
+    } catch (err) {
+      setUserError(err.message || "유저 조회 실패");
+      setUsers([]);
+    }
+  };
+
+  const handleGetCategories = async () => {
+    setCategoryError("");
+    try {
+      const data = await getChatbotCategories();
+      setCategories(data);
+    } catch (err) {
+      setCategoryError(err.message || "카테고리 조회 실패");
+      setCategories([]);
+    }
+  };
+
   return (
     <>
-
       <div className="homepage-container">
 
-        <section className="review-section">
-          <h2>공지사항</h2>
-          <div>
-            <NoticeListPage />
-          </div>
-        </section>
-
+        {/* 공지사항 바로가기 버튼 상단에 추가 */}
+        <div style={{ width: "100%", display: "flex", justifyContent: "center", margin: "32px 0 0 0" }}>
+          <button
+            className="banner-btn"
+            style={{ minWidth: 180 }}
+            onClick={() => navigate("/notice")}
+          >
+            공지사항 바로가기
+          </button>
+        </div>  
+      
         {/* 메인 배너 */}
         <section className="main-banner">
           <h1>빠르고 안전한 진료, SkinSeal 병원</h1>
@@ -87,6 +116,8 @@ function HomePage() {
           <button>의료 상담</button>
           <button>오시는 길</button>
         </section>
+
+        
       </div>
       <RightSidebar /> {/* ← 바깥에 추가하면 오른쪽 고정 */}
     </>

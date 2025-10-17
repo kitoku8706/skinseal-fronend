@@ -1,6 +1,6 @@
 .right-sidebar {
   position: fixed;
-  top: 20%;
+  top: 25%;
   right: 0;              /* 왼쪽에서 오른쪽으로 변경 */
   left: auto;            /* left 속성 제거 또는 auto로 */
   z-index: 1000;
