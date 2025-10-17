@@ -44,12 +44,15 @@ const TestConnection = () => {
         },
       });
 
-      if (!res.ok) throw new Error(`HTTP 오류: ${res.status} ${res.statusText}`);
+      if (!res.ok)
+        throw new Error(`HTTP 오류: ${res.status} ${res.statusText}`);
       const data = await res.json();
 
       setResponse(
         <>
-          <p className="text-green-600 font-bold">✅ 연결 성공! DB 데이터 수신 완료.</p>
+          <p className="text-green-600 font-bold">
+            ✅ 연결 성공! DB 데이터 수신 완료.
+          </p>
           <pre className="mt-2 p-2 bg-gray-100 rounded text-sm overflow-auto max-h-40">
             {JSON.stringify(data, null, 2)}
           </pre>
@@ -66,8 +69,10 @@ const TestConnection = () => {
           <p className="text-red-600 font-bold">❌ 연결 실패...</p>
           <p className="text-red-500 mt-1">오류 메시지: {error.message}</p>
           <p className="mt-2 text-xs text-gray-500">
-            💡 <strong>Failed to fetch</strong> 오류는 주로 <strong>CORS 설정</strong>
-            문제이므로, Spring Boot의 <code>SecurityConfig.java</code>를 확인해 주세요.
+            💡 <strong>Failed to fetch</strong> 오류는 주로{" "}
+            <strong>CORS 설정</strong>
+            문제이므로, Spring Boot의 <code>SecurityConfig.java</code>를 확인해
+            주세요.
           </p>
         </>
       );
@@ -76,7 +81,9 @@ const TestConnection = () => {
 
   return (
     <div className="p-4 border-2 border-dashed border-blue-300 rounded-lg m-4">
-      <h2 className="text-lg font-semibold mb-3 text-blue-700">📌 React ↔ Spring Boot ↔ DB 통합 연결 테스트</h2>
+      <h2 className="text-lg font-semibold mb-3 text-blue-700">
+        📌 React ↔ Spring Boot ↔ DB 통합 연결 테스트
+      </h2>
       <button
         onClick={checkDatabaseConnection}
         className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-200"
