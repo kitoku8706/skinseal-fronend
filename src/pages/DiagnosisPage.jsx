@@ -3,8 +3,17 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../styles/DiagnosisPage.css';
 
+import AcneImage from '../assets/disease/1_Acne_image.jpg';
+import BenignTumorsImage from '../assets/disease/2_Benign_tumors.png'
+import BullousImage from '../assets/disease/3_Bullous.png'
+import EczemaImage from '../assets/disease/4_Eczema.png'
+import LupusImage from '../assets/disease/5_Lupus.jpg'
+import SkinCancerImage from '../assets/disease/6_SkinCancer.jpg'
+import VitiligoImage from '../assets/disease/7_Vitiligo.png'
+
+
 const staticMenus = [
-  { label: '자가 진단', link: '/self-diagnosis' },
+  { label: '자가 진단', link: '/ai/diagnose' },
   { label: '진단 결과', link: '/diagnosis/result' },
 ];
 
@@ -54,18 +63,35 @@ function DiagnosisPage() {
       }));
   }, [selected]);
 
+  const getDiseaseImage = (diseaseId) => {
+    switch (diseaseId) {
+    case 1: 
+      return AcneImage;
+    case 2:
+      return BenignTumorsImage;
+    case 3:
+      return BullousImage;
+    case 4: 
+      return EczemaImage;
+    case 5:
+      return LupusImage;
+    case 6:
+      return SkinCancerImage;
+    case 7:
+      return VitiligoImage;
+    default:
+    return null; 
+    }
+    };
   return (
     <div className="diagnosis-layout">
-      {/* 4. 바로가기 사이드바 */}
       <aside className="diagnosis-sidebar">
         <div className="sidebar-title">바로가기</div>
-        {/* DB에서 불러온 병명 목록으로 바로가기 버튼 생성 */}
         {diseaseList.map((disease) => (
           <button
             key={disease.diseaseId}
-            className="sidebar-btn"
+            className={`sidebar-btn ${selected === disease.diseaseId ? 'active' : ''}`}
             onClick={() => navigate(`/diagnosis/${disease.diseaseId}`)}
-            style={{ fontWeight: selected === disease.diseaseId ? 'bold' : 'normal' }}
           >
             {disease.diseaseName}
           </button>
@@ -83,12 +109,13 @@ function DiagnosisPage() {
       </aside>
       {/* 2. 컨텐츠 영역 */}
       <main className="diagnosis-content">
-        {/* <div className="content-image" /> */}
-        <img 
-          src={diseaseInfo?.imageUrl} 
+        {selected && ( 
+          <img 
+          src={getDiseaseImage(selected)} 
           alt={diseaseInfo?.diseaseName + " 이미지"} 
           className="content-image" 
           />
+        )}
         <div className="content-desc">
           <div style={{ fontWeight: 'bold', fontSize: 20 }}>
             {diseaseInfo?.diseaseName || '병명'}
