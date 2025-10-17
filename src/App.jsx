@@ -24,18 +24,18 @@ import MyInfoEdit from "./pages/MyInfoEdit.jsx";
 import UserWithdrawal from "./pages/UserWithdrawal.jsx";
 import ReservationQuery from "./pages/ReservationQuery.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
-<<<<<<< HEAD
 
+// Optional utility component to test backend connection. Kept here but not
+// rendered by default. Uncomment <TestConnection /> in the App tree to use.
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
 
-  // 사용자님의 서버 포트 8090에 맞춰 URL 설정
-  // const API_URL = "http://localhost:8090/member/user";
+  // Set your backend API URL here if you want to test connectivity
+  const API_URL = "http://localhost:8090/member/user";
 
   const checkDatabaseConnection = async () => {
     setResponse("API 요청 중...");
     try {
-      // CORS 문제 방지를 위해 mode: 'cors'를 명시적으로 설정
       const res = await fetch(API_URL, {
         method: "GET",
         mode: "cors",
@@ -44,24 +44,18 @@ const TestConnection = () => {
         },
       });
 
-      if (!res.ok) {
-        throw new Error(`HTTP 오류: ${res.status} ${res.statusText}`);
-      }
-
-      // 응답을 JSON으로 파싱 (DB에 저장된 사용자 목록이 여기에 포함됨)
+      if (!res.ok) throw new Error(`HTTP 오류: ${res.status} ${res.statusText}`);
       const data = await res.json();
 
       setResponse(
         <>
-          <p className="text-green-600 font-bold">
-            ✅ 연결 성공! DB 데이터 수신 완료.
-          </p>
+          <p className="text-green-600 font-bold">✅ 연결 성공! DB 데이터 수신 완료.</p>
           <pre className="mt-2 p-2 bg-gray-100 rounded text-sm overflow-auto max-h-40">
             {JSON.stringify(data, null, 2)}
           </pre>
           <p className="mt-1 text-xs text-gray-500">
-            데이터가 출력되면, **React ↔ Spring Boot ↔ DB** 연결이 모두 성공한
-            것입니다.
+            데이터가 출력되면, <strong>React ↔ Spring Boot ↔ DB</strong> 연결이
+            모두 성공한 것입니다.
           </p>
         </>
       );
@@ -72,8 +66,8 @@ const TestConnection = () => {
           <p className="text-red-600 font-bold">❌ 연결 실패...</p>
           <p className="text-red-500 mt-1">오류 메시지: {error.message}</p>
           <p className="mt-2 text-xs text-gray-500">
-            💡 **Failed to fetch** 오류는 주로 **CORS 설정** 문제이므로, Spring
-            Boot의 `SecurityConfig.java`를 확인해 주세요.
+            💡 <strong>Failed to fetch</strong> 오류는 주로 <strong>CORS 설정</strong>
+            문제이므로, Spring Boot의 <code>SecurityConfig.java</code>를 확인해 주세요.
           </p>
         </>
       );
@@ -82,10 +76,7 @@ const TestConnection = () => {
 
   return (
     <div className="p-4 border-2 border-dashed border-blue-300 rounded-lg m-4">
-      <h2 className="text-lg font-semibold mb-3 text-blue-700">
-        📌 React ↔ Spring Boot ↔ DB 통합 연결 테스트
-      </h2>
-
+      <h2 className="text-lg font-semibold mb-3 text-blue-700">📌 React ↔ Spring Boot ↔ DB 통합 연결 테스트</h2>
       <button
         onClick={checkDatabaseConnection}
         className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-200"
@@ -100,8 +91,6 @@ const TestConnection = () => {
     </div>
   );
 };
-=======
->>>>>>> 771db96fa257d7e3e68ee8aa5f32c1531a737361
 
 function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -113,8 +102,13 @@ function App() {
       <Header />
       <NavBar />
       <main style={{ minHeight: "80vh" }}>
+        <div>
+          {/* Optional test component for backend connection - uncomment to use */}
+          {/* <TestConnection /> */}
+        </div>
+
         <Routes>
-          {/* 공개 */}
+          {/* Public routes */}
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<UserLoginPage />} />
           <Route path="/join" element={<UserJoinPage />} />
@@ -128,8 +122,7 @@ function App() {
           <Route path="/diagnosis/:id" element={<DiagnosisPage />} />
           <Route path="/reservation/chatbot" element={<ChatbotConsultPage />} />
 
-          {/* 로그인만 필요 */}
-<<<<<<< HEAD
+          {/* Protected: wrap parent so child routes inherit protection */}
           <Route
             path="/mypage"
             element={
@@ -137,7 +130,13 @@ function App() {
                 <MyPage />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route index element={<MyInfoEdit />} />
+            <Route path="reservation" element={<ReservationQuery />} />
+            <Route path="diagnosis" element={<DiagnosisPage />} />
+            <Route path="withdraw" element={<UserWithdrawal />} />
+          </Route>
+
           <Route
             path="/reservation/consult"
             element={
@@ -146,40 +145,8 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/mypage/edit"
-            element={
-              <ProtectedRoute>
-                <MyInfoEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/mypage/withdraw"
-            element={
-              <ProtectedRoute>
-                <UserWithdrawal />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/mypage/reservation"
-            element={
-              <ProtectedRoute>
-                <ReservationConsultPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/mypage/diagnosis"
-            element={
-              <ProtectedRoute>
-                <DiagnosisPage />
-              </ProtectedRoute>
-            }
-          />
 
-          {/* ADMIN만 필요 */}
+          {/* Admin only */}
           <Route
             path="/notice/edit/:id"
             element={
@@ -197,20 +164,6 @@ function App() {
             }
           />
         </Routes>
-=======
-          <Route path="/mypage" element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
-          <Route path="/reservation/consult" element={<ProtectedRoute><ReservationConsultPage /></ProtectedRoute>} />
-          <Route path="/mypage/edit" element={<ProtectedRoute><MyInfoEdit /></ProtectedRoute>} />
-          <Route path="/mypage/withdraw" element={<ProtectedRoute><UserWithdrawal /></ProtectedRoute>} />
-          <Route path="/mypage/reservation" element={<ProtectedRoute><ReservationConsultPage /></ProtectedRoute>} />
-          <Route path="/mypage/diagnosis" element={<ProtectedRoute><DiagnosisPage /></ProtectedRoute>} />
-
-          {/* ADMIN만 필요 */}
-          <Route path="/notice/edit/:id" element={<ProtectedRoute requiredRole="ADMIN"><NoticeEditPage /></ProtectedRoute>} />
-          <Route path="/notice/write" element={<ProtectedRoute requiredRole="ADMIN"><NoticeForm /></ProtectedRoute>} />
-        </Routes>        
-
->>>>>>> 771db96fa257d7e3e68ee8aa5f32c1531a737361
       </main>
       <Footer />
     </Router>
