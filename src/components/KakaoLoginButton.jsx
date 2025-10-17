@@ -3,7 +3,11 @@ import React, { useState, useEffect } from 'react';
 function KakaoLoginButton({ onLogin }) {
   useEffect(() => {
     if (!window.Kakao.isInitialized()) {
-      window.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY); // 카카오 JavaScript 키 설정
+      console.log('Initializing Kakao SDK...');
+      window.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY); // Kakao JavaScript 키 설정
+      console.log('Kakao SDK initialized:', window.Kakao.isInitialized());
+    } else {
+      console.log('Kakao SDK already initialized.');
     }
   }, []);
 

@@ -73,8 +73,8 @@ function RegisterModal({ onClose }) {
   };
 
   return (
-    <div className="modal" style={{ padding: '20px', backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-      <h2>회원가입</h2>
+    <div className="modal" style={{ padding: '20px', backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', width: '400px', margin: '0 auto' }}>
+      <h2 style={{ textAlign: 'center' }}>회원가입</h2>
       <form style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <input placeholder="아이디" value={userId} onChange={e => setUserId(e.target.value)} />
         <input placeholder="비밀번호" type="password" value={password} onChange={e => setPassword(e.target.value)} />
@@ -82,7 +82,7 @@ function RegisterModal({ onClose }) {
         <input placeholder="이름" value={name} onChange={e => setName(e.target.value)} />
         <input placeholder="생년월일 (예시: 90.09.09)" value={birth} onChange={e => setBirth(e.target.value)} />
         <input placeholder="이메일" value={email} onChange={e => { setEmail(e.target.value); setEmailChecked(false); }} />
-        <button type="button" onClick={handleEmailCheck}>중복확인</button>
+        <button type="button" onClick={handleEmailCheck} style={{ backgroundColor: '#007BFF', color: '#fff', padding: '10px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>중복확인</button>
         <input placeholder="역할 (user/admin)" value={role} onChange={e => setRole(e.target.value)} />
         <input placeholder="전화번호" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} />
         <button onClick={handleRegister} style={{ backgroundColor: '#4CAF50', color: '#fff', padding: '10px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>회원가입</button>
