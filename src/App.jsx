@@ -24,6 +24,7 @@ import MyInfoEdit from "./pages/MyInfoEdit.jsx";
 import UserWithdrawal from "./pages/UserWithdrawal.jsx";
 import ReservationQuery from "./pages/ReservationQuery.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
+<<<<<<< HEAD
 
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
@@ -99,6 +100,8 @@ const TestConnection = () => {
     </div>
   );
 };
+=======
+>>>>>>> 771db96fa257d7e3e68ee8aa5f32c1531a737361
 
 function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -126,6 +129,7 @@ function App() {
           <Route path="/reservation/chatbot" element={<ChatbotConsultPage />} />
 
           {/* 로그인만 필요 */}
+<<<<<<< HEAD
           <Route
             path="/mypage"
             element={
@@ -193,6 +197,20 @@ function App() {
             }
           />
         </Routes>
+=======
+          <Route path="/mypage" element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
+          <Route path="/reservation/consult" element={<ProtectedRoute><ReservationConsultPage /></ProtectedRoute>} />
+          <Route path="/mypage/edit" element={<ProtectedRoute><MyInfoEdit /></ProtectedRoute>} />
+          <Route path="/mypage/withdraw" element={<ProtectedRoute><UserWithdrawal /></ProtectedRoute>} />
+          <Route path="/mypage/reservation" element={<ProtectedRoute><ReservationConsultPage /></ProtectedRoute>} />
+          <Route path="/mypage/diagnosis" element={<ProtectedRoute><DiagnosisPage /></ProtectedRoute>} />
+
+          {/* ADMIN만 필요 */}
+          <Route path="/notice/edit/:id" element={<ProtectedRoute requiredRole="ADMIN"><NoticeEditPage /></ProtectedRoute>} />
+          <Route path="/notice/write" element={<ProtectedRoute requiredRole="ADMIN"><NoticeForm /></ProtectedRoute>} />
+        </Routes>        
+
+>>>>>>> 771db96fa257d7e3e68ee8aa5f32c1531a737361
       </main>
       <Footer />
     </Router>
