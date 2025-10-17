@@ -11,10 +11,14 @@ function NoticeListPage() {
   const navigate = useNavigate();
 
   const ITEMS_PER_PAGE = 5;
-
   useEffect(() => {
     fetch('/api/notice')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          throw new Error('API 호출 실패');
+        }
+        return res.json();
+      })
       .then(data => {
         // 작성일 기준 최신순 정렬
         const sorted = [...data].sort((a, b) => {
@@ -24,7 +28,22 @@ function NoticeListPage() {
         });
         setNotices(sorted);
       })
-      .catch(() => setNotices([]));
+      .catch((error) => {
+        console.error('공지사항 로드 실패:', error);
+        // 백엔드 서버가 없을 때 테스트용 데이터
+        setNotices([
+          {
+            noticeId: 1,
+            title: '[테스트] 백엔드 서버를 실행해주세요',
+            content: 'Spring Boot 서버가 실행되지 않았습니다.',
+            username: '시스템',
+            views: 0,
+            createdAt: new Date().toISOString(),
+            pinned: true,
+            is_new: true
+          }
+        ]);
+      });
 
     const userRole = localStorage.getItem("role");
     setRole(userRole);
