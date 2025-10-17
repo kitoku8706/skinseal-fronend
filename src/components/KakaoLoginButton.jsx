@@ -1,14 +1,32 @@
 import React, { useState, useEffect } from 'react';
 
 function KakaoLoginButton({ onLogin }) {
-  useEffect(() => {
-    if (!window.Kakao.isInitialized()) {
-      console.log('Initializing Kakao SDK...');
-      window.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY); // Kakao JavaScript 키 설정
-      console.log('Kakao SDK initialized:', window.Kakao.isInitialized());
-    } else {
-      console.log('Kakao SDK already initialized.');
-    }
+  const [isKakaoReady, setIsKakaoReady] = useState(false);  useEffect(() => {
+    // Kakao SDK가 로드될 때까지 기다림
+    const checkKakaoReady = () => {
+      if (window.Kakao) {
+        try {
+          if (!window.Kakao.isInitialized()) {            console.log('Initializing Kakao SDK...');
+            // 하드코딩된 Kakao JavaScript 키
+            const kakaoKey = 'aab3ac3dc3b251ccb87e8a0f1f1532c7';
+            console.log('Kakao Key:', kakaoKey);
+            
+            window.Kakao.init(kakaoKey);
+            console.log('Kakao SDK initialized:', window.Kakao.isInitialized());
+          } else {
+            console.log('Kakao SDK already initialized.');
+          }
+          setIsKakaoReady(true);
+        } catch (error) {
+          console.error('Kakao SDK 초기화 중 오류 발생:', error);
+        }
+      } else {
+        console.warn('Kakao SDK not loaded yet. Retrying...');
+        setTimeout(checkKakaoReady, 100);
+      }
+    };
+    
+    checkKakaoReady();
   }, []);
 
   const handleKakaoLogin = () => {
@@ -20,41 +38,35 @@ function KakaoLoginButton({ onLogin }) {
             const kakaoUser = {
               email: res.kakao_account.email,
               nickname: res.properties.nickname,
-              kakao_id: res.id
+              kakao_id: res.id,
             };
             onLogin(kakaoUser); // 로그인 성공 시 콜백 호출
           },
           fail: function (error) {
             console.error('카카오 사용자 정보 요청 실패:', error);
-          }
+          },
         });
       },
       fail: function (error) {
         console.error('카카오 로그인 실패:', error);
-      }
+      },
     });
   };
-
+  console.log('KakaoLoginButton rendered. Kakao Ready:', isKakaoReady);
+  
+  if (!isKakaoReady) {
+    return (
+      <button disabled style={{ backgroundColor: '#CCCCCC', border: 'none', padding: '10px 20px', borderRadius: '5px', cursor: 'not-allowed', fontWeight: 'bold' }}>
+        카카오 SDK 로딩중...
+      </button>
+    );
+  }
+  
   return (
-    <button onClick={handleKakaoLogin} style={{ backgroundColor: '#FEE500', border: 'none', padding: '10px 20px', borderRadius: '5px', cursor: 'pointer' }}>
+    <button onClick={handleKakaoLogin} style={{ backgroundColor: '#FEE500', color: '#000', border: 'none', padding: '10px 20px', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}>
       카카오 로그인
     </button>
   );
 }
 
-function App() {
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
-
-  return (
-    <div>
-      {/* 기존 로그인/회원가입 버튼 */}
-      <button onClick={() => setShowLoginModal(true)}>로그인</button>
-      <button onClick={() => setShowRegisterModal(true)}>회원가입</button>
-      {/* 카카오 로그인 버튼 추가 */}
-      <KakaoLoginButton />
-    </div>
-  );
-}
-
-export default App;
+export default KakaoLoginButton;
