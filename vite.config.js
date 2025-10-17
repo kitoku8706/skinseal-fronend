@@ -41,7 +41,9 @@ const backendPort = 8090; // 백엔드 서버 포트를 8090으로 설정합니�
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: "0.0.0.0",
+    host: '0.0.0.0',
+    port: 5173,
+
     proxy: {
       "/api": {
         target: `http://${localIp}:${backendPort}`,

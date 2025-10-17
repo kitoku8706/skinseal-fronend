@@ -25,12 +25,11 @@ import UserWithdrawal from "./pages/UserWithdrawal.jsx";
 import ReservationQuery from "./pages/ReservationQuery.jsx";
 
 
-
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
 
   // 사용자님의 서버 포트 8090에 맞춰 URL 설정
-  const API_URL = "http://localhost:8090/member/user";
+  // const API_URL = "http://localhost:8090/member/user";
 
   const checkDatabaseConnection = async () => {
     setResponse("API 요청 중...");
@@ -111,48 +110,34 @@ function App() {
       <Header />
       <NavBar />
       <main style={{ minHeight: "80vh" }}>
-        <div>
-          {/* <TestConnection /> */}
-          {/* 버튼 클릭 시에만 팝업이 뜨도록 */}
-          {/* {showLoginModal && (
-            <LoginModal onClose={() => setShowLoginModal(false)} />
-          )}
-          {showRegisterModal && (
-            <RegisterModal onClose={() => setShowRegisterModal(false)} />
-          )} */}
-          {/* ...기타 메인 페이지 내용... */}
-        </div>
-
         <Routes>
+          {/* 공개 */}
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<UserLoginPage />} />
           <Route path="/join" element={<UserJoinPage />} />
           <Route path="/notice" element={<NoticeListPage />} />
+          <Route path="/notice/:id" element={<NoticeDetailPage />} />
           <Route path="/ai/diagnose" element={<AiDiagnosisPage />} />
           <Route path="/intro" element={<IntroPage />} />
           <Route path="/management" element={<ManagementTeam />} />
           <Route path="/directions" element={<Directions />} />
-          <Route
-            path="/reservation/consult"
-            element={<ReservationConsultPage />}
-          />
           <Route path="/diagnosis" element={<DiagnosisPage />} />
           <Route path="/diagnosis/:id" element={<DiagnosisPage />} />
-          <Route path="/notice/write" element={<NoticeForm />} />
-          <Route path="/notice/edit/:id" element={<NoticeEditPage />} />
-          <Route path="/notice/:id" element={<NoticeDetailPage />} />
           <Route path="/reservation/chatbot" element={<ChatbotConsultPage />} />
 
-          <Route path="/mypage" element={<MyPage />} >
-            <Route index element={<MyInfoEdit />} />
-            <Route path="reservation" element={<ReservationQuery />} />
-            <Route path="diagnosis" element={<DiagnosisPage />} />
-            <Route path="withdraw" element={<UserWithdrawal />} />
-          </Route>
+          {/* 로그인만 필요 */}
+          <Route path="/mypage" element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
+          <Route path="/reservation/consult" element={<ProtectedRoute><ReservationConsultPage /></ProtectedRoute>} />
+          <Route path="/mypage/edit" element={<ProtectedRoute><MyInfoEdit /></ProtectedRoute>} />
+          <Route path="/mypage/withdraw" element={<ProtectedRoute><UserWithdrawal /></ProtectedRoute>} />
+          <Route path="/mypage/reservation" element={<ProtectedRoute><ReservationConsultPage /></ProtectedRoute>} />
+          <Route path="/mypage/diagnosis" element={<ProtectedRoute><DiagnosisPage /></ProtectedRoute>} />
 
-        </Routes>
+          {/* ADMIN만 필요 */}
+          <Route path="/notice/edit/:id" element={<ProtectedRoute requiredRole="ADMIN"><NoticeEditPage /></ProtectedRoute>} />
+          <Route path="/notice/write" element={<ProtectedRoute requiredRole="ADMIN"><NoticeForm /></ProtectedRoute>} />
+        </Routes>        
 
-       
       </main>
       <Footer />
     </Router>
