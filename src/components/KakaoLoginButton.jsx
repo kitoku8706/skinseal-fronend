@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from 'react';
 
 function KakaoLoginButton({ onLogin }) {
-  const [isKakaoReady, setIsKakaoReady] = useState(false);
-  useEffect(() => {
+  const [isKakaoReady, setIsKakaoReady] = useState(false);  useEffect(() => {
     // Kakao SDK가 로드될 때까지 기다림
     const checkKakaoReady = () => {
       if (window.Kakao) {
-        if (!window.Kakao.isInitialized()) {
-          console.log('Initializing Kakao SDK...');
-          const kakaoKey = import.meta.env.VITE_KAKAO_JS_KEY || 'aab3ac3dc3b251ccb87e8a0f1f1532c7';
-          console.log('Kakao Key:', kakaoKey);
-          window.Kakao.init(kakaoKey);
-          console.log('Kakao SDK initialized:', window.Kakao.isInitialized());
-        } else {
-          console.log('Kakao SDK already initialized.');
+        try {
+          if (!window.Kakao.isInitialized()) {            console.log('Initializing Kakao SDK...');
+            // 하드코딩된 Kakao JavaScript 키
+            const kakaoKey = 'aab3ac3dc3b251ccb87e8a0f1f1532c7';
+            console.log('Kakao Key:', kakaoKey);
+            
+            window.Kakao.init(kakaoKey);
+            console.log('Kakao SDK initialized:', window.Kakao.isInitialized());
+          } else {
+            console.log('Kakao SDK already initialized.');
+          }
+          setIsKakaoReady(true);
+        } catch (error) {
+          console.error('Kakao SDK 초기화 중 오류 발생:', error);
         }
-        setIsKakaoReady(true);
       } else {
         console.warn('Kakao SDK not loaded yet. Retrying...');
         setTimeout(checkKakaoReady, 100);
