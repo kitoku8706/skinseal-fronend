@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import KakaoLoginButton from './KakaoLoginButton';
 
 function RegisterModal({ onClose }) {
   const [userId, setUserId] = useState('');
@@ -65,20 +66,34 @@ function RegisterModal({ onClose }) {
     }
   };
 
+  const handleKakaoRegister = (kakaoUser) => {
+    setEmail(kakaoUser.email);
+    setName(kakaoUser.nickname);
+    // 추가적으로 필요한 정보를 설정할 수 있습니다.
+  };
+
   return (
-    <div className="modal">
+    <div className="modal" style={{ padding: '20px', backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
       <h2>회원가입</h2>
-      <input placeholder="아이디" value={userId} onChange={e => setUserId(e.target.value)} />
-      <input placeholder="비밀번호" type="password" value={password} onChange={e => setPassword(e.target.value)} />
-      <input placeholder="비밀번호 확인" type="password" value={passwordConfirm} onChange={e => setPasswordConfirm(e.target.value)} />
-      <input placeholder="이름" value={name} onChange={e => setName(e.target.value)} />
-      <input placeholder="생년월일 (예시: 90.09.09)" value={birth} onChange={e => setBirth(e.target.value)} />
-      <input placeholder="이메일" value={email} onChange={e => { setEmail(e.target.value); setEmailChecked(false); }} />
-      <button type="button" onClick={handleEmailCheck}>중복확인</button>
-      <input placeholder="역할 (user/admin)" value={role} onChange={e => setRole(e.target.value)} />
-      <input placeholder="전화번호" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} />
-      <button onClick={handleRegister}>회원가입</button>
-      <button onClick={onClose}>취소</button>
+      <form style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <input placeholder="아이디" value={userId} onChange={e => setUserId(e.target.value)} />
+        <input placeholder="비밀번호" type="password" value={password} onChange={e => setPassword(e.target.value)} />
+        <input placeholder="비밀번호 확인" type="password" value={passwordConfirm} onChange={e => setPasswordConfirm(e.target.value)} />
+        <input placeholder="이름" value={name} onChange={e => setName(e.target.value)} />
+        <input placeholder="생년월일 (예시: 90.09.09)" value={birth} onChange={e => setBirth(e.target.value)} />
+        <input placeholder="이메일" value={email} onChange={e => { setEmail(e.target.value); setEmailChecked(false); }} />
+        <button type="button" onClick={handleEmailCheck}>중복확인</button>
+        <input placeholder="역할 (user/admin)" value={role} onChange={e => setRole(e.target.value)} />
+        <input placeholder="전화번호" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} />
+        <button onClick={handleRegister} style={{ backgroundColor: '#4CAF50', color: '#fff', padding: '10px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>회원가입</button>
+      </form>
+
+      <div style={{ marginTop: '20px', textAlign: 'center' }}>
+        <p>또는</p>
+        <KakaoLoginButton onLogin={handleKakaoRegister} />
+      </div>
+
+      <button onClick={onClose} style={{ marginTop: '10px', backgroundColor: '#f44336', color: '#fff', padding: '10px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>취소</button>
     </div>
   );
 }
