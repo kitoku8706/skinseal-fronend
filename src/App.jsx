@@ -51,6 +51,7 @@ function App() {
           <Route path="/reservation/chatbot" element={<ChatbotConsultPage />} />
 
           {/* 로그인만 필요 */}
+
           <Route path="/mypage" element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
           <Route path="/reservation/consult" element={<ProtectedRoute><ReservationConsultPage /></ProtectedRoute>} />
           <Route path="/mypage/edit" element={<ProtectedRoute><MyInfoEdit /></ProtectedRoute>} />
