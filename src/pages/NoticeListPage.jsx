@@ -159,11 +159,6 @@ function NoticeListPage() {
               초기화
             </button>
           </div>
-          {searchQuery && (
-            <div style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
-              검색결과: {filteredNotices.length}개 (전체 {notices.length}개 중)
-            </div>
-          )}
         </div>
 
         <table className="notice-table">
@@ -176,7 +171,7 @@ function NoticeListPage() {
               <th>작성일</th>
               {role === "ADMIN" && <th>수정</th>}
             </tr>
-          </thead>          <tbody>
+          </thead><tbody>
             {paginatedNotices.length > 0 ? (
               paginatedNotices.map((notice, idx) => (
                 <React.Fragment key={notice.notice_id || `${notice.title}_${notice.created_at}`}>
@@ -236,6 +231,11 @@ function NoticeListPage() {
             <div style={{ fontSize: "0.9em", color: "#666" }}>
               총 {totalElements}개의 공지사항
             </div>
+            {searchQuery && (
+              <div style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
+                {/* 서버 필터 사용: 개별 카운트 문구 제거 */}
+              </div>
+            )}
           </div>
           {role === "ADMIN" && (
             <button className="notice-write-btn" onClick={handleWrite} style={{ marginLeft: "auto" }}>
