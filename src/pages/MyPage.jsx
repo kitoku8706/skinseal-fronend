@@ -13,19 +13,9 @@ function MyPage() {
     ];
     
     const getCurrentTitle = () => {
-        const currentRouteSegment = location.pathname.split('/').pop();
-        
-        const activeItem = mypageMenuItems.find(item => item.path === currentRouteSegment);
-        
-        if (activeItem) {
-            return activeItem.name;
-        } 
-        
-        if (location.pathname === '/mypage' || location.pathname.endsWith('/')) {
-             return "회원정보 수정"; 
-        }
-
-        return "마이페이지"; 
+        const currentPath = location.pathname.replace(/\/mypage\/?$/, '/mypage').split('/').pop();
+        const activeItem = mypageMenuItems.find(item => item.path === (currentPath === 'mypage' ? '' : currentPath));
+        return activeItem ? activeItem.name : "마이페이지";
     }
 
     return (
