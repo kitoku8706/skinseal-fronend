@@ -18,33 +18,39 @@ const staticMenus = [
 ];
 
 function DiagnosisPage() {
-    // diseaseList와 관련된 상태/로직 제거
-    const [selected, setSelected] = useState(null); // diseaseId
+    const [selected, setSelected] = useState(null); 
     const [diseaseInfo, setDiseaseInfo] = useState(null);
+    const [loading, setLoading] = useState(false);
     const { id } = useParams();
 
-    // URL 파라미터(id)가 변경될 때 selected 업데이트
     useEffect(() => {
         if (id) {
             setSelected(parseInt(id));
         } else {
-            // 초기 진입 시 기본값 설정 (만약 URL이 /diagnosis/1처럼 ID를 포함하지 않을 경우를 대비하여 ID가 필요함.
-            // Layout에서 목록을 불러오므로, 여기서는 id가 없을 경우 selected를 null로 둠)
             setSelected(null); 
+            setDiseaseInfo(null); 
         }
     }, [id]);
 
-    // 선택된 병명 정보 불러오기
     useEffect(() => {
-        if (!selected) return;
+        if (!selected) {
+            setDiseaseInfo(null); 
+            return;
+        }
+        setLoading(true);
+        setDiseaseInfo(null); 
+
         axios.get(`/api/disease/${selected}`)
-            .then(res => setDiseaseInfo(res.data))
-            .catch(() => setDiseaseInfo({
-                diseaseName: '정보 없음',
-                description: '',
-                symptoms: '',
-                causes: ''
-            }));
+            .then(res => {
+                setDiseaseInfo(res.data);
+            })
+            .catch((error) => {
+                console.error("질병 정보 로드 실패:", error);
+                setDiseaseInfo(null); 
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     }, [selected]);
 
     const getDiseaseImage = (diseaseId) => {
@@ -68,28 +74,34 @@ function DiagnosisPage() {
         }
     };
     
-    // 사이드바 마크업 제거, 메인 콘텐츠 영역만 남김
+    if (loading) {
+        return <div className="content-desc">로딩 중...</div>;
+    }
+
+    if (!diseaseInfo) {
+        return <div className="content-desc">사이드바에서 질병을 선택해주세요.</div>;
+    }
+
     return (
         <>
-            {selected && ( 
-                <img 
-                    src={getDiseaseImage(selected)} 
-                    alt={diseaseInfo?.diseaseName + " 이미지"} 
-                    className="content-image" 
-                />
-            )}
+            <img 
+                src={getDiseaseImage(selected)} 
+                alt={diseaseInfo.diseaseName ? `${diseaseInfo.diseaseName} 이미지` : "질병 이미지"} 
+                className="content-image" 
+                onError={(e) => { e.target.style.display = 'none'; }}
+            />
             <div className="content-desc">
                 <div style={{ fontWeight: 'bold', fontSize: 20 }}>
-                    {diseaseInfo?.diseaseName || '병명'}
+                    {diseaseInfo.diseaseName || '알 수 없는 병명'}
                 </div>
                 <div style={{ marginTop: 10 }}>
-                    <b>설명:</b> {diseaseInfo?.description}
+                    <b>설명:</b> {diseaseInfo.description || '정보가 없습니다.'}
                 </div>
                 <div style={{ marginTop: 10 }}>
-                    <b>주요 증상:</b> {diseaseInfo?.symptoms}
+                    <b>주요 증상:</b> {diseaseInfo.symptoms || '정보가 없습니다.'}
                 </div>
                 <div style={{ marginTop: 10 }}>
-                    <b>원인:</b> {diseaseInfo?.causes}
+                    <b>원인:</b> {diseaseInfo.causes || '정보가 없습니다.'}
                 </div>
             </div>
         </>

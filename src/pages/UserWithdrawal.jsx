@@ -111,9 +111,6 @@ function UserWithdrawal() {
                     <button 
                         type="submit" 
                         className="btn-withdraw" 
-                        // isConfirmed를 false로 설정하면 버튼을 비활성화할 수 있지만, 
-                        // 에러 메시지 우선순위를 위해 disabled는 선택 사항입니다.
-                        // disabled={!isConfirmed}
                     >
                         회원 탈퇴
                     </button>
