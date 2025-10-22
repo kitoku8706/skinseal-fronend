@@ -1,10 +1,32 @@
 import React, { useState, useEffect } from 'react';
 
 function KakaoLoginButton({ onLogin }) {
-  useEffect(() => {
-    if (!window.Kakao.isInitialized()) {
-      window.Kakao.init('카카오_자바스크립트_키'); // 카카오 개발자 콘솔에서 발급받은 JS 키
-    }
+  const [isKakaoReady, setIsKakaoReady] = useState(false);  useEffect(() => {
+    // Kakao SDK가 로드될 때까지 기다림
+    const checkKakaoReady = () => {
+      if (window.Kakao) {
+        try {
+          if (!window.Kakao.isInitialized()) {            console.log('Initializing Kakao SDK...');
+            // 하드코딩된 Kakao JavaScript 키
+            const kakaoKey = 'aab3ac3dc3b251ccb87e8a0f1f1532c7';
+            console.log('Kakao Key:', kakaoKey);
+            
+            window.Kakao.init(kakaoKey);
+            console.log('Kakao SDK initialized:', window.Kakao.isInitialized());
+          } else {
+            console.log('Kakao SDK already initialized.');
+          }
+          setIsKakaoReady(true);
+        } catch (error) {
+          console.error('Kakao SDK 초기화 중 오류 발생:', error);
+        }
+      } else {
+        console.warn('Kakao SDK not loaded yet. Retrying...');
+        setTimeout(checkKakaoReady, 100);
+      }
+    };
+    
+    checkKakaoReady();
   }, []);
 
   const handleKakaoLogin = () => {
@@ -13,55 +35,38 @@ function KakaoLoginButton({ onLogin }) {
         window.Kakao.API.request({
           url: '/v2/user/me',
           success: function (res) {
-            // res.kakao_account.email 등에서 정보 추출
             const kakaoUser = {
               email: res.kakao_account.email,
               nickname: res.properties.nickname,
-              kakao_id: res.id
+              kakao_id: res.id,
             };
-            // 백엔드로 회원가입/로그인 요청
-            fetch('http://localhost:8090/kakao-login', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(kakaoUser)
-            })
-              .then(r => r.json())
-              .then(data => {
-                alert(data.message);
-                if (onLogin) onLogin(data);
-              });
+            onLogin(kakaoUser); // 로그인 성공 시 콜백 호출
           },
           fail: function (error) {
-            alert('카카오 사용자 정보 요청 실패');
-          }
+            console.error('카카오 사용자 정보 요청 실패:', error);
+          },
         });
       },
-      fail: function (err) {
-        alert('카카오 로그인 실패');
-      }
+      fail: function (error) {
+        console.error('카카오 로그인 실패:', error);
+      },
     });
   };
-
+  console.log('KakaoLoginButton rendered. Kakao Ready:', isKakaoReady);
+  
+  if (!isKakaoReady) {
+    return (
+      <button disabled style={{ backgroundColor: '#CCCCCC', border: 'none', padding: '10px 20px', borderRadius: '5px', cursor: 'not-allowed', fontWeight: 'bold' }}>
+        카카오 SDK 로딩중...
+      </button>
+    );
+  }
+  
   return (
-    <button onClick={handleKakaoLogin} style={{ background: '#FEE500', border: 'none', padding: '10px 20px', borderRadius: '5px' }}>
-      카카오로 로그인/회원가입
+    <button onClick={handleKakaoLogin} style={{ backgroundColor: '#FEE500', color: '#000', border: 'none', padding: '10px 20px', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}>
+      카카오 로그인
     </button>
   );
 }
 
-function App() {
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
-
-  return (
-    <div>
-      {/* 기존 로그인/회원가입 버튼 */}
-      <button onClick={() => setShowLoginModal(true)}>로그인</button>
-      <button onClick={() => setShowRegisterModal(true)}>회원가입</button>
-      {/* 카카오 로그인 버튼 추가 */}
-      <KakaoLoginButton />
-    </div>
-  );
-}
-
-export default App;
+export default KakaoLoginButton;
