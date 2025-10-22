@@ -1,0 +1,327 @@
+/* ScheduleTestPage.css */
+
+/* 배경 및 전체 컨테이너 스타일 */
+.min-h-screen {
+    min-height: 100vh;
+}
+.bg-gray-50 {
+    background-color: #f9fafb; /* gray-50 */
+}
+.p-8 {
+    padding: 2rem;
+}
+
+/* 최대 너비 및 중앙 정렬 */
+.max-w-4xl {
+    max-width: 56rem; /* Tailwind max-w-4xl */
+}
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 제목 스타일 */
+.text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+}
+.font-bold {
+    font-weight: 700;
+}
+.text-gray-800 {
+    color: #1f2937; /* gray-800 */
+}
+.mb-6 {
+    margin-bottom: 1.5rem;
+}
+.border-b {
+    border-bottom-width: 1px;
+}
+.pb-2 {
+    padding-bottom: 0.5rem;
+}
+
+/* 기간 표시 스타일 */
+.text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+.font-medium {
+    font-weight: 500;
+}
+.text-blue-700 {
+    color: #1d4ed8; /* blue-700 */
+}
+.mb-6 {
+    margin-bottom: 1.5rem;
+}
+.bg-blue-100 {
+    background-color: #dbeafe; /* blue-100 */
+}
+.px-2 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+.py-1 {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+.rounded-md {
+    border-radius: 0.375rem;
+}
+
+/* --- 시간표 헤더 (이전/다음 주 버튼 및 제목) --- */
+.flex {
+    display: flex;
+}
+.justify-between {
+    justify-content: space-between;
+}
+.items-center {
+    align-items: center;
+}
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+/* 주간 이동 버튼 */
+.p-2 {
+    padding: 0.5rem;
+}
+.border {
+    border-width: 1px;
+}
+.rounded-full {
+    border-radius: 9999px; /* circle */
+}
+.bg-white {
+    background-color: #fff;
+}
+.hover\:bg-gray-100:hover {
+    background-color: #f3f4f6; /* gray-100 */
+}
+.disabled\:opacity-50:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+/* 헤더 중앙 제목 */
+.text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+}
+
+/* --- 시간표 테이블 전체 --- */
+.schedule-calendar-container {
+    overflow-x: auto;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.min-w-full {
+    min-width: 100%;
+}
+.border-collapse {
+    border-collapse: collapse;
+}
+.border-gray-300 {
+    border-color: #d1d5db; /* gray-300 */
+}
+.bg-white {
+    background-color: #fff;
+}
+.shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* 테이블 헤드 */
+.bg-gray-100 {
+    background-color: #f3f4f6;
+}
+.text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+.font-semibold {
+    font-weight: 600;
+}
+.text-gray-700 {
+    color: #374151; /* gray-700 */
+}
+.w-24 {
+    width: 6rem; /* 시간표 열 너비 고정 */
+}
+.text-xs {
+    font-size: 0.75rem;
+    line-height: 1rem;
+}
+.font-normal {
+    font-weight: 400;
+}
+.text-gray-500 {
+    color: #6b7280; /* gray-500 */
+}
+
+/* 테이블 바디 셀 공통 */
+td, th {
+    padding: 0.75rem; /* p-3 */
+    border: 1px solid #d1d5db; /* border border-gray-300 */
+}
+
+/* 시간표 행 호버 효과 */
+.hover\:bg-gray-50:hover {
+    background-color: #f9fafb; /* gray-50 */
+}
+
+/* 상담 시간 열 (첫 번째 열) */
+.bg-gray-50 {
+    background-color: #f9fafb;
+}
+.font-medium {
+    font-weight: 500;
+}
+.text-gray-800 {
+    color: #1f2937;
+}
+
+/* --- 예약 가능 셀 스타일 --- */
+.bg-green-50 {
+    background-color: #ecfdf5; /* green-50 */
+}
+.hover\:bg-green-100:hover {
+    background-color: #d1fae5; /* green-100 */
+}
+.text-green-700 {
+    color: #047857; /* green-700 */
+}
+
+/* --- 예약됨 셀 스타일 --- */
+.bg-red-100 {
+    background-color: #fee2e2; /* red-100 */
+}
+.hover\:bg-red-200:hover {
+    background-color: #fecaca; /* red-200 */
+}
+
+/* 셀 공통 스타일 */
+.text-center {
+    text-align: center;
+}
+.transition {
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+}
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* 예약 가능 텍스트 */
+.text-gray-400 {
+    color: #9ca3af; /* gray-400 */
+}
+
+/* 예약됨 표시 (빨간 점) */
+.w-4 {
+    width: 1rem;
+}
+.h-4 {
+    height: 1rem;
+}
+.rounded-full {
+    border-radius: 9999px;
+}
+.bg-red-500 {
+    background-color: #ef4444; /* red-500 */
+}
+.shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Tooltip 스타일 (Tailwind 기본이 아니므로 title 속성 활용) */
+/* CSS만으로는 Tailwind의 'tooltip' 효과를 완벽히 재현하기 어려우므로, 
+   여기에 간단한 Tooltip 효과를 위한 기본 CSS를 추가합니다. */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+.tooltip[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+/* ScheduleTestPage.css 에 추가 */
+
+/* 기존 전체 컨테이너 클래스 대체 */
+.main-container {
+    min-height: 100vh;
+    background-color: #f9fafb; /* gray-50 */
+    padding: 2rem; /* p-8 */
+}
+.content-area {
+    max-width: 56rem; /* max-w-4xl */
+    margin-left: auto; /* mx-auto */
+    margin-right: auto; /* mx-auto */
+}
+.main-title {
+    font-size: 1.875rem; /* text-3xl */
+    font-weight: 700; /* font-bold */
+    color: #1f2937; /* text-gray-800 */
+    margin-bottom: 1.5rem; /* mb-6 */
+    border-bottom-width: 1px; /* border-b */
+    padding-bottom: 0.5rem; /* pb-2 */
+}
+
+/* 셀 관련 클래스 추가 */
+.cell-base {
+    padding: 0.75rem; /* p-3 */
+    border: 1px solid #d1d5db; /* border border-gray-300 */
+    text-align: center; /* text-center */
+    transition-property: all; /* transition duration-200 */
+    transition-duration: 200ms;
+    cursor: pointer;
+    position: relative; /* relative for reserved dot */
+}
+
+.available-cell {
+    background-color: #ecfdf5; /* bg-green-50 */
+    color: #047857; /* text-green-700 */
+    font-weight: 700; /* font-bold */
+}
+.available-cell:hover {
+    background-color: #d1fae5; /* hover:bg-green-100 */
+}
+.available-text {
+    font-size: 0.75rem; /* text-xs */
+    color: #9ca3af; /* text-gray-400 */
+}
+
+.reserved-cell {
+    background-color: #fee2e2; /* bg-red-100 */
+}
+.reserved-cell:hover {
+    background-color: #fecaca; /* hover:bg-red-200 */
+}
+
+/* 예약 표시 (빨간 점) */
+.reservation-indicator {
+    display: flex; 
+    justify-content: center;
+    align-items: center; 
+    height: 100%;
+    width: 100%;
+}
+.reserved-dot {
+    width: 1rem; /* w-4 */
+    height: 1rem; /* h-4 */
+    border-radius: 9999px; /* rounded-full */
+    background-color: #ef4444; /* bg-red-500 */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+}

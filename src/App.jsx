@@ -26,6 +26,7 @@ import ReservationQuery from "./pages/ReservationQuery.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DiagnosisLayout from "./pages/DiagnosisLayout.jsx";
 import SchedulePage from "./pages/SchedulePage.jsx";
+import ScheduleTestPage from "./pages/ScheduleTestPage.jsx";
 
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
@@ -127,7 +128,7 @@ function App() {
                     <Route path="/management" element={<ManagementTeam />} />
                     <Route path="/directions" element={<Directions />} />
                     <Route path="/reservation/chatbot" element={<ChatbotConsultPage />} />
-                    <Route path="/reservation/timetable" element={<SchedulePage />} />
+                    <Route path="/reservation/timetable" element={<ScheduleTestPage />} />
 
                     <Route path="/reservation/consult" element={<ProtectedRoute><ReservationConsultPage /></ProtectedRoute>} /> {/* MyPage와 관련 없으므로 유지 */}
 
