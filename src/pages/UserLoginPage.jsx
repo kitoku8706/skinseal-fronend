@@ -19,7 +19,7 @@ function UserLoginPage() {
         setError('');
         
         try {
-            const res = await axios.post('http://localhost:8090/member/login', {
+            const res = await axios.post('/api/user/login', {
                 loginId: loginId, 
                 password
             });
