@@ -11,17 +11,17 @@ function AppointmentForm({ userId }) {
   const [agree, setAgree] = useState(false);
   const [selectedConsultant, setSelectedConsultant] = useState(null);
 
-  // 상담 가능한 시간 목록
+  // 상담 가능한 시간 목록을 Date 객체로 변환
   const times = [
-    "09:30 ~ 10:30",
-    "10:30 ~ 11:30",
-    "11:30 ~ 12:30",
-    "12:30 ~ 13:30",
-    "13:30 ~ 14:30",
-    "14:30 ~ 15:30",
-    "15:30 ~ 16:30",
-    "16:30 ~ 17:30",
-    "17:30 ~ 18:30",
+    new Date(2025, 9, 22, 9, 30),
+    new Date(2025, 9, 22, 10, 30),
+    new Date(2025, 9, 22, 11, 30),
+    new Date(2025, 9, 22, 12, 30),
+    new Date(2025, 9, 22, 13, 30),
+    new Date(2025, 9, 22, 14, 30),
+    new Date(2025, 9, 22, 15, 30),
+    new Date(2025, 9, 22, 16, 30),
+    new Date(2025, 9, 22, 17, 30),
   ];
 
   // 시간별 상담 가능 여부 (예시, 실제 API 연동 권장)
@@ -171,7 +171,7 @@ function AppointmentForm({ userId }) {
                 onClick={() => availability[idx] && setTime(t)}
                 disabled={!availability[idx]}
               >
-                {t}
+                {t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </button>
             ))}
           </div>

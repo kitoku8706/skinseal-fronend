@@ -25,6 +25,7 @@ import UserWithdrawal from "./pages/UserWithdrawal.jsx";
 import ReservationQuery from "./pages/ReservationQuery.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DiagnosisLayout from "./pages/DiagnosisLayout.jsx";
+import TimetablePage from "./pages/TimetablePage"; // TimetablePage 컴포넌트 경로 확인
 
 function App() {
     const [showLoginModal, setShowLoginModal] = useState(false);
@@ -56,6 +57,7 @@ function App() {
                     <Route path="/management" element={<ManagementTeam />} />
                     <Route path="/directions" element={<Directions />} />
                     <Route path="/reservation/chatbot" element={<ChatbotConsultPage />} />
+                    <Route path="/reservation/timetable" element={<TimetablePage />} />
 
                     {/* 로그인만 필요 */}
                     <Route path="/mypage" element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
