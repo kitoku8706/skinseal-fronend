@@ -79,13 +79,6 @@ function NoticeListPage() {
   const handleTitleClick = (noticeId) => {
     navigate(`/notice/${noticeId}`);
   };  // 검색 기능 - 디바운싱 추가 (타이핑 후 500ms 대기)
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setPage(1); // 검색어 변경 시 첫 페이지로
-    }, 500);
-    
-    return () => clearTimeout(timer);
-  }, [searchQuery, searchCategory]);
 
   const handleSearch = () => {
     setPage(1);
