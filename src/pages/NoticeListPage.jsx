@@ -9,10 +9,33 @@ function NoticeListPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchCategory, setSearchCategory] = useState("all");
   const navigate = useNavigate();
+  const ITEMS_PER_PAGE = 10;
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
 
-  const ITEMS_PER_PAGE = 5;
   useEffect(() => {
-    fetch('/api/notice')
+    loadNotices();
+    const userRole = localStorage.getItem("role");
+    setRole(userRole);
+  }, [page, searchQuery, searchCategory]);
+
+  const loadNotices = () => {
+    // 페이지네이션 API 호출 (0-based)
+    const apiPage = page - 1;
+    const params = new URLSearchParams({
+      page: apiPage,
+      size: ITEMS_PER_PAGE
+    });
+    
+    if (searchQuery && searchQuery.trim()) {
+      params.append('keyword', searchQuery.trim());
+    }
+    
+    if (searchCategory && searchCategory !== 'all') {
+      params.append('type', searchCategory);
+    }
+
+    fetch(`/api/notice?${params}`)
       .then(res => {
         if (!res.ok) {
           throw new Error('API 호출 실패');
@@ -20,34 +43,18 @@ function NoticeListPage() {
         return res.json();
       })
       .then(data => {
-        // 작성일 기준 최신순 정렬
-        const sorted = [...data].sort((a, b) => {
-          const dateA = new Date(a.createdAt);
-          const dateB = new Date(b.createdAt);
-          return dateB - dateA;
-        });
-        setNotices(sorted);
+        // Spring Data Page 응답 구조
+        setNotices(data.content || []);
+        setTotalPages(data.totalPages || 0);
+        setTotalElements(data.totalElements || 0);
       })
       .catch((error) => {
         console.error('공지사항 로드 실패:', error);
-        // 백엔드 서버가 없을 때 테스트용 데이터
-        setNotices([
-          {
-            noticeId: 1,
-            title: '[테스트] 백엔드 서버를 실행해주세요',
-            content: 'Spring Boot 서버가 실행되지 않았습니다.',
-            username: '시스템',
-            views: 0,
-            createdAt: new Date().toISOString(),
-            pinned: true,
-            is_new: true
-          }
-        ]);
+        setNotices([]);
+        setTotalPages(0);
+        setTotalElements(0);
       });
-
-    const userRole = localStorage.getItem("role");
-    setRole(userRole);
-  }, []);
+  };
 
   const getLabelClass = (type) => {
     if (type === '이벤트') return 'label-patch';
@@ -71,10 +78,11 @@ function NoticeListPage() {
   };
   const handleTitleClick = (noticeId) => {
     navigate(`/notice/${noticeId}`);
-  };
-  // 검색 기능
+  };  // 검색 기능 - 디바운싱 추가 (타이핑 후 500ms 대기)
+
   const handleSearch = () => {
-    setPage(1); // 검색 시 첫 페이지로 이동
+    setPage(1);
+    loadNotices();
   };
 
   const handleSearchReset = () => {
@@ -82,40 +90,8 @@ function NoticeListPage() {
     setSearchCategory("all");
     setPage(1);
   };
-
-  // 검색어나 카테고리가 변경될 때 첫 페이지로 이동
-  useEffect(() => {
-    setPage(1);
-  }, [searchQuery, searchCategory]);
-
-  // 검색 필터링
-  const filteredNotices = notices.filter((notice) => {
-    if (!searchQuery.trim()) return true;
-
-    const query = searchQuery.toLowerCase();
-    const title = (notice.title || "").toLowerCase();
-    const content = (notice.content || "").toLowerCase();
-    const author = (notice.username || "관리자").toLowerCase();
-
-    switch (searchCategory) {
-      case "title":
-        return title.includes(query);
-      case "content":
-        return content.includes(query);
-      case "author":
-        return author.includes(query);
-      case "all":
-      default:
-        return title.includes(query) || content.includes(query) || author.includes(query);
-    }
-  });
-
-  // 페이지네이션 관련 (필터링된 결과 기준)
-  const totalPages = Math.ceil(filteredNotices.length / ITEMS_PER_PAGE);
-  const paginatedNotices = filteredNotices.slice(
-    (page - 1) * ITEMS_PER_PAGE,
-    page * ITEMS_PER_PAGE
-  );
+  // 서버 사이드 페이지네이션 사용 - 필터링 로직 제거
+  const paginatedNotices = notices; // 이미 서버에서 필터링/페이지네이션됨
 
   const handlePrev = () => setPage((prev) => Math.max(prev - 1, 1));
   const handleNext = () => setPage((prev) => Math.min(prev + 1, totalPages));
@@ -176,11 +152,6 @@ function NoticeListPage() {
               초기화
             </button>
           </div>
-          {searchQuery && (
-            <div style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
-              검색결과: {filteredNotices.length}개 (전체 {notices.length}개 중)
-            </div>
-          )}
         </div>
 
         <table className="notice-table">
@@ -193,7 +164,7 @@ function NoticeListPage() {
               <th>작성일</th>
               {role === "ADMIN" && <th>수정</th>}
             </tr>
-          </thead>          <tbody>
+          </thead><tbody>
             {paginatedNotices.length > 0 ? (
               paginatedNotices.map((notice, idx) => (
                 <React.Fragment key={notice.notice_id || `${notice.title}_${notice.created_at}`}>
@@ -236,19 +207,24 @@ function NoticeListPage() {
               </tr>
             )}
           </tbody>
-        </table>
-        {/* 페이지네이션 중앙 + 글쓰기 버튼 오른쪽 */}
+        </table>        {/* 페이지네이션 중앙 + 글쓰기 버튼 오른쪽 */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", margin: "20px 0" }}>
-          <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
-            <button onClick={handlePrev} disabled={page === 1} style={{ marginRight: 8 }}>
-              이전
-            </button>
-            <span>
-              {page} / {totalPages}
-            </span>
-            <button onClick={handleNext} disabled={page === totalPages} style={{ marginLeft: 8 }}>
-              다음
-            </button>
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <button onClick={handlePrev} disabled={page === 1} style={{ marginRight: 8 }}>
+                이전
+              </button>
+              <span>
+                {page} / {totalPages || 1}
+              </span>
+              <button onClick={handleNext} disabled={page >= totalPages} style={{ marginLeft: 8 }}>
+                다음
+              </button>
+            </div>
+            <div style={{ fontSize: "0.9em", color: "#666" }}>
+              총 {totalElements}개의 공지사항
+            </div>
+            {/* 서버 필터 사용: 개별 카운트 문구 제거 */}
           </div>
           {role === "ADMIN" && (
             <button className="notice-write-btn" onClick={handleWrite} style={{ marginLeft: "auto" }}>

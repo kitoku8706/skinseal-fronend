@@ -117,13 +117,24 @@ function AiDiagnosisPage() {
                 </button>
             </div>
             {result && (
-                <div style={{ background: "#f9f9f9", padding: 16, borderRadius: 8 }}>
+                <div className="result-card">
                     {result.error ? (
                         <div style={{ color: "red" }}>{result.error}</div>
                     ) : (
                         <>
-                            <h4>진단 결과</h4>
-                            <pre>{JSON.stringify(result, null, 2)}</pre>
+                            <h2>진단 결과</h2>
+                            <div className="result-item">
+                                <span>진단명:</span> {result.aiResult?.diagnosis || "N/A"}
+                            </div>
+                            <div className="result-item">
+                                <span>신뢰도:</span> <span className="confidence">{result.aiResult?.confidence || "N/A"}</span>
+                            </div>
+                            <div className="result-item">
+                                <span>파일명:</span> {result.aiResult?.filename || "N/A"}
+                            </div>
+                            <div className="result-item">
+                                <span>비고:</span> {result.aiResult?.note || "N/A"}
+                            </div>
                         </>
                     )}
                 </div>

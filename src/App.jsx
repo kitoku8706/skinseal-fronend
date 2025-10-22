@@ -25,7 +25,8 @@ import UserWithdrawal from "./pages/UserWithdrawal.jsx";
 import ReservationQuery from "./pages/ReservationQuery.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DiagnosisLayout from "./pages/DiagnosisLayout.jsx";
-import SchedulePage from "./pages/SchedulePage.jsx";
+
+import TimetablePage from "./pages/TimetablePage"; // TimetablePage 컴포넌트 경로 확인
 
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
@@ -101,6 +102,7 @@ const TestConnection = () => {
 
 
 
+
 function App() {
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -127,7 +129,8 @@ function App() {
                     <Route path="/management" element={<ManagementTeam />} />
                     <Route path="/directions" element={<Directions />} />
                     <Route path="/reservation/chatbot" element={<ChatbotConsultPage />} />
-                    <Route path="/reservation/timetable" element={<SchedulePage />} />
+                    <Route path="/reservation/timetable" element={<TimetablePage />} />
+
 
                     <Route path="/reservation/consult" element={<ProtectedRoute><ReservationConsultPage /></ProtectedRoute>} /> {/* MyPage와 관련 없으므로 유지 */}
 
