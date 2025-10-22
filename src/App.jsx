@@ -103,6 +103,7 @@ const TestConnection = () => {
 
 
 
+
 function App() {
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -131,6 +132,7 @@ function App() {
                     <Route path="/reservation/chatbot" element={<ChatbotConsultPage />} />
 
                     <Route path="/reservation/timetable" element={<TimetablePage />} />
+
 
 
                     <Route path="/reservation/consult" element={<ProtectedRoute><ReservationConsultPage /></ProtectedRoute>} /> {/* MyPage와 관련 없으므로 유지 */}
