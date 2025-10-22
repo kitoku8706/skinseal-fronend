@@ -24,7 +24,7 @@ import MyInfoEdit from "./pages/MyInfoEdit.jsx";
 import UserWithdrawal from "./pages/UserWithdrawal.jsx";
 import ReservationQuery from "./pages/ReservationQuery.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
-
+import SchedulePage from "./pages/SchedulePage.jsx";
 // Optional utility component to test backend connection. Kept here but not
 // rendered by default. Uncomment <TestConnection /> in the App tree to use.
 const TestConnection = () => {
@@ -128,6 +128,7 @@ function App() {
           <Route path="/diagnosis" element={<DiagnosisPage />} />
           <Route path="/diagnosis/:id" element={<DiagnosisPage />} />
           <Route path="/reservation/chatbot" element={<ChatbotConsultPage />} />
+          <Route path="/reservation/timetable" element={<SchedulePage />} />
 
           {/* Protected: wrap parent so child routes inherit protection */}
           <Route
