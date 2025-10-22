@@ -1,0 +1,159 @@
+/* SchedulePage.css */
+
+/* 전체 페이지 컨테이너: 고정 너비 및 중앙 정렬 */
+.wrapper {
+  width: 1024px; /* 전체 페이지 고정 너비 */
+  margin: 0 auto; /* 중앙 정렬 */
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #fff;
+  min-height: 100vh; /* 최소 높이로 푸터 침범 방지 */
+  display: flex;
+  flex-direction: column; /* 콘텐츠와 푸터 세로 정렬 */
+  gap: 20px;
+}
+
+/* 스케줄 페이지 전체 내용 (프로필+테이블 블록들) */
+.schedulePageContent {
+  display: flex;
+  flex-direction: column; /* 상담사 블록들을 세로로 쌓음 */
+  gap: 48px; /* 각 상담사 블록 사이 간격 */
+  flex-grow: 1; /* 남은 공간 차지 */
+  overflow-y: auto; /* 세로 스크롤 가능 */
+}
+
+/* 각 상담사별 프로필과 테이블을 묶는 블록 */
+.consultantBlock {
+  display: flex; /* 프로필 열과 테이블을 가로로 나란히 */
+  gap: 24px; /* 프로필과 테이블 사이 간격 */
+  align-items: center;
+}
+
+/* 각 상담사 프로필 이미지를 위한 열 */
+.consultantProfileColumn {
+  /* 상담사 프로필이 들어있는 부모 컨테이너 클래스명 사용 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 세로 가운데 정렬 */
+  align-items: center; /* 가로 중앙 정렬 유지 */
+  height: 180px; /* 표 높이와 비슷하게 맞춤 */
+}
+
+/* 프로필 이미지 */
+.profileImage {
+  width: 140px; /* 이미지 크기 140px로 키우기 */
+  height: 140px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid #bbb;
+  margin-top: 65px;
+  margin-bottom: 12px; /* 이미지 아래 여백 추가로 위치 미세 조정 */
+}
+
+/* 프로필 이름 */
+.profileName {
+  font-weight: 700;
+  font-size: 16px;
+  color: #333;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 각 상담사 시간표 테이블 컨테이너 */
+.scheduleTableContainerForConsultant {
+  flex-grow: 1; /* 남은 공간 모두 사용 */
+  overflow-x: auto; /* 테이블이 넘칠 경우 가로 스크롤 */
+  min-width: 650px; /* 테이블 최소 너비 (너무 작아지는 것 방지) */
+}
+
+/* 상담사 이름 (테이블 위) */
+.consultantTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+/* 테이블 기본 스타일 */
+.scheduleTable {
+  width: 60%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+/* 테이블 헤더와 셀 공통 스타일 */
+.scheduleTable th,
+.scheduleTable td {
+  border: 1px solid #ccc; /* 테두리 유지 */
+  padding: 1px 2px; /* 패딩 축소 */
+  font-size: 10px; /* 폰트 크기 축소 */
+  height: 16px; /* 셀 높이 축소 */
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 50px; /* 각 칸 최소 너비 */
+}
+
+/* 시간 컬럼 */
+.timeCol {
+  width: 100px; /* 시간 컬럼 너비 조정 */
+  background-color: #fafafa;
+  font-weight: 600;
+}
+
+/* 날짜 헤더 */
+.dateHeader {
+  background-color: #f2f2f2;
+  font-weight: 700;
+}
+
+/* 비가용 시간대 */
+.unavailable {
+  background-color: #ddd;
+  color: #666; /* 텍스트 보존 */
+  font-style: italic;
+  cursor: not-allowed;
+}
+
+/* 예약된 셀 (회색 점만 표시) */
+.reserved {
+  position: relative;
+  cursor: not-allowed;
+  background-color: transparent; /* 배경 투명 유지 */
+}
+
+.reservedDot {
+  width: 14px; /* 동그라미 크기 */
+  height: 14px;
+  background-color: gray; /* 회색 */
+  border-radius: 50%;
+  margin: 0 auto; /* 가운데 정렬 */
+}
+
+/* 로딩/에러 메시지 */
+.loadingMessage,
+.errorMessage {
+  font-size: 16px;
+  color: #666;
+  padding: 20px;
+  text-align: center;
+}
+
+/* 푸터 (예시) */
+.footer {
+  height: 80px;
+  background-color: #f2f2f2;
+  text-align: center;
+  line-height: 80px;
+  border-top: 1px solid #ccc;
+  font-size: 14px;
+  color: #555;
+  margin-top: auto; /* 스케줄 페이지 콘텐츠 아래에 푸터 붙이기 */
+}
+
+.profileName {
+  display: none;
+}
