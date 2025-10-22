@@ -231,11 +231,7 @@ function NoticeListPage() {
             <div style={{ fontSize: "0.9em", color: "#666" }}>
               총 {totalElements}개의 공지사항
             </div>
-            {searchQuery && (
-              <div style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
-                {/* 서버 필터 사용: 개별 카운트 문구 제거 */}
-              </div>
-            )}
+            {/* 서버 필터 사용: 개별 카운트 문구 제거 */}
           </div>
           {role === "ADMIN" && (
             <button className="notice-write-btn" onClick={handleWrite} style={{ marginLeft: "auto" }}>
