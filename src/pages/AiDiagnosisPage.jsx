@@ -71,7 +71,7 @@ function AiDiagnosisPage() {
         const formData = new FormData();
         formData.append("image", imageFile);
         try {
-            const response = await fetch("/api/diagnosis/efficientnet", {
+            const response = await fetch("/api/diagnosis", {
                 method: "POST",
                 body: formData,
             });
