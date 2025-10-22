@@ -26,7 +26,7 @@ import ReservationQuery from "./pages/ReservationQuery.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DiagnosisLayout from "./pages/DiagnosisLayout.jsx";
 
-import TimetablePage from "./pages/TimetablePage"; // TimetablePage 컴포넌트 경로 확인
+import SchedulePage from "./pages/SchedulePage"; // SchedulePage 컴포넌트 경로 확인
 
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
@@ -131,7 +131,7 @@ function App() {
                     <Route path="/directions" element={<Directions />} />
                     <Route path="/reservation/chatbot" element={<ChatbotConsultPage />} />
 
-                    <Route path="/reservation/timetable" element={<TimetablePage />} />
+                    <Route path="/reservation/timetable" element={<SchedulePage />} />
 
 
 

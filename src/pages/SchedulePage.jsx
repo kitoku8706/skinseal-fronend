@@ -10,14 +10,14 @@ const consultants = [
 ];
 
 const timeSlots = [
-  { label: "09:30~10:30", unavailable: false },
-  { label: "10:30~11:30", unavailable: false },
-  { label: "11:30~12:30", unavailable: false },
-  { label: "12:30~14:00", unavailable: true }, // 비가용 시간대
-  { label: "14:00~15:00", unavailable: false },
-  { label: "15:00~16:00", unavailable: false },
-  { label: "16:00~17:00", unavailable: false },
-  { label: "17:00~18:00", unavailable: false },
+  { label: "09:30~10:30", start: "09:30", end: "10:30", unavailable: false },
+  { label: "10:30~11:30", start: "10:30", end: "11:30", unavailable: false },
+  { label: "11:30~12:30", start: "11:30", end: "12:30", unavailable: false },
+  { label: "12:30~14:00", start: "12:30", end: "14:00", unavailable: true },
+  { label: "14:00~15:00", start: "14:00", end: "15:00", unavailable: false },
+  { label: "15:00~16:00", start: "15:00", end: "16:00", unavailable: false },
+  { label: "16:00~17:00", start: "16:00", end: "17:00", unavailable: false },
+  { label: "17:00~18:00", start: "17:00", end: "18:00", unavailable: false },
 ];
 
 // 주중 날짜 (월요일~금요일)
@@ -116,7 +116,7 @@ const SchedulePage = () => {
         const allData = [];
         for (const date of weekDates) {
           const res = await axios.get(
-            `http://localhost:8090/api/schedules/date/${date}`
+            `http://localhost:8090/api/schedule/date/${date}`
           );
           const dataWithDate = res.data.map((item) => ({ ...item, date }));
           allData.push(...dataWithDate);
