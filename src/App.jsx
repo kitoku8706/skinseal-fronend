@@ -38,16 +38,12 @@ function App() {
             <NavBar />
             <main style={{ minHeight: "80vh" }}>
                 <Routes>
-                    {/* 공통 레이아웃을 사용하는 진단 페이지 그룹 */}
                     <Route element={<DiagnosisLayout><Outlet /></DiagnosisLayout>}>
                         <Route path="/ai/diagnose" element={<AiDiagnosisPage />} />
-                        {/* /diagnosis 경로가 질병 목록의 기본 페이지 역할을 하도록 설정 */}
                         <Route path="/diagnosis" element={<DiagnosisPage />} /> 
                         <Route path="/diagnosis/:id" element={<DiagnosisPage />} />
-                        {/* 진단 결과 페이지가 있다면 여기에 추가 (예: /diagnosis/result) */}
                     </Route>
                     
-                    {/* 기존 라우트들 */}
                     <Route path="/" element={<HomePage />} />
                     <Route path="/login" element={<UserLoginPage />} />
                     <Route path="/join" element={<UserJoinPage />} />
@@ -59,16 +55,15 @@ function App() {
                     <Route path="/reservation/chatbot" element={<ChatbotConsultPage />} />
                     <Route path="/reservation/timetable" element={<TimetablePage />} />
 
-                    {/* 로그인만 필요 */}
-                    <Route path="/mypage" element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
-                    <Route path="/reservation/consult" element={<ProtectedRoute><ReservationConsultPage /></ProtectedRoute>} />
-                    <Route path="/mypage/edit" element={<ProtectedRoute><MyInfoEdit /></ProtectedRoute>} />
-                    <Route path="/mypage/withdraw" element={<ProtectedRoute><UserWithdrawal /></ProtectedRoute>} />
-                    <Route path="/mypage/reservation" element={<ProtectedRoute><ReservationConsultPage /></ProtectedRoute>} />
-                    {/* 마이페이지 내 진단 페이지도 Layout이 적용되도록 수정할 수 있음 */}
-                    <Route path="/mypage/diagnosis" element={<ProtectedRoute><DiagnosisLayout><DiagnosisPage /></DiagnosisLayout></ProtectedRoute>} />
+                    <Route path="/reservation/consult" element={<ProtectedRoute><ReservationConsultPage /></ProtectedRoute>} /> {/* MyPage와 관련 없으므로 유지 */}
 
-                    {/* ADMIN만 필요 */}
+                    <Route path="/mypage" element={<ProtectedRoute><MyPage /></ProtectedRoute>}>
+                        <Route index element={<MyInfoEdit />} /> 
+                        <Route path="withdraw" element={<UserWithdrawal />} />
+                        <Route path="reservation" element={<ReservationQuery />} />
+                        <Route path="diagnosis" element={<DiagnosisLayout><DiagnosisPage /></DiagnosisLayout>} />
+                    </Route>
+
                     <Route path="/notice/edit/:id" element={<ProtectedRoute requiredRole="ADMIN"><NoticeEditPage /></ProtectedRoute>} />
                     <Route path="/notice/write" element={<ProtectedRoute requiredRole="ADMIN"><NoticeForm /></ProtectedRoute>} />
                 </Routes>      
