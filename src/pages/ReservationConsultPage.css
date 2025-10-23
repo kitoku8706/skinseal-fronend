@@ -1,0 +1,146 @@
+.reservation-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 30px;
+  border-radius: 16px;
+  background-color: #f9fbff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #1e3a8a;
+  margin-bottom: 20px;
+}
+
+section {
+  margin-bottom: 25px;
+}
+
+.consultant-list {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.consultant-card {
+  flex: 1;
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.consultant-card.selected {
+  border-color: #2563eb;
+  background-color: #e0edff;
+}
+
+.consultant-card img {
+  width: 80px;
+  height: 80px;
+}
+
+.time-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.time-slot {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.time-slot.selected {
+  background-color: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+.purpose-section {
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.radio-group label {
+  display: inline-block;
+  margin-right: 15px;
+}
+
+.custom-purpose-input {
+  margin-top: 10px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.agree-section {
+  margin-top: 20px;
+}
+
+.submit-btn {
+  width: 100%;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.submit-btn:hover {
+  background-color: #1d4ed8;
+}
+
+.reservation-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.consultant-card {
+  display: inline-block;
+  width: 120px;
+  text-align: center;
+  cursor: pointer;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px;
+  transition: all 0.2s;
+}
+
+.consultant-card.selected {
+  border-color: #007bff;
+  background-color: #e8f0fe;
+}
+
+.time-slot {
+  margin: 5px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.time-slot.selected {
+  background-color: #007bff;
+  color: white;
+}
+
+.react-datepicker__day--disabled {
+  color: #ccc !important;
+  cursor: not-allowed !important;
+}
