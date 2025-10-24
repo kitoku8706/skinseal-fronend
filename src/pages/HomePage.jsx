@@ -4,7 +4,7 @@ import { pingBackend, getUsersFromBackend, getChatbotCategories } from "../api/t
 import NoticeListPage from "./NoticeListPage";
 import NavBar from "../components/NavBar";
 import "./HomePage.css";
-import RightSidebar from "../components/RightSidebar"; // ← 추가
+import RightSidebar from "../components/RightSidebar";
 
 function HomePage() {
   const [result, setResult] = useState("");
@@ -14,7 +14,6 @@ function HomePage() {
   const [categoryError, setCategoryError] = useState("");
   const navigate = useNavigate();
 
-  // 드롭다운 상태 관리
   const [openMenu, setOpenMenu] = useState(null);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -65,8 +64,8 @@ function HomePage() {
     <>
       <div className="homepage-container">
 
-        {/* 공지사항 바로가기 버튼 상단에 추가 */}
-        <div style={{ width: "100%", display: "flex", justifyContent: "center", margin: "32px 0 0 0" }}>
+        {/* 공지사항 바로가기 버튼의 상단 마진을 48px로 설정 */}
+        <div style={{ width: "100%", display: "flex", justifyContent: "center", margin: "48px 0 0 0" }}>
           <button
             className="banner-btn"
             style={{ minWidth: 180 }}
@@ -74,9 +73,8 @@ function HomePage() {
           >
             공지사항 바로가기
           </button>
-        </div>  
+        </div>
       
-        {/* 메인 배너 */}
         <section className="main-banner">
           <h1>빠르고 안전한 진료, SkinSeal 병원</h1>
           <p>진료부터 수술, 그리고 진료연계까지 믿고 맡길 수 있는 병원</p>
@@ -88,7 +86,6 @@ function HomePage() {
           </button>
         </section>
 
-        {/* 센터/진료과 소개 */}
         <section className="center-section">
           <h2>전문 센터 안내</h2>
           <div className="center-cards">
@@ -100,7 +97,6 @@ function HomePage() {
           </div>
         </section>
 
-        {/* 소셜채널/언론보도/블로그 콘텐츠 */}
         <section className="social-section">
           <h2>소셜채널 & 언론보도</h2>
           <div className="social-cards">
@@ -110,7 +106,6 @@ function HomePage() {
           </div>
         </section>
 
-        {/* 빠른 예약/상담/오시는 길 등 바로가기 */}
         <section className="quick-links">
           <button>진료 예약</button>
           <button>의료 상담</button>
@@ -119,7 +114,7 @@ function HomePage() {
 
         
       </div>
-      <RightSidebar /> {/* ← 바깥에 추가하면 오른쪽 고정 */}
+      <RightSidebar />
     </>
   );
 }
