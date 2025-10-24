@@ -4,6 +4,7 @@ function AiDiagnosisPage() {
     const [selectedImage, setSelectedImage] = useState(null);
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [selectedModel, setSelectedModel] = useState("efficientnet"); // 기본 모델 설정
     const fileInputRef = useRef();
     const videoRef = useRef();
     const canvasRef = useRef();
@@ -71,7 +72,8 @@ function AiDiagnosisPage() {
         const formData = new FormData();
         formData.append("image", imageFile);
         try {
-            const response = await fetch("/api/diagnosis/efficientnet", {
+            // 동적으로 API 경로 설정
+            const response = await fetch(`/api/diagnosis/${selectedModel}`, {
                 method: "POST",
                 body: formData,
             });
@@ -87,6 +89,20 @@ function AiDiagnosisPage() {
     return (
         <div style={{ maxWidth: 600, margin: "0 auto", padding: 24 }}>
             <h2>AI 피부 질환 진단</h2>
+
+            {/* 모델 선택 드롭다운 */}
+            <div style={{ marginBottom: 16 }}>
+                <label htmlFor="model-select" style={{ marginRight: 8 }}>진단 모델 선택:</label>
+                <select 
+                    id="model-select"
+                    value={selectedModel} 
+                    onChange={(e) => setSelectedModel(e.target.value)}
+                >
+                    <option value="efficientnet">EfficientNet</option>
+                    <option value="skin_model">Skin Model</option>
+                </select>
+            </div>
+
             <div style={{ marginBottom: 16 }}>
                 <input
                     type="file"
