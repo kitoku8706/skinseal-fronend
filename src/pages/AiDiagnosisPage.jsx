@@ -191,6 +191,7 @@ function AiDiagnosisPage() {
                 >
                     <option value="efficientnet">EfficientNet</option>
                     <option value="skin_model">Skin Model</option>
+                    <option value="acne">Acne (Binary)</option>
                 </select>
             </div>
 
