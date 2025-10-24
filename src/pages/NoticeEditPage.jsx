@@ -24,12 +24,13 @@ function NoticeEditPage() {
             throw new Error('네트워크 응답이 올바르지 않습니다');
           }
           return res.json();
-        })
-        .then(data => {
-          // 배열에서 해당 ID의 공지사항 찾기
-          const foundNotice = data.find(notice => 
-            notice.noticeId == id || notice.notice_id == id
-          );
+       })
+         .then(data => {
+                const noticeArray = Array.isArray(data) ? data : (data.content || data.data || []); 
+      
+        const foundNotice = noticeArray.find(notice => 
+        notice.noticeId == id || notice.notice_id == id
+        );
           
           if (foundNotice) {
             setNotice({
