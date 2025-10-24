@@ -1,25 +1,23 @@
-// NavBar.jsx (통합 및 수정된 최종 코드)
+// src/components/NavBar.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./NavBar.css";
+import "./NavBar.css"; // ✅ 이 CSS만 import
 
 function NavBar() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState(""); // 상태 관리는 상위에서 이루어지는 경우가 많으므로 주석 처리
+  const [username, setUsername] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [diseaseList, setDiseaseList] = useState([]);
   const [openMenu, setOpenMenu] = useState(null);
 
   useEffect(() => {
-    // 1. 로그인 상태 확인 및 localUsername 폴백 세팅
     const token = localStorage.getItem("accessToken");
     setIsLoggedIn(!!token);
 
     const localUsername = localStorage.getItem("username");
     if (localUsername) setUsername(localUsername);
 
-    // 2. 질환 리스트 불러오기 (비동기)
     axios
       .get("/api/disease/list")
       .then((res) => setDiseaseList(res.data))
@@ -29,41 +27,31 @@ function NavBar() {
           { diseaseName: "병명2", diseaseId: 2 },
           { diseaseName: "병명3", diseaseId: 3 },
         ])
-      ); // Fallback: 병명과 ID를 객체 형태로 맞춤
+      );
 
-    // 3. 토큰이 있을 경우 DB에서 최신 유저 정보 요청 (localUsername을 덮어씀)
     if (token) {
       axios
-        .get("/api/user/me", {
+        .get("http://localhost:8090/api/user/me", {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
           if (res.data.username) {
             setUsername(res.data.username);
-            localStorage.setItem("username", res.data.username); // DB 값으로 localstorage 동기화
+            localStorage.setItem("username", res.data.username);
           }
         })
-        .catch(() => {
-          // API 실패 시 토큰이 만료되었을 수 있으므로 로그아웃 처리 고려 가능 (선택 사항)
-          // console.error("사용자 정보 로드 실패");
-        });
+        .catch(() => {});
     } else {
-      // 토큰이 없으면 username 상태 초기화
       setUsername("");
     }
-  }, []); // 초기 로드 시 1회만 실행
+  }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("username");
-    localStorage.removeItem("loginId");
-    localStorage.removeItem("role");
-    localStorage.removeItem("userId");
-
+    localStorage.clear();
     setIsLoggedIn(false);
     setUsername("");
     alert("로그아웃 되었습니다.");
-    navigate("/"); // 새로고침 대신 React Router의 navigate 사용
+    navigate("/");
   };
 
   const menuItems = [
@@ -71,10 +59,9 @@ function NavBar() {
     {
       label: "질환 진단",
       submenu: [
-        // 배열이고, 요소가 있을 때만 매핑 (안전성 강화)
-        ...(Array.isArray(diseaseList) ? diseaseList : []).map((disease) => ({
-          label: disease.diseaseName,
-          link: `/diagnosis/${disease.diseaseId}`,
+        ...(Array.isArray(diseaseList) ? diseaseList : []).map((d) => ({
+          label: d.diseaseName,
+          link: `/diagnosis/${d.diseaseId}`,
         })),
         { label: "자가 진단", link: "/ai/diagnose" },
         { label: "진단 결과", link: "/diagnosis/result" },
@@ -92,10 +79,9 @@ function NavBar() {
     {
       label: "소개",
       submenu: [
-        // kcm 블록의 경로 기준으로 통일
-        { label: "회사소개", link: "/intro" }, // /intro -> /about/company
-        { label: "운영진", link: "/management" }, // /management -> /about/team
-        { label: "오시는 길", link: "/directions" }, // /directions -> /about/location
+        { label: "회사소개", link: "/intro" },
+        { label: "운영진", link: "/management" },
+        { label: "오시는 길", link: "/directions" },
       ],
     },
   ];
@@ -115,9 +101,7 @@ function NavBar() {
               onMouseLeave={() => setOpenMenu(null)}
             >
               <span
-                onClick={() => {
-                  if (item.link) navigate(item.link);
-                }}
+                onClick={() => item.link && navigate(item.link)}
                 style={{ cursor: item.link ? "pointer" : "default" }}
               >
                 {item.label}
@@ -143,7 +127,6 @@ function NavBar() {
         {isLoggedIn ? (
           <>
             <span style={{ marginRight: 10 }}>{username}님</span>
-            {/* 마이페이지 버튼은 두 번째 블록에 있어 추가합니다. */}
             <button onClick={() => navigate("/mypage")}>마이페이지</button>
             <button onClick={handleLogout}>로그아웃</button>
           </>

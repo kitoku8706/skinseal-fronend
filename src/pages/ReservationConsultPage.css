@@ -1,146 +1,221 @@
 .reservation-container {
-  max-width: 700px;
-  margin: 0 auto;
+  max-width: 1200px;
+  margin: 50px auto;
   padding: 30px;
-  border-radius: 16px;
-  background-color: #f9fbff;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  background-color: #f8fafc;
+  border-radius: 12px;
+  font-family: "Pretendard", sans-serif;
 }
 
-h2 {
+.reservation-container h2 {
   text-align: center;
-  color: #1e3a8a;
-  margin-bottom: 20px;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #222;
 }
 
-section {
-  margin-bottom: 25px;
-}
-
-.consultant-list {
+.reservation-sections {
   display: flex;
+  gap: 20px;
   justify-content: space-between;
-  gap: 10px;
 }
 
-.consultant-card {
+.section-box {
   flex: 1;
   background: #fff;
-  padding: 15px;
+  border: 1px solid #d9e1ec;
   border-radius: 12px;
-  cursor: pointer;
-  text-align: center;
-  border: 2px solid transparent;
-  transition: all 0.2s ease;
+  padding: 25px;
+  height: 600px;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
-.consultant-card.selected {
-  border-color: #2563eb;
-  background-color: #e0edff;
+.section-box::-webkit-scrollbar {
+  width: 6px;
 }
-
-.consultant-card img {
-  width: 80px;
-  height: 80px;
-}
-
-.time-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.time-slot {
-  padding: 10px 20px;
+.section-box::-webkit-scrollbar-thumb {
+  background-color: #c2c7d0;
   border-radius: 10px;
-  border: 1px solid #ccc;
-  background: #fff;
+}
+
+.section-box h4 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 10px;
+}
+
+.section-desc {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.input-group input,
+.input-group select {
+  border: 1px solid #d0d7e2;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  border-color: #4b7bec;
+  box-shadow: 0 0 0 2px rgba(75, 123, 236, 0.1);
+}
+
+.time-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.time-buttons button {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #cfd8e3;
+  background: #f8fafc;
   cursor: pointer;
   transition: 0.2s;
 }
 
-.time-slot.selected {
-  background-color: #2563eb;
+.time-buttons button:hover {
+  background-color: #e6efff;
+}
+
+.time-buttons .selected {
+  background-color: #4b7bec;
   color: #fff;
-  border-color: #2563eb;
+  border-color: #4b7bec;
 }
 
-.purpose-section {
+.footer-section {
   background: #fff;
-  padding: 15px;
+  border: 1px solid #d9e1ec;
   border-radius: 12px;
+  padding: 25px;
+  margin-top: 25px;
 }
 
-.radio-group label {
-  display: inline-block;
-  margin-right: 15px;
-}
-
-.custom-purpose-input {
-  margin-top: 10px;
-  width: 100%;
-  padding: 8px;
+.scroll-box {
+  border: 1px solid #e3e7ed;
+  background-color: #f9fafc;
+  padding: 15px;
+  height: 150px;
+  overflow-y: auto;
+  font-size: 13px;
+  color: #444;
+  line-height: 1.5;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  margin-bottom: 15px;
 }
 
-.agree-section {
-  margin-top: 20px;
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .submit-btn {
   width: 100%;
-  background-color: #2563eb;
+  background: #4b7bec;
   color: white;
   border: none;
-  border-radius: 10px;
-  padding: 12px;
-  font-size: 1.1rem;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.2s;
 }
 
 .submit-btn:hover {
-  background-color: #1d4ed8;
+  background: #3867d6;
 }
 
-.reservation-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.consultant-card {
-  display: inline-block;
-  width: 120px;
+.notice-text {
   text-align: center;
-  cursor: pointer;
-  border: 2px solid #ddd;
+  font-size: 13px;
+  color: #666;
+  margin-top: 10px;
+}
+
+/* 생년월일 선택 */
+.birth-select {
+  display: flex;
+  gap: 6px;
+}
+
+.birth-select select {
+  flex: 1;
+  border: 1px solid #d0d7e2;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 14px;
+}
+
+/* 달력 영역 */
+.calendar-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.react-calendar {
+  width: 100% !important;
+  border: 1px solid #d9e1ec;
   border-radius: 10px;
-  padding: 10px;
-  margin: 10px;
-  transition: all 0.2s;
+  font-size: 14px;
 }
 
-.consultant-card.selected {
-  border-color: #007bff;
-  background-color: #e8f0fe;
+/* 회색 처리 (6주 뒤 날짜) */
+.disabled-date {
+  background-color: #f0f0f0 !important;
+  color: #999 !important;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+/* 연락처 입력 */
+.input-group input[type="text"]::placeholder {
+  color: #aaa;
 }
 
-.time-slot {
-  margin: 5px;
-  padding: 10px 15px;
+/* 달력 회색 처리 */
+.disabled-date {
+  background-color: #f0f0f0 !important;
+  color: #999 !important;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* 개인정보 수집 스크롤박스 */
+.scroll-box {
+  border: 1px solid #e3e7ed;
+  background-color: #f9fafc;
+  padding: 15px;
+  height: 150px;
+  overflow-y: auto;
+  font-size: 13px;
+  color: #444;
+  line-height: 1.5;
   border-radius: 8px;
-  border: 1px solid #ccc;
-  cursor: pointer;
-}
-
-.time-slot.selected {
-  background-color: #007bff;
-  color: white;
-}
-
-.react-datepicker__day--disabled {
-  color: #ccc !important;
-  cursor: not-allowed !important;
+  margin-bottom: 15px;
 }
