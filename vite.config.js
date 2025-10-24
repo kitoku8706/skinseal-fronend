@@ -50,19 +50,25 @@ export default defineConfig({
       'localhost',
       localIp
     ],
-
+    // 3. API 프록시 설정 추가
     proxy: {
+      // AI 진단 및 상태 확인 요청을 위한 프록시
+      "/api/diagnosis": {
+        target: "http://localhost:5000", // 파이썬 백엔드 서버
+        changeOrigin: true,
+      },
+      "/api/health": {
+        target: "http://localhost:5000", // 파이썬 백엔드 서버
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      },
+      // 나머지 API 요청을 위한 프록시
       "/api": {
-        target: `http://${localIp}:${backendPort}`,
+        target: "http://localhost:8090", // 스프링 부트 백엔드 서버
         changeOrigin: true,
-        secure: false,
-      },
-      "/management/api": {
-        // 관계자 소개 API 경로 추가
-        target: `http://${localIp}:${backendPort}`,
-        changeOrigin: true,
-        secure: false,
-      },
-    },
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
   },
+  // 빌드 설정
 });
