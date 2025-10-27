@@ -173,24 +173,24 @@ export default function SelfDiagnosisResults() {
           const filtered = items.filter(it => matchesModel(it, selectedModel));
           if (filtered.length === 0) return <div>{selectedModel} 모델로 저장된 진단 결과가 없습니다.</div>;
           const sorted = filtered.slice().sort((a, b) => getCreatedTime(b) - getCreatedTime(a));
-          const it = sorted[0];
-          const modelName = it.modelName || it.model || 'unknown';
-          const created = it.createdAt || it.created_at || it.created || '';
-          const resultArr = Array.isArray(it.result) ? it.result : (it?.aiResult?.result || it?.result);
-          const top = Array.isArray(resultArr) && resultArr.length ? resultArr[0] : null;
-          const idx = 0;
+
           return (
-            <div key={idx} style={{ border: '1px solid #e5e7eb', padding: 12, borderRadius: 8, marginBottom: 12 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <div style={{ fontWeight: 'bold' }}>{modelName} {top ? `- ${top.class || top.name || top.label}` : ''}</div>
-                  <div style={{ fontSize: 12, color: '#666' }}>{created}</div>
-                </div>
-                <div>
-                  <button onClick={() => setExpanded(expanded === idx ? null : idx)} style={{ marginRight: 8 }}>
-                    {expanded === idx ? '닫기' : '상세 보기'}
-                  </button>
-                </div>
+            <div style={{ border: '1px solid #e5e7eb', padding: 12, borderRadius: 8, marginBottom: 12 }}>
+              {/* 헤더: 진단일시 | 진단모델명 | 진단결과 */}
+              <div style={{ display: 'flex', gap: 12, padding: '8px 4px', borderBottom: '1px solid #eee', fontWeight: 'bold' }}>
+                <div style={{ flex: 2 }}>진단일시</div>
+                <div style={{ flex: 1 }}>진단모델명</div>
+                <div style={{ flex: 3 }}>진단결과</div>
+                <div style={{ width: 110 }}></div>
+              </div>
+
+              {sorted.map((it, idx) => {
+                const modelName = it.modelName || it.model || 'unknown';
+                const created = it.createdAt || it.created_at || it.created || '';
+                const resultArr = Array.isArray(it.result) ? it.result : (it?.aiResult?.result || it?.result);
+                const resText = Array.isArray(resultArr) ? resultArr.map(r => r.class || r.name || r.label).join(', ') : (typeof resultArr === 'string' ? resultArr : JSON.stringify(resultArr));
+
+                return (
               </div>
 
               {expanded === idx && (
