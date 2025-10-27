@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Calendar from "react-calendar";
 import axios from "axios";
 import "./ReservationConsultPage.css";
 
+// ✅ 날짜 숫자만 표시 (ex: "10")
+const formatDayNumber = (locale, date) => date.getDate();
+
+// ✅ 상담사 리스트
 const consultants = [
   { id: 1, name: "김충만", img: "/images/profile1.png" },
   { id: 2, name: "신대현", img: "/images/profile2.png" },
   { id: 3, name: "정승환", img: "/images/profile3.png" },
 ];
 
+// ✅ 상담 가능 시간대
 const timeSlots = [
   "09:30",
   "10:30",
@@ -29,17 +34,61 @@ export default function ReservationConsultPage() {
   const [time, setTime] = useState("");
   const [agree, setAgree] = useState(false);
 
-  const today = new Date();
-  const maxDate = new Date();
-  maxDate.setDate(maxDate.getDate() + 42); // 6주 뒤까지 가능
+  // ✅ 예약된 시간 목록 (서버에서 불러옴)
+  const [reservedTimes, setReservedTimes] = useState([]);
 
-  // 전화번호 숫자만 입력
+  // 오늘 날짜 기준 세팅
+  const today = useMemo(() => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    return date;
+  }, []);
+
+  const currentMonthStart = useMemo(
+    () => new Date(today.getFullYear(), today.getMonth(), 1),
+    [today]
+  );
+  const nextMonthStart = useMemo(
+    () => new Date(today.getFullYear(), today.getMonth() + 1, 1),
+    [today]
+  );
+
+  const maxDate = useMemo(() => {
+    const date = new Date(today);
+    date.setDate(date.getDate() + 42);
+    date.setHours(23, 59, 59, 999);
+    return date;
+  }, [today]);
+
+  // ✅ 전화번호 숫자만 허용
   const handlePhoneChange = (e) => {
-    const value = e.target.value.replace(/[^0-9]/g, ""); // 숫자만 허용
+    const value = e.target.value.replace(/[^0-9]/g, "");
     setPhone(value);
   };
 
-  // 예약 제출
+  // ✅ 상담사 + 날짜 기준 예약 정보 불러오기
+  useEffect(() => {
+    if (!selectedDate || !consultant) return;
+
+    const dateStr = selectedDate.toISOString().split("T")[0];
+    axios
+      .get(`http://localhost:8090/api/appointments/date/${dateStr}`, {
+        params: { counselorId: consultant }, // ✅ 이 한 줄 추가!
+      })
+      .then((res) => {
+        // 🔥 선택된 상담사만 필터링
+        const filtered = res.data
+          .filter((a) => a.counselorId === Number(consultant))
+          .map((a) => a.appointmentTime);
+        setReservedTimes(filtered);
+      })
+      .catch((err) => {
+        console.error("예약 데이터 불러오기 오류:", err);
+        setReservedTimes([]);
+      });
+  }, [selectedDate, consultant]);
+
+  // ✅ 예약하기
   const handleSubmit = async () => {
     const token = localStorage.getItem("accessToken");
     if (!token) {
@@ -69,7 +118,7 @@ export default function ReservationConsultPage() {
         appointmentDate: selectedDate.toISOString().split("T")[0],
         appointmentTime: time,
         birth: `${birthYear}-${birthMonth}-${birthDay}`,
-        phone: phone,
+        phone,
         purpose: "상담 예약",
       };
 
@@ -85,13 +134,7 @@ export default function ReservationConsultPage() {
       );
 
       alert(res.data ?? "예약이 완료되었습니다!");
-      setBirthYear("");
-      setBirthMonth("");
-      setBirthDay("");
-      setPhone("");
-      setConsultant("");
       setTime("");
-      setAgree(false);
     } catch (err) {
       console.error("예약 오류:", err);
       if (err.response?.status === 409) {
@@ -102,7 +145,7 @@ export default function ReservationConsultPage() {
     }
   };
 
-  // 주말 및 6주 이후 비활성화
+  // ✅ 날짜 비활성화 로직
   const tileDisabled = ({ date, view }) =>
     view === "month" &&
     (date < today ||
@@ -112,8 +155,11 @@ export default function ReservationConsultPage() {
 
   const tileClassName = ({ date, view }) => {
     if (view === "month") {
-      if (date > maxDate) return "disabled-date";
+      if (date < today || date > maxDate) return "disabled-date";
       if (date.getDay() === 0 || date.getDay() === 6) return "weekend-disabled";
+      // 🔵 선택한 날짜 배경 강조 (얕은 하늘색)
+      if (selectedDate.toDateString() === date.toDateString())
+        return "selected-date";
     }
     return null;
   };
@@ -131,9 +177,10 @@ export default function ReservationConsultPage() {
             예약하시는 분의 정보를 입력해주세요.
           </p>
 
+          {/* 생년월일 */}
           <div className="input-group birth-group">
             <label>생년월일</label>
-            <div className="birth-selects">
+            <div className="birth-select">
               <select
                 value={birthYear}
                 onChange={(e) => setBirthYear(e.target.value)}
@@ -170,6 +217,7 @@ export default function ReservationConsultPage() {
             </div>
           </div>
 
+          {/* 연락처 */}
           <div className="input-group">
             <label>연락처</label>
             <input
@@ -182,39 +230,38 @@ export default function ReservationConsultPage() {
           </div>
         </div>
 
-        {/* 2️⃣ 달력 2개 (이번 달 / 다음 달) */}
+        {/* 2️⃣ 달력 */}
         <div className="section-box">
           <h4>상담 날짜 선택</h4>
-          <p className="date-desc">예약하실 날짜를 선택해주세요.</p>
-
           <div className="calendar-double">
-            {/* 이번 달 */}
             <Calendar
-              onChange={setSelectedDate}
+              onClickDay={setSelectedDate}
               value={selectedDate}
               locale="ko-KR"
-              activeStartDate={new Date()}
+              showNeighboringMonth={false}
+              minDetail="month"
+              maxDetail="month"
+              activeStartDate={currentMonthStart}
               tileDisabled={tileDisabled}
               tileClassName={tileClassName}
+              formatDay={formatDayNumber}
             />
-
-            {/* 다음 달 */}
             <Calendar
-              onChange={setSelectedDate}
+              onClickDay={setSelectedDate}
               value={selectedDate}
               locale="ko-KR"
-              activeStartDate={(function () {
-                const next = new Date();
-                next.setMonth(next.getMonth() + 1);
-                return next;
-              })()}
+              showNeighboringMonth={false}
+              minDetail="month"
+              maxDetail="month"
+              activeStartDate={nextMonthStart}
               tileDisabled={tileDisabled}
               tileClassName={tileClassName}
+              formatDay={formatDayNumber}
             />
           </div>
         </div>
 
-        {/* 3️⃣ 상담사 선택 + 시간 */}
+        {/* 3️⃣ 상담사 + 시간 선택 */}
         <div className="section-box">
           <h4>상담 시간 / 담당자</h4>
           <div className="consultant-list">
@@ -224,36 +271,48 @@ export default function ReservationConsultPage() {
                 className={`consultant-card ${
                   consultant === c.id ? "selected" : ""
                 }`}
+                onClick={() => setConsultant(c.id)}
               >
                 <img src={c.img} alt={c.name} />
                 <p>{c.name}</p>
-                <button onClick={() => setConsultant(c.id)}>선택</button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setConsultant(c.id);
+                  }}
+                >
+                  선택
+                </button>
               </div>
             ))}
           </div>
 
+          {/* ✅ 시간대 버튼 (상담사별 예약 표시) */}
           <div className="time-buttons">
-            {timeSlots.map((t) => (
-              <button
-                key={t}
-                className={time === t ? "selected" : ""}
-                onClick={() => setTime(t)}
-              >
-                {t}
-              </button>
-            ))}
+            {timeSlots.map((t) => {
+              const isReserved = reservedTimes.includes(t);
+              return (
+                <button
+                  key={t}
+                  className={`time-btn ${isReserved ? "reserved" : ""} ${
+                    time === t ? "selected" : ""
+                  }`}
+                  onClick={() => !isReserved && setTime(t)}
+                  disabled={isReserved || !consultant}
+                >
+                  {t}
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
 
-      {/* 4️⃣ 개인정보 동의 + 버튼 */}
+      {/* 4️⃣ 개인정보 동의 + 제출 */}
       <div className="footer-section">
         <p className="privacy-text">
           피부씰은 원활한 진료 예약을 위해 고객님의 개인정보 수집 및 활용에 대한
           동의를 받고 있습니다.
-          <br />
-          개인정보 수집 이용 동의는 거부하실 수 있으며, 거부할 경우 서비스
-          사용이 일부 제한될 수 있습니다.
         </p>
 
         <div className="privacy-box">
@@ -263,10 +322,8 @@ export default function ReservationConsultPage() {
             대리 예약 : 환자명, 환자 생년월일, 환자 휴대폰 번호, 예약자, 예약자
             휴대폰 번호
           </p>
-
           <h5>수집 · 이용목적</h5>
-          <p>진료 예약 및 진료 안내</p>
-
+          <p>진료 예약 및 안내</p>
           <h5>보유 및 이용기간</h5>
           <p>의료법에 준함</p>
         </div>
