@@ -74,17 +74,6 @@ function HomePage() {
             공지사항 바로가기
           </button>
         </div>
-      
-        <section className="main-banner">
-          <h1>빠르고 안전한 진료, SkinSeal 병원</h1>
-          <p>진료부터 수술, 그리고 진료연계까지 믿고 맡길 수 있는 병원</p>
-          <button
-            className="banner-btn"
-            onClick={() => navigate("/reservation/consult")}
-          >
-            진료 예약 바로가기
-          </button>
-        </section>
 
         <section className="center-section">
           <h2>전문 센터 안내</h2>
@@ -112,6 +101,19 @@ function HomePage() {
             </Link>
           </div>
         </section>
+
+      
+        <section className="main-banner" style={{marginTop:"30px"}}>
+          <h1>빠르고 안전한 진료, SkinSeal 병원</h1>
+          <p>진료부터 수술, 그리고 진료연계까지 믿고 맡길 수 있는 병원</p>
+          <button
+            className="banner-btn"
+            onClick={() => navigate("/reservation/consult")}
+          >
+            진료 예약 바로가기
+          </button>
+        </section>
+
 
         <section className="social-section">
           <h2>소셜채널 & 언론보도</h2>

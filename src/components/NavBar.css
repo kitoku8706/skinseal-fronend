@@ -50,8 +50,8 @@
 .nav-item {
   position: relative;
   flex: none;
-  margin: 0 16px; /* 좌우 간격 조정 */
-  font-size: 1.05rem;
+  margin: 0 25px; /* 좌우 간격 조정 */
+  font-size: 1.2rem;
   font-weight: 500;
   color: #dddddd; /* 메뉴 글자색을 밝은 회색으로 변경 */
   cursor: pointer;
@@ -71,7 +71,7 @@
   position: absolute;
   top: 100%;
   left: 50%;
-  transform: translateX(-50%); /* 중앙 정렬 */
+  transform: translateX(-20%); /* 중앙 정렬 */
   background: #ffffff; /* 드롭다운 배경은 흰색 */
   border: 1px solid #eeeeee;
   border-top: 2px solid #3b82f6; /* 강조색으로 상단 경계선 추가 */
