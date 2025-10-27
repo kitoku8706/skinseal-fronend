@@ -189,8 +189,8 @@ function AiDiagnosisPage() {
                     value={selectedModel} 
                     onChange={(e) => setSelectedModel(e.target.value)}
                 >
-                    <option value="efficientnet">EfficientNet</option>
-                    <option value="skin_model">Skin Model</option>
+                    <option value="efficientnet">EfficientNet(8)</option>
+                    <option value="skin_model">Skin Model(21)</option>
                     <option value="acne">Acne (Binary)</option>
                 </select>
             </div>
