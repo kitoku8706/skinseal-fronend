@@ -1,17 +1,22 @@
+/* ✅ 메인 컨테이너 */
 .check-container {
   display: flex;
   justify-content: center;
-  margin-top: 120px; /* ✅ 메뉴 아래로 충분히 내림 */
+  align-items: center;
+  margin-top: 120px;
   font-family: "Pretendard", sans-serif;
+  padding: 0 16px; /* 좌우 여백 */
 }
 
+/* ✅ 카드 영역 */
 .check-card {
   background-color: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 40px 60px;
-  width: 80%;
-  max-width: 900px;
+  padding: 32px 36px;
+  width: 100%;
+  max-width: 920px; /* 고정 폭 */
+  margin: 0 auto;
   text-align: center;
 }
 
@@ -19,24 +24,29 @@
   font-size: 24px;
   font-weight: 700;
   color: #333;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
+/* ✅ 표 전체 */
 .reservation-table {
-  width: 100%;
   border-collapse: collapse;
   border-radius: 10px;
   overflow: hidden;
+  margin: 0 auto;
+  width: 100%;
 }
 
+/* ✅ 컬럼 정확히 6개 맞추기 */
 .table-header,
 .table-row {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  padding: 14px 0;
+  grid-template-columns: 90px 160px 110px 140px 120px 220px;
+  padding: 12px 0;
   align-items: center;
+  text-align: center;
 }
 
+/* ✅ 헤더 스타일 */
 .table-header {
   background-color: #f6f9fc;
   font-weight: 600;
@@ -44,24 +54,35 @@
   border-bottom: 2px solid #e4e7eb;
 }
 
+/* ✅ 셀 스타일 */
+.table-header div,
+.table-row div {
+  padding: 0 6px;
+  text-align: center;
+  letter-spacing: 0.2px;
+}
+
+/* ✅ 행 스타일 */
 .table-row {
   border-bottom: 1px solid #eaeaea;
 }
 
+/* ✅ 상태 텍스트 */
 .status.active {
   color: #20b65d;
   font-weight: 600;
 }
-
 .status.cancelled {
   color: #d9534f;
   font-weight: 600;
 }
 
+/* ✅ 버튼 그룹 */
 .actions {
   display: flex;
   justify-content: center;
   gap: 8px;
+  transform: translateX(60px); /* ✅ 버튼을 오른쪽으로 10px 이동 */
 }
 
 .cancel-btn {
@@ -72,6 +93,10 @@
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+.cancel-btn:hover {
+  background-color: #c0392b;
 }
 
 .modify-btn {
@@ -82,24 +107,23 @@
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
+  transition: background-color 0.2s ease;
 }
-
-.cancel-btn:hover {
-  background-color: #c0392b;
-}
-
 .modify-btn:hover {
   background-color: #2980b9;
 }
 
-/* ✅ 안내 문구 스타일 */
+/* ✅ 안내 문구 */
 .notice-text {
-  margin-top: 25px;
+  margin-top: 18px;
   font-size: 15px;
   color: #555;
   background: #f8fafc;
-  padding: 12px 18px;
+  padding: 10px 14px;
   border-radius: 8px;
-  display: inline-block;
+  display: block;
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
 }
