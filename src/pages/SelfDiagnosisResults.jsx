@@ -48,12 +48,25 @@ export default function SelfDiagnosisResults() {
   const [error, setError] = useState(null);
   const [expanded, setExpanded] = useState(null);
   const [overlayOpacity, setOverlayOpacity] = useState(0.6);
+  const [selectedModel, setSelectedModel] = useState('efficientnet');
 
   useEffect(() => {
     const { uid, uname } = extractUser();
     if (uid) setUserId(uid);
     if (uname) setUsername(uname);
   }, []);
+
+  const normalizeModelName = (s) => (String(s || '').toLowerCase().replace(/\s|[-_]/g, ''));
+  const matchesModel = (it, modelKey) => {
+    const modelCandidates = [it.modelName, it.model, it.model_name, it.aiResult?.modelName, it.aiResult?.model];
+    return modelCandidates.some(m => normalizeModelName(m) === normalizeModelName(modelKey));
+  };
+
+  const getCreatedTime = (it) => {
+    const created = it.createdAt || it.created_at || it.created || it.createdDate || '';
+    const t = Date.parse(created);
+    return Number.isFinite(t) ? t : 0;
+  };
 
   const downloadBase64 = (b64, filename = 'gradcam.png') => {
     if (!b64) return;
@@ -72,21 +85,66 @@ export default function SelfDiagnosisResults() {
     }
     setLoading(true);
     setError(null);
+
+    const ctl = new AbortController();
+    const timeoutMs = 30000; // 30s
+    const to = setTimeout(() => ctl.abort(), timeoutMs);
+
     try {
-      const res = await fetch(`/api/diagnosis/history?userId=${encodeURIComponent(userId)}`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      setItems(Array.isArray(data) ? data : []);
+      // Use the new lightweight endpoint that returns the single latest record
+      const url = `/api/diagnosis/latest?userId=${encodeURIComponent(userId)}&modelName=${encodeURIComponent(selectedModel)}`;
+      const res = await fetch(url, { signal: ctl.signal });
+      clearTimeout(to);
+
+      const text = await res.text();
+      console.log('[latest] status', res.status, 'len', text?.length);
+
+      if (!res.ok) {
+        // try to surface server error message
+        let parsedErr = null;
+        try { parsedErr = JSON.parse(text); } catch (e) { parsedErr = text; }
+        throw new Error(`HTTP ${res.status} ${JSON.stringify(parsedErr)}`);
+      }
+
+      let parsed = null;
+      try {
+        parsed = JSON.parse(text);
+      } catch (e) {
+        try {
+          const compact = text.replace(/\n|\r/g, '');
+          parsed = JSON.parse(compact);
+        } catch (e2) {
+          parsed = null;
+        }
+      }
+
+      let outItems = [];
+      if (parsed && !Array.isArray(parsed)) {
+        // single-object response expected
+        outItems = [parsed];
+      } else if (Array.isArray(parsed) && parsed.length > 0) {
+        outItems = [parsed[0]]; // defensive: take first
+      } else {
+        outItems = [];
+      }
+
+      setItems(outItems);
     } catch (e) {
-      setError('이력 조회 실패: ' + (e.message || e.toString()));
+      if (e.name === 'AbortError') {
+        setError(`이력 조회 타임아웃(${timeoutMs}ms). 서버가 응답하지 않거나 네트워크 문제가 있습니다.`);
+      } else {
+        setError('이력 조회 실패: ' + (e.message || e.toString()));
+      }
+      setItems([]);
+    } finally {
+      clearTimeout(to);
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
     if (userId) fetchHistory();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+  }, [userId, selectedModel]);
 
   return (
     <div style={{ maxWidth: 900, margin: '0 auto', padding: 24 }}>
@@ -96,18 +154,31 @@ export default function SelfDiagnosisResults() {
         <button onClick={fetchHistory} style={{ marginLeft: 12 }}>새로고침</button>
       </div>
 
+      <div style={{ marginBottom: 12, display: 'flex', gap: 8, alignItems: 'center' }}>
+        <label><strong>모델 선택:</strong></label>
+        <select value={selectedModel} onChange={(e) => { setSelectedModel(e.target.value); setExpanded(null); }}>
+          <option value="efficientnet">efficientnet</option>
+          <option value="skin_model">skin_model</option>
+          <option value="acne">acne</option>
+        </select>
+      </div>
+
       {loading && <div>로딩 중...</div>}
       {error && <div style={{ color: 'red' }}>{error}</div>}
 
       {!loading && items.length === 0 && <div>저장된 진단 결과가 없습니다.</div>}
 
       <div>
-        {items.map((it, idx) => {
-          // it is expected to contain fields like userId, modelName, result (array) or raw
+        {(!loading && items.length > 0) ? (() => {
+          const filtered = items.filter(it => matchesModel(it, selectedModel));
+          if (filtered.length === 0) return <div>{selectedModel} 모델로 저장된 진단 결과가 없습니다.</div>;
+          const sorted = filtered.slice().sort((a, b) => getCreatedTime(b) - getCreatedTime(a));
+          const it = sorted[0];
           const modelName = it.modelName || it.model || 'unknown';
           const created = it.createdAt || it.created_at || it.created || '';
           const resultArr = Array.isArray(it.result) ? it.result : (it?.aiResult?.result || it?.result);
           const top = Array.isArray(resultArr) && resultArr.length ? resultArr[0] : null;
+          const idx = 0;
           return (
             <div key={idx} style={{ border: '1px solid #e5e7eb', padding: 12, borderRadius: 8, marginBottom: 12 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -139,7 +210,6 @@ export default function SelfDiagnosisResults() {
                     </div>
                   </div>
 
-                  {/* Grad-CAM rendering if base64 available */}
                   {(() => {
                     const grad = it.gradcam || it.aiResult?.gradcam || (typeof it === 'object' && it.gradcam ? it.gradcam : null);
                     const overlayB64 = grad?.overlay_base64 || it.overlay_base64 || it.overlayBase64 || null;
@@ -151,14 +221,12 @@ export default function SelfDiagnosisResults() {
                         <strong>Grad-CAM</strong>
                         <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginTop: 8 }}>
                           <div style={{ position: 'relative', width: 320, height: 320, background: '#fafafa', border: '1px solid #eee' }}>
-                            {/* If overlay exists, show it; otherwise show heatmap */}
                             {overlayB64 ? (
                               <img alt="overlay" src={`data:image/png;base64,${overlayB64}`} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', objectFit: 'contain', opacity: overlayOpacity }} />
                             ) : null}
                             {heatmapB64 && !overlayB64 ? (
                               <img alt="heatmap" src={`data:image/png;base64,${heatmapB64}`} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', objectFit: 'contain', opacity: overlayOpacity }} />
                             ) : null}
-                            {/* If no base image available, show placeholder */}
                             <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', display: overlayB64 || heatmapB64 ? 'none' : 'flex', alignItems: 'center', justifyContent: 'center', color: '#999' }}>원본 이미지 없음</div>
                           </div>
                           <div style={{ minWidth: 160 }}>
@@ -186,7 +254,7 @@ export default function SelfDiagnosisResults() {
               )}
             </div>
           );
-        })}
+        })() : null}
       </div>
     </div>
   );
