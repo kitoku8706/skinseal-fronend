@@ -3,7 +3,7 @@
   margin: 40px auto;
   background: #f5f7fa;
   border-radius: 18px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   height: 600px;
@@ -16,8 +16,30 @@
   font-weight: bold;
   font-size: 1.2rem;
   padding: 18px;
-  text-align: center;
   border-bottom: 1px solid #eee;
+  /* 버튼을 위한 flex 설정 추가 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 챗봇 헤더 초기화 버튼 스타일 */
+.main-reset-btn {
+  background: none;
+  border: 1px solid #777;
+  color: #555;
+  padding: 5px 10px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 0.8em;
+  font-weight: normal;
+  transition: all 0.2s;
+}
+
+.main-reset-btn:hover {
+  background-color: #ffd43b;
+  border-color: #ffd43b;
+  color: #333;
 }
 
 .chatbot-messages {
@@ -51,6 +73,25 @@
   align-self: flex-end;
   color: #222;
   border: 1px solid #74c0fc;
+}
+
+/* 봇 메시지 내부 '처음으로 돌아가기' 버튼 스타일 */
+.goto-main-btn {
+  display: block;
+  margin-top: 10px;
+  padding: 8px 12px;
+  background-color: #6a1b9a;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9em;
+  transition: background-color 0.3s;
+}
+
+.goto-main-btn:hover {
+  background-color: #4a148c;
 }
 
 .chatbot-input-area {
@@ -103,6 +144,7 @@
   margin-bottom: 6px;
   transition: background 0.2s, border 0.2s;
 }
+
 .quick-reply-btn:hover {
   background: #ffe066;
   border-color: #ffe066;

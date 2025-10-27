@@ -163,9 +163,7 @@ function App() {
             <Route
               path="diagnosis"
               element={
-                <DiagnosisLayout>
-                  <DiagnosisPage />
-                </DiagnosisLayout>
+                  <SelfDiagnosisResults />
               }
             />
           </Route>
