@@ -30,6 +30,7 @@ import ReservationQuery from "./pages/ReservationQuery.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DiagnosisLayout from "./pages/DiagnosisLayout.jsx";
 import ReservationConsultPage from "./pages/ReservationConsultPage";
+import TimeTable from "./pages/Timetable.jsx";
 
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
@@ -134,6 +135,7 @@ function App() {
           <Route path="/management" element={<ManagementTeam />} />
           <Route path="/directions" element={<Directions />} />
           <Route path="/reservation/chatbot" element={<ChatbotConsultPage />} />
+          <Route path="/reservation/timetable" element={<TimeTable />} />
           <Route
             path="/reservation/consult"
             element={
