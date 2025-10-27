@@ -169,7 +169,7 @@ function App() {
           >
             <Route index element={<MyInfoEdit />} />
             <Route path="withdraw" element={<UserWithdrawal />} />
-            <Route path="reservation" element={<ReservationQuery />} />
+            <Route path="reservation" element={<Check />} />
             <Route
               path="diagnosis"
               element={
