@@ -33,11 +33,9 @@ export default function ReservationConsultPage() {
   const [consultant, setConsultant] = useState("");
   const [time, setTime] = useState("");
   const [agree, setAgree] = useState(false);
+  const [reservedTimes, setReservedTimes] = useState([]); // ✅ 예약된 시간 목록
 
-  // ✅ 예약된 시간 목록 (서버에서 불러옴)
-  const [reservedTimes, setReservedTimes] = useState([]);
-
-  // 오늘 날짜 기준 세팅
+  // ✅ 오늘 날짜 기준
   const today = useMemo(() => {
     const date = new Date();
     date.setHours(0, 0, 0, 0);
@@ -48,6 +46,7 @@ export default function ReservationConsultPage() {
     () => new Date(today.getFullYear(), today.getMonth(), 1),
     [today]
   );
+
   const nextMonthStart = useMemo(
     () => new Date(today.getFullYear(), today.getMonth() + 1, 1),
     [today]
@@ -73,10 +72,9 @@ export default function ReservationConsultPage() {
     const dateStr = selectedDate.toISOString().split("T")[0];
     axios
       .get(`http://localhost:8090/api/appointments/date/${dateStr}`, {
-        params: { counselorId: consultant }, // ✅ 이 한 줄 추가!
+        params: { counselorId: consultant },
       })
       .then((res) => {
-        // 🔥 선택된 상담사만 필터링
         const filtered = res.data
           .filter((a) => a.counselorId === Number(consultant))
           .map((a) => a.appointmentTime);
@@ -90,11 +88,13 @@ export default function ReservationConsultPage() {
 
   // ✅ 예약하기
   const handleSubmit = async () => {
-    const token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem("accessToken"); // ✅ 로그인 시 저장된 key 이름 그대로 사용
     if (!token) {
       alert("로그인 후 이용해주세요.");
       return;
     }
+
+    // ✅ 입력 유효성 검사
     if (
       !birthYear ||
       !birthMonth ||
@@ -128,16 +128,21 @@ export default function ReservationConsultPage() {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, // ✅ JWT 토큰 전달
           },
+          withCredentials: true, // ✅ CORS 인증 허용
         }
       );
 
       alert(res.data ?? "예약이 완료되었습니다!");
-      setTime("");
+      setTime(""); // 시간 선택 초기화
     } catch (err) {
       console.error("예약 오류:", err);
-      if (err.response?.status === 409) {
+      const status = err.response?.status;
+
+      if (status === 401) {
+        alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
+      } else if (status === 409) {
         alert("이미 해당 시간대에 예약이 존재합니다.");
       } else {
         alert("❌ 예약 중 오류가 발생했습니다.");
@@ -145,7 +150,7 @@ export default function ReservationConsultPage() {
     }
   };
 
-  // ✅ 날짜 비활성화 로직
+  // ✅ 달력 비활성화 조건
   const tileDisabled = ({ date, view }) =>
     view === "month" &&
     (date < today ||
@@ -157,7 +162,6 @@ export default function ReservationConsultPage() {
     if (view === "month") {
       if (date < today || date > maxDate) return "disabled-date";
       if (date.getDay() === 0 || date.getDay() === 6) return "weekend-disabled";
-      // 🔵 선택한 날짜 배경 강조 (얕은 하늘색)
       if (selectedDate.toDateString() === date.toDateString())
         return "selected-date";
     }
@@ -287,7 +291,7 @@ export default function ReservationConsultPage() {
             ))}
           </div>
 
-          {/* ✅ 시간대 버튼 (상담사별 예약 표시) */}
+          {/* ✅ 시간대 버튼 */}
           <div className="time-buttons">
             {timeSlots.map((t) => {
               const isReserved = reservedTimes.includes(t);
@@ -319,8 +323,7 @@ export default function ReservationConsultPage() {
           <h5>수집하는 개인정보 항목</h5>
           <p>본인 예약 : 예약자, 생년월일, 휴대폰 번호</p>
           <p>
-            대리 예약 : 환자명, 환자 생년월일, 환자 휴대폰 번호, 예약자, 예약자
-            휴대폰 번호
+            환자명, 환자 생년월일, 환자 휴대폰 번호, 예약자, 예약자 휴대폰 번호
           </p>
           <h5>수집 · 이용목적</h5>
           <p>진료 예약 및 안내</p>
