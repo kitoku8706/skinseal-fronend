@@ -65,6 +65,46 @@ function AiDiagnosisPage() {
         if (uname) setUsername(String(uname));
     }, []);
 
+    // 모델 변경 시 이전에 업로드/캡처한 이미지를 초기화하여 UI가 리셋되도록 처리
+    useEffect(() => {
+        // revoke object URL if one was created
+        try {
+            if (selectedImage && typeof selectedImage === 'string' && selectedImage.startsWith('blob:')) {
+                URL.revokeObjectURL(selectedImage);
+            }
+        } catch (_) {}
+
+        setSelectedImage(null);
+        setResult(null);
+        setLoading(false);
+
+        // clear file input value so the same file can be re-selected if needed
+        try {
+            if (fileInputRef.current) fileInputRef.current.value = '';
+        } catch (_) {}
+
+        // clear canvas if used
+        try {
+            const canvas = canvasRef.current;
+            if (canvas) {
+                const ctx = canvas.getContext && canvas.getContext('2d');
+                if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        } catch (_) {}
+
+        // stop camera stream if it was running
+        try {
+            const video = videoRef.current;
+            if (video && video.srcObject) {
+                const tracks = video.srcObject.getTracks();
+                tracks.forEach((t) => t.stop());
+                video.srcObject = null;
+            }
+        } catch (_) {}
+
+        setShowCamera(false);
+    }, [selectedModel]);
+
     // 이미지 파일 업로드 핸들러
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -105,14 +145,34 @@ function AiDiagnosisPage() {
         setShowCamera(false);
     };
 
+    // helper: ensure we send numeric userId. If current userId looks non-numeric but username exists,
+    // try to resolve via backend GET /member/user?username=... (expects JSON with id).
+    const resolveUserId = async (rawId, rawUsername) => {
+        if (rawId && /^\d+$/.test(String(rawId).trim())) return String(rawId).trim();
+        if (!rawUsername) return null;
+        try {
+            const res = await fetch(`/member/user?username=${encodeURIComponent(rawUsername)}`);
+            if (!res.ok) return null;
+            const data = await res.json();
+            // backend may return { id: 123, ... } or { userId: 123 }
+            const id = data?.id ?? data?.userId ?? data?.user?.id;
+            return id ? String(id) : null;
+        } catch (_) {
+            return null;
+        }
+    };
+
     // 진단 요청
     const handleDiagnose = async () => {
         setLoading(true);
         setResult(null);
 
-        if (!userId || String(userId).trim() === "") {
+        // resolve numeric userId
+        const resolvedId = await resolveUserId(userId, username);
+        console.log('[DEBUG] resolved userId:', resolvedId, 'raw userId:', userId, 'username:', username);
+        if (!resolvedId) {
             setLoading(false);
-            setResult({ error: "User ID is required" });
+            setResult({ error: '유효한 사용자 ID가 없습니다. 사용자 설정을 확인하세요.' });
             return;
         }
 
@@ -133,16 +193,41 @@ function AiDiagnosisPage() {
         // FormData로 API 전송
         const formData = new FormData();
         formData.append("image", imageFile);
-        formData.append("userId", String(userId));
+        formData.append("userId", String(resolvedId));
+
+        // debug: log formData entries (can't log file contents fully)
+        try {
+            const entries = [];
+            for (const pair of formData.entries()) {
+                entries.push([pair[0], pair[1] && pair[1].name ? `(file:${pair[1].name})` : pair[1]]);
+            }
+            console.log('[DEBUG] formData entries before POST:', entries);
+        } catch (e) {
+            console.log('[DEBUG] failed to enumerate formData', e);
+        }
+
         try {
             const response = await fetch(`/api/diagnosis/${selectedModel}`, { method: "POST", body: formData });
-            const data = await response.json().catch(() => ({}));
+            // DEBUG: 서버가 text/html 또는 오류 HTML을 반환할 수 있으므로 먼저 텍스트로 받아 전체 내용을 로깅
+            const text = await response.text();
+            console.error('[DEBUG] diagnosis response text', response.status, text);
+            let data = {};
+            try {
+                data = JSON.parse(text);
+            } catch (e) {
+                // JSON이 아니면 그대로 text로 처리
+            }
+
             if (!response.ok) {
-                setResult(data?.error ? { error: data.error } : { error: "진단 요청 실패" });
+                console.error('[DEBUG] diagnosis response error', response.status, text);
+                // 서버가 에러 메시지를 텍스트로 반환하는 경우도 있어 사용자가 볼 수 있게 포함
+                setResult(data?.error ? { error: data.error } : { error: `진단 요청 실패: ${text}` });
             } else {
-                setResult(data);
+                console.log('[DEBUG] diagnosis success', data || text);
+                setResult(Object.keys(data || {}).length ? data : { raw: text });
             }
         } catch (err) {
+            console.error('[DEBUG] diagnosis request failed', err);
             setResult({ error: "진단 요청 실패" });
         }
         setLoading(false);

@@ -73,17 +73,68 @@ export default function SelfDiagnosisResults() {
     setLoading(true);
     setError(null);
 
-    // AbortController를 사용해 타임아웃 처리 (예: 8초)
+    // AbortController를 사용해 타임아웃 처리 (긴 목록을 위해 30초로 연장)
     const ctl = new AbortController();
-    const timeoutMs = 8000;
+    const timeoutMs = 30000; // 30s
     const to = setTimeout(() => ctl.abort(), timeoutMs);
 
     try {
-      const res = await fetch(`/api/diagnosis/history?userId=${encodeURIComponent(userId)}`, { signal: ctl.signal });
+      // DEBUG: use direct Spring Boot URL to bypass Vite proxy
+      const res = await fetch(`http://localhost:8090/api/diagnosis/history?userId=${encodeURIComponent(userId)}`, { signal: ctl.signal });
       clearTimeout(to);
+
+      // 받아오는 내용을 먼저 text로 받아 전체를 확인한다 (대용량/비표준 JSON 방지)
+      const text = await res.text();
+      console.log('[DEBUG] history response status', res.status);
+      console.log('[DEBUG] history response text (truncated 5000):', text ? text.slice(0, 5000) : '');
+
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      setItems(Array.isArray(data) ? data : []);
+
+      let parsed = null;
+      try {
+        parsed = JSON.parse(text);
+      } catch (e) {
+        // 서버가 정상 JSON을 반환하지 않는 경우 대비: 공백 제거 후 재시도
+        try {
+          const compact = text.replace(/\n|\r/g, '');
+          parsed = JSON.parse(compact);
+        } catch (e2) {
+          // 마지막으로, 응답 자체가 이미 JSON 문자열을 포함하고 있는 경우 파싱 시도
+          try {
+            // 예: '{"result":"[...]"}' 같은 형태
+            const asObj = eval('(' + text + ')'); // fallback (디버그 전용) - 안전한 환경에서만 사용
+            parsed = asObj;
+          } catch (e3) {
+            parsed = null;
+          }
+        }
+      }
+
+      // parsed를 items 배열 형태로 정규화
+      let outItems = [];
+      if (Array.isArray(parsed)) {
+        outItems = parsed;
+      } else if (parsed && Array.isArray(parsed.result)) {
+        outItems = parsed.result;
+      } else if (parsed && typeof parsed.result === 'string') {
+        try {
+          outItems = JSON.parse(parsed.result);
+        } catch (_) {
+          outItems = [parsed];
+        }
+      } else if (parsed) {
+        outItems = [parsed];
+      } else {
+        // parsed가 null이면, 시도 삼아서 text가 JSON 배열로 보이면 eval로 변환
+        try {
+          const maybe = eval('(' + text + ')');
+          outItems = Array.isArray(maybe) ? maybe : [maybe];
+        } catch (_) {
+          outItems = [];
+        }
+      }
+
+      setItems(outItems);
     } catch (e) {
       if (e.name === 'AbortError') {
         setError(`이력 조회 타임아웃(${timeoutMs}ms). 서버가 응답하지 않거나 네트워크 문제가 있습니다.`);
