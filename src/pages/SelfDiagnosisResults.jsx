@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './SelfDiagnosisResults.css';
 
 function decodeJwt(token) {
   try {
@@ -147,14 +148,14 @@ export default function SelfDiagnosisResults() {
   }, [userId, selectedModel]);
 
   return (
-    <div style={{ maxWidth: 900, margin: '0 auto', padding: 24 }}>
-      <h2>자가 진단 결과</h2>
-      <div style={{ marginBottom: 12 }}>
+    <div className="sdr-container">
+      <h2 className="sdr-title">자가 진단 결과</h2>
+      <div className="sdr-userline">
         <strong>사용자:</strong> {username || userId || '알 수 없음'}
-        <button onClick={fetchHistory} style={{ marginLeft: 12 }}>새로고침</button>
+        <button onClick={fetchHistory} className="sdr-button">새로고침</button>
       </div>
 
-      <div style={{ marginBottom: 12, display: 'flex', gap: 8, alignItems: 'center' }}>
+      <div className="sdr-controls">
         <label><strong>모델 선택:</strong></label>
         <select value={selectedModel} onChange={(e) => { setSelectedModel(e.target.value); setExpanded(null); }}>
           <option value="efficientnet">efficientnet</option>
@@ -168,90 +169,128 @@ export default function SelfDiagnosisResults() {
 
       {!loading && items.length === 0 && <div>저장된 진단 결과가 없습니다.</div>}
 
-      <div>
+      <div className="sdr-results">
         {(!loading && items.length > 0) ? (() => {
           const filtered = items.filter(it => matchesModel(it, selectedModel));
           if (filtered.length === 0) return <div>{selectedModel} 모델로 저장된 진단 결과가 없습니다.</div>;
           const sorted = filtered.slice().sort((a, b) => getCreatedTime(b) - getCreatedTime(a));
 
           return (
-            <div style={{ border: '1px solid #e5e7eb', padding: 12, borderRadius: 8, marginBottom: 12 }}>
-              {/* 헤더: 진단일시 | 진단모델명 | 진단결과 */}
-              <div style={{ display: 'flex', gap: 12, padding: '8px 4px', borderBottom: '1px solid #eee', fontWeight: 'bold' }}>
-                <div style={{ flex: 2 }}>진단일시</div>
-                <div style={{ flex: 1 }}>진단모델명</div>
-                <div style={{ flex: 3 }}>진단결과</div>
+            <div>
+              <div className="sdr-results-header">
+                <div className="sdr-col-created">진단일시</div>
+                <div className="sdr-col-model">진단모델명</div>
+                <div className="sdr-col-result">진단결과</div>
                 <div style={{ width: 110 }}></div>
               </div>
 
               {sorted.map((it, idx) => {
                 const modelName = it.modelName || it.model || 'unknown';
                 const created = it.createdAt || it.created_at || it.created || '';
-                const resultArr = Array.isArray(it.result) ? it.result : (it?.aiResult?.result || it?.result);
-                const resText = Array.isArray(resultArr) ? resultArr.map(r => r.class || r.name || r.label).join(', ') : (typeof resultArr === 'string' ? resultArr : JSON.stringify(resultArr));
+                const resultArrRaw = Array.isArray(it.result) ? it.result : (it?.aiResult?.result || it?.result);
+
+                // 저장 구조가 [ { userId:..., result:[{class,probability}, ...], modelName:... } ] 처럼
+                // wrapper 배열 안에 실제 result 배열이 들어있는 경우를 처리합니다.
+                let resultArr = null;
+                if (Array.isArray(resultArrRaw)) {
+                  if (resultArrRaw.length > 0 && Array.isArray(resultArrRaw[0]?.result)) {
+                    resultArr = resultArrRaw[0].result;
+                  } else {
+                    resultArr = resultArrRaw;
+                  }
+                } else if (resultArrRaw && Array.isArray(resultArrRaw.result)) {
+                  resultArr = resultArrRaw.result;
+                } else {
+                  resultArr = resultArrRaw;
+                }
+
+                // 상위 1개 결과만 추출하여 요약 문자열 생성
+                let resText = '';
+                if (Array.isArray(resultArr) && resultArr.length > 0) {
+                  const top = resultArr[0];
+                  const cls = top?.class || top?.name || top?.label || '알 수 없음';
+                  const prob = top?.probability || top?.prob || '';
+                  resText = `판단명 : ${cls}  가능성 : ${prob}`;
+                } else if (typeof resultArr === 'string' && resultArr.trim()) {
+                  resText = resultArr;
+                } else if (resultArr && typeof resultArr === 'object') {
+                  const cls = resultArr.class || resultArr.name || resultArr.label || '알 수 없음';
+                  const prob = resultArr.probability || resultArr.prob || '';
+                  resText = `판단명 : ${cls}  가능성 : ${prob}`;
+                } else {
+                  resText = '결과 없음';
+                }
 
                 return (
-              </div>
-
-              {expanded === idx && (
-                <div style={{ marginTop: 12 }}>
-                  <div style={{ marginBottom: 8 }}>
-                    <strong>결과:</strong>
-                    <div style={{ marginTop: 8 }}>
-                      {Array.isArray(resultArr) ? (
-                        resultArr.map((r, i) => (
-                          <div key={i} style={{ marginBottom: 6 }}>
-                            <div><strong>{r.class || r.label || r.name}</strong> <span style={{ color: '#666' }}>{r.probability || r.prob}</span></div>
-                          </div>
-                        ))
-                      ) : (
-                        <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(it.result || it, null, 2)}</pre>
-                      )}
+                  <div key={idx} className="sdr-row">
+                    <div className="sdr-col-created">{created}</div>
+                    <div className="sdr-col-model">{modelName}</div>
+                    <div className="sdr-col-result">{resText}</div>
+                    <div className="sdr-actions">
+                      <button className="sdr-button" onClick={() => setExpanded(expanded === idx ? null : idx)}>
+                        {expanded === idx ? '닫기' : '상세 보기'}
+                      </button>
                     </div>
-                  </div>
 
-                  {(() => {
-                    const grad = it.gradcam || it.aiResult?.gradcam || (typeof it === 'object' && it.gradcam ? it.gradcam : null);
-                    const overlayB64 = grad?.overlay_base64 || it.overlay_base64 || it.overlayBase64 || null;
-                    const heatmapB64 = grad?.heatmap_base64 || it.heatmap_base64 || it.heatmapBase64 || null;
-                    if (!overlayB64 && !heatmapB64) return null;
-
-                    return (
-                      <div style={{ marginTop: 12 }}>
-                        <strong>Grad-CAM</strong>
-                        <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginTop: 8 }}>
-                          <div style={{ position: 'relative', width: 320, height: 320, background: '#fafafa', border: '1px solid #eee' }}>
-                            {overlayB64 ? (
-                              <img alt="overlay" src={`data:image/png;base64,${overlayB64}`} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', objectFit: 'contain', opacity: overlayOpacity }} />
-                            ) : null}
-                            {heatmapB64 && !overlayB64 ? (
-                              <img alt="heatmap" src={`data:image/png;base64,${heatmapB64}`} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', objectFit: 'contain', opacity: overlayOpacity }} />
-                            ) : null}
-                            <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', display: overlayB64 || heatmapB64 ? 'none' : 'flex', alignItems: 'center', justifyContent: 'center', color: '#999' }}>원본 이미지 없음</div>
-                          </div>
-                          <div style={{ minWidth: 160 }}>
-                            <div style={{ marginBottom: 8 }}>
-                              <label style={{ fontSize: 13 }}>투명도: {Math.round(overlayOpacity * 100)}%</label>
-                              <input type="range" min="0" max="1" step="0.05" value={overlayOpacity} onChange={(e) => setOverlayOpacity(Number(e.target.value))} style={{ width: '100%' }} />
-                            </div>
-                            <div style={{ display: 'flex', gap: 8 }}>
-                              {overlayB64 && <button onClick={() => downloadBase64(overlayB64, `overlay_${idx}.png`)}>오버레이 다운로드</button>}
-                              {heatmapB64 && <button onClick={() => downloadBase64(heatmapB64, `heatmap_${idx}.png`)}>히트맵 다운로드</button>}
-                            </div>
+                    {expanded === idx && (
+                      <div className="sdr-details">
+                        <div style={{ marginBottom: 8 }}>
+                          <strong>결과:</strong>
+                          <div style={{ marginTop: 8 }}>
+                            {Array.isArray(resultArr) ? (
+                              resultArr.map((r, i) => (
+                                <div key={i} style={{ marginBottom: 6 }}>
+                                  <div><strong>{r.class || r.label || r.name}</strong> <span style={{ color: '#666' }}>{r.probability || r.prob}</span></div>
+                                </div>
+                              ))
+                            ) : (
+                              <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(it.result || it, null, 2)}</pre>
+                            )}
                           </div>
                         </div>
-                      </div>
-                    );
-                  })()}
 
-                  <div>
-                    <details>
-                      <summary>원본 JSON 보기</summary>
-                      <pre style={{ maxHeight: 300, overflow: 'auto' }}>{JSON.stringify(it, null, 2)}</pre>
-                    </details>
+                        {(() => {
+                          const grad = it.gradcam || it.aiResult?.gradcam || (typeof it === 'object' && it.gradcam ? it.gradcam : null);
+                          const overlayB64 = grad?.overlay_base64 || it.overlay_base64 || it.overlayBase64 || null;
+                          const heatmapB64 = grad?.heatmap_base64 || it.heatmap_base64 || it.heatmapBase64 || null;
+                          if (!overlayB64 && !heatmapB64) return null;
+
+                          return (
+                            <div className="sdr-gradcam">
+                              <div className="sdr-imgbox">
+                                {overlayB64 ? (
+                                  <img alt="overlay" src={`data:image/png;base64,${overlayB64}`} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', objectFit: 'contain', opacity: overlayOpacity }} />
+                                ) : null}
+                                {heatmapB64 && !overlayB64 ? (
+                                  <img alt="heatmap" src={`data:image/png;base64,${heatmapB64}`} style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', objectFit: 'contain', opacity: overlayOpacity }} />
+                                ) : null}
+                                <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', display: overlayB64 || heatmapB64 ? 'none' : 'flex', alignItems: 'center', justifyContent: 'center', color: '#999' }}>원본 이미지 없음</div>
+                              </div>
+                              <div style={{ minWidth: 160 }}>
+                                <div style={{ marginBottom: 8 }}>
+                                  <label style={{ fontSize: 13 }}>투명도: {Math.round(overlayOpacity * 100)}%</label>
+                                  <input type="range" min="0" max="1" step="0.05" value={overlayOpacity} onChange={(e) => setOverlayOpacity(Number(e.target.value))} style={{ width: '100%' }} />
+                                </div>
+                                <div style={{ display: 'flex', gap: 8 }}>
+                                  {overlayB64 && <button className="sdr-button" onClick={() => downloadBase64(overlayB64, `overlay_${idx}.png`)}>오버레이 다운로드</button>}
+                                  {heatmapB64 && <button className="sdr-button" onClick={() => downloadBase64(heatmapB64, `heatmap_${idx}.png`)}>히트맵 다운로드</button>}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })()}
+
+                        <div>
+                          <details>
+                            <summary>원본 JSON 보기</summary>
+                            <pre style={{ maxHeight: 300, overflow: 'auto' }}>{JSON.stringify(it, null, 2)}</pre>
+                          </details>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </div>
-              )}
+                );
+              })}
             </div>
           );
         })() : null}
