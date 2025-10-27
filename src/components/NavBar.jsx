@@ -29,21 +29,21 @@ function NavBar() {
         ])
       );
 
-    if (token) {
-      axios
-        .get("http://localhost:8090/api/user/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-          if (res.data.username) {
-            setUsername(res.data.username);
-            localStorage.setItem("username", res.data.username);
-          }
-        })
-        .catch(() => {});
-    } else {
-      setUsername("");
-    }
+    // if (token) {
+    //   axios
+    //     .get("/api/user/me", {
+    //       headers: { Authorization: `Bearer ${token}` },
+    //     })
+    //     .then((res) => {
+    //       if (res.data.username) {
+    //         setUsername(res.data.username);
+    //         localStorage.setItem("username", res.data.username);
+    //       }
+    //     })
+    //     .catch(() => {});
+    // } else {
+    //   setUsername("");
+    // }
   }, []);
 
   const handleLogout = () => {
