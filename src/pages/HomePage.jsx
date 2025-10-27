@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { pingBackend, getUsersFromBackend, getChatbotCategories } from "../api/testApi";
 import NoticeListPage from "./NoticeListPage";
 import NavBar from "../components/NavBar";
@@ -89,27 +89,43 @@ function HomePage() {
         <section className="center-section">
           <h2>전문 센터 안내</h2>
           <div className="center-cards">
-            <div className="center-card">척추센터</div>
-            <div className="center-card">관절센터</div>
-            <div className="center-card">뇌신경센터</div>
-            <div className="center-card">내과</div>
-            <div className="center-card">건강검진센터</div>
+            <Link to="/diagnosis/1" className="center-card">
+              여드름
+            </Link>
+            <Link to="/diagnosis/2" className="center-card">
+              양성 종양
+            </Link>
+            <Link to="/diagnosis/3" className="center-card">
+              수포성 질환
+            </Link>
+            <Link to="/diagnosis/4" className="center-card">
+              습진
+            </Link>
+            <Link to="/diagnosis/5" className="center-card">
+              루푸스
+            </Link>
+            <Link to="/diagnosis/6" className="center-card">
+              피부암
+            </Link>
+            <Link to="/diagnosis/7" className="center-card">
+              백반증
+            </Link>
           </div>
         </section>
 
         <section className="social-section">
           <h2>소셜채널 & 언론보도</h2>
           <div className="social-cards">
-            <div className="social-card">유튜브 콘텐츠</div>
-            <div className="social-card">블로그 소식</div>
-            <div className="social-card">언론보도</div>
+            <a href="http://www.youtube.com" className="social-card">유튜브 콘텐츠</a>
+            <a href="http://www.naver.com" className="social-card">블로그 소식</a>
+            <a href="http://google.com" className="social-card">언론보도</a>
           </div>
         </section>
 
         <section className="quick-links">
-          <button>진료 예약</button>
+          <button onClick={() => navigate("reservation/consult")}>진료 예약</button>
           <button>의료 상담</button>
-          <button>오시는 길</button>
+          <button onClick={() => navigate("/directions")}>오시는 길</button>
         </section>
 
         
