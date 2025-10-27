@@ -234,6 +234,47 @@ function AiDiagnosisPage() {
     };
 
     // 결과 렌더링 유틸
+    // 영어 레이블을 한국어로 변환하는 매핑
+    const LABEL_KO_MAP = {
+        Acne: "여드름",
+        Actinic_Keratosis: "광선각화증",
+        Benign_tumors: "양성 종양",
+        Bullous: "수포성 질환",
+        Candidiasis: "칸디다증(진균 감염)",
+        DrugEruption: "약물발진",
+        Eczema: "습진",
+        Infestations_Bites: "기생충/물림",
+        Lichen: "편평태선(리켄)",
+        Lupus: "루푸스",
+        Moles: "점",
+        Psoriasis: "건선",
+        Rosacea: "주사(로사체아)",
+        Seborrh_Keratoses: "지루각화증",
+        SkinCancer: "피부암",
+        Sun_Sunlight_Damage: "광손상(태양 손상)",
+        Tinea: "백선/무좀",
+        Unknown_Normal: "정상/확인불가",
+        Vascular_Tumors: "혈관종",
+        Vasculitis: "혈관염",
+        Vitiligo: "백반증",
+        Warts: "사마귀"
+    };
+
+    const getDisplayLabel = (label) => {
+        if (!label && label !== 0) return "";
+        const s = String(label).trim();
+        if (LABEL_KO_MAP[s]) return LABEL_KO_MAP[s];
+        const normalized = s.replace(/\s+/g, "_");
+        if (LABEL_KO_MAP[normalized]) return LABEL_KO_MAP[normalized];
+        // case-insensitive match
+        const lower = s.toLowerCase();
+        for (const k of Object.keys(LABEL_KO_MAP)) {
+            if (k.toLowerCase() === lower || k.toLowerCase() === normalized.toLowerCase()) return LABEL_KO_MAP[k];
+        }
+        // 기본 폴백: 언더스코어를 공백으로 바꿔 보여줌
+        return s.replace(/_/g, " ");
+    };
+
     const renderResults = () => {
         if (!result) return null;
         if (result.error) return <div style={{ color: "red" }}>{result.error}</div>;
@@ -248,7 +289,7 @@ function AiDiagnosisPage() {
                     return (
                         <div key={idx} style={{ marginBottom: 12 }}>
                             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, marginBottom: 6 }}>
-                                <strong>{item.class}</strong>
+                                <strong>{getDisplayLabel(item.class)}</strong>
                                 <span>{(probNum || 0).toFixed(2)}%</span>
                             </div>
                             <div style={{ height: 8, background: "#eee", borderRadius: 999 }}>
