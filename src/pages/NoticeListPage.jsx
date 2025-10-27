@@ -20,8 +20,9 @@ function NoticeListPage() {
         return res.json();
       })
       .then(data => {
-        // 작성일 기준 최신순 정렬
-        const sorted = [...data].sort((a, b) => {
+        const noticeArray = Array.isArray(data) ? data : (data.content || data.data || []);
+
+        const sorted = [...noticeArray].sort((a, b) => {
           const dateA = new Date(a.createdAt);
           const dateB = new Date(b.createdAt);
           return dateB - dateA;
@@ -30,7 +31,6 @@ function NoticeListPage() {
       })
       .catch((error) => {
         console.error('공지사항 로드 실패:', error);
-        // 백엔드 서버가 없을 때 테스트용 데이터
         setNotices([
           {
             noticeId: 1,
@@ -72,9 +72,9 @@ function NoticeListPage() {
   const handleTitleClick = (noticeId) => {
     navigate(`/notice/${noticeId}`);
   };
-  // 검색 기능
+
   const handleSearch = () => {
-    setPage(1); // 검색 시 첫 페이지로 이동
+    setPage(1);
   };
 
   const handleSearchReset = () => {
@@ -83,12 +83,10 @@ function NoticeListPage() {
     setPage(1);
   };
 
-  // 검색어나 카테고리가 변경될 때 첫 페이지로 이동
   useEffect(() => {
     setPage(1);
   }, [searchQuery, searchCategory]);
 
-  // 검색 필터링
   const filteredNotices = notices.filter((notice) => {
     if (!searchQuery.trim()) return true;
 
@@ -110,7 +108,6 @@ function NoticeListPage() {
     }
   });
 
-  // 페이지네이션 관련 (필터링된 결과 기준)
   const totalPages = Math.ceil(filteredNotices.length / ITEMS_PER_PAGE);
   const paginatedNotices = filteredNotices.slice(
     (page - 1) * ITEMS_PER_PAGE,
@@ -183,8 +180,7 @@ function NoticeListPage() {
           )}
         </div>
 
-        <table className="notice-table">
-          <thead>
+        <table className="notice-table"><thead>
             <tr>
               <th style={{textAlign: 'center', width: '60px'}}>번호</th>
               <th style={{textAlign: 'left'}}>제목</th>
@@ -193,10 +189,10 @@ function NoticeListPage() {
               <th>작성일</th>
               {role === "ADMIN" && <th>수정</th>}
             </tr>
-          </thead>          <tbody>
+          </thead><tbody>
             {paginatedNotices.length > 0 ? (
               paginatedNotices.map((notice, idx) => (
-                <React.Fragment key={notice.notice_id || `${notice.title}_${notice.created_at}`}>
+                <React.Fragment key={notice.noticeId || `${notice.title}_${notice.createdAt}`}>
                   <tr>
                     <td style={{textAlign: 'center'}}>
                       {(page - 1) * ITEMS_PER_PAGE + idx + 1}
@@ -225,7 +221,7 @@ function NoticeListPage() {
                         </button>
                       </td>
                     )}
-                  </tr>               
+                  </tr>          
                 </React.Fragment>
               ))
             ) : (

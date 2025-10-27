@@ -1,156 +1,147 @@
+/* ==================================== */
+/* 1. 컨테이너 및 기본 스타일 */
+/* ==================================== */
 .homepage-container {
   width: 100%;
   min-height: 100vh;
-  background: #fff;
+  background: #ffffff; /* 흰색 배경 */
   padding: 0 0 40px 0;
 }
 
-.review-section {
-  max-width: 800px;
-  margin: 40px auto 0 auto;
-  padding: 0 16px;
-}
-
-.review-section h2 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 18px;
-  color: #222;
-  text-align: center;
-}
-
+/* ==================================== */
+/* 2. 메인 배너 (Dark/Black 컨셉 적용) */
+/* ==================================== */
 .main-banner {
-  max-width: 900px;
-  margin: 48px auto 0 auto;
-  padding: 32px 16px;
-  background: #f8fafd;
-  border-radius: 18px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  max-width: 100%; /* 너비를 꽉 채우도록 설정 */
+  margin: 0 auto; /* 상하 마진 제거, 중앙 정렬 */
+  padding: 80px 16px; /* 여백 확대 */
+  background: #111111; /* 짙은 검은색 배경 */
+  border-radius: 0; /* 둥근 모서리 제거 */
+  box-shadow: none; /* 그림자 제거 */
   text-align: center;
 }
 
 .main-banner h1 {
-  font-size: 2.3rem;
+  font-size: 2.8rem;
   font-weight: 700;
-  color: #26324b;
-  margin-bottom: 12px;
+  color: #ffffff; /* 흰색 글자 */
+  margin-bottom: 16px;
+  letter-spacing: -0.05em; /* 전문적인 느낌을 위한 자간 조정 */
 }
 
 .main-banner p {
-  font-size: 1.1rem;
-  color: #444;
-  margin-bottom: 22px;
+  font-size: 1.2rem;
+  color: #cccccc; /* 밝은 회색 글자 */
+  margin-bottom: 30px;
 }
 
+/* 버튼 스타일 (전문적인 느낌을 위해 기본 디자인 수정) */
 .banner-btn {
-  background: #3b82f6;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 32px;
+  background: #3b82f6; /* 강조를 위해 파란색 유지 */
+  color: #ffffff;
+  border: 1px solid #3b82f6;
+  border-radius: 4px;
+  padding: 14px 40px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
 }
 .banner-btn:hover {
   background: #2563eb;
+  border-color: #2563eb;
 }
 
-.center-section {
-  max-width: 900px;
-  margin: 48px auto 0 auto;
+/* ==================================== */
+/* 3. 섹션 공통 및 카드 스타일 */
+/* ==================================== */
+.center-section, .social-section, .quick-links {
+  max-width: 1100px;
+  margin: 60px auto 0 auto;
   padding: 0 16px;
 }
 
-.center-section h2 {
-  font-size: 1.3rem;
+.center-section h2, .social-section h2 {
+  font-size: 1.8rem;
   font-weight: 700;
-  margin-bottom: 16px;
-  color: #26324b;
+  margin-bottom: 24px;
+  color: #222222; /* 진한 검은색 제목 */
+  text-align: left; /* 왼쪽 정렬 */
+  border-bottom: 2px solid #eeeeee; /* 구분선 추가 */
+  padding-bottom: 10px;
 }
 
-.center-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+/* 카드 레이아웃 (Grid를 사용하여 깔끔하게 배치) */
+.center-cards, .social-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 200px 이상 크기로 유연하게 배치 */
+  gap: 20px;
 }
 
-.center-card {
-  background: #f3f4f6;
-  border-radius: 10px;
-  padding: 18px 28px;
-  font-size: 1.05rem;
+.center-card, .social-card {
+  background: #ffffff; /* 흰색 배경 */
+  border: 1px solid #e0e0e0; /* 연한 경계선 */
+  border-radius: 6px;
+  padding: 30px 20px;
+  font-size: 1.1rem;
   font-weight: 500;
-  color: #222;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-  flex: 1 1 160px;
+  color: #222222;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* 은은한 그림자 */
   text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.center-card:hover, .social-card:hover {
+  transform: translateY(-5px); /* 호버 시 약간 뜸 */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
-.social-section {
-  max-width: 900px;
-  margin: 48px auto 0 auto;
-  padding: 0 16px;
-}
-
-.social-section h2 {
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin-bottom: 16px;
-  color: #26324b;
-}
-
-.social-cards {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
+/* 소셜카드 색상 구분 (옵션) */
 .social-card {
-  background: #e0e7ff;
-  border-radius: 10px;
-  padding: 18px 28px;
-  font-size: 1.05rem;
-  font-weight: 500;
-  color: #222;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-  flex: 1 1 160px;
-  text-align: center;
+  background: #f8f8f8; /* 소셜 카드는 약간 더 밝게 */
 }
 
+/* ==================================== */
+/* 4. 빠른 링크 버튼 */
+/* ==================================== */
 .quick-links {
-  max-width: 900px;
-  margin: 48px auto 0 auto;
-  padding: 0 16px;
+  margin-top: 60px;
   display: flex;
   gap: 18px;
   justify-content: center;
 }
 
 .quick-links button {
-  background: #fff;
-  border: 1.5px solid #3b82f6;
-  color: #3b82f6;
-  border-radius: 8px;
-  padding: 10px 26px;
+  background: #ffffff;
+  border: 1px solid #cccccc; /* 경계선 색상 변경 */
+  color: #555555;
+  border-radius: 4px;
+  padding: 12px 30px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition: all 0.2s;
 }
 .quick-links button:hover {
-  background: #3b82f6;
+  background: #3b82f6; /* 호버 시 강조색 사용 */
   color: #fff;
+  border-color: #3b82f6;
 }
 
-@media (max-width: 700px) {
-  .main-banner, .center-section, .social-section, .review-section, .quick-links {
-    max-width: 100%;
-    padding: 0 4vw;
+/* ==================================== */
+/* 5. 모바일 반응형 */
+/* ==================================== */
+@media (max-width: 768px) {
+  .main-banner h1 {
+    font-size: 2rem;
+  }
+  .center-section h2, .social-section h2 {
+    font-size: 1.5rem;
   }
   .center-cards, .social-cards {
+    grid-template-columns: 1fr; /* 모바일에서 1열로 변경 */
+    gap: 12px;
+  }
+  .quick-links {
     flex-direction: column;
-    gap: 10px;
   }
 }

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { pingBackend, getUsersFromBackend, getChatbotCategories } from "../api/testApi";
 import NoticeListPage from "./NoticeListPage";
 import NavBar from "../components/NavBar";
 import "./HomePage.css";
-import RightSidebar from "../components/RightSidebar"; // ← 추가
+import RightSidebar from "../components/RightSidebar";
 
 function HomePage() {
   const [result, setResult] = useState("");
@@ -14,7 +14,6 @@ function HomePage() {
   const [categoryError, setCategoryError] = useState("");
   const navigate = useNavigate();
 
-  // 드롭다운 상태 관리
   const [openMenu, setOpenMenu] = useState(null);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -65,8 +64,8 @@ function HomePage() {
     <>
       <div className="homepage-container">
 
-        {/* 공지사항 바로가기 버튼 상단에 추가 */}
-        <div style={{ width: "100%", display: "flex", justifyContent: "center", margin: "32px 0 0 0" }}>
+        {/* 공지사항 바로가기 버튼의 상단 마진을 48px로 설정 */}
+        <div style={{ width: "100%", display: "flex", justifyContent: "center", margin: "48px 0 0 0" }}>
           <button
             className="banner-btn"
             style={{ minWidth: 180 }}
@@ -74,9 +73,8 @@ function HomePage() {
           >
             공지사항 바로가기
           </button>
-        </div>  
+        </div>
       
-        {/* 메인 배너 */}
         <section className="main-banner">
           <h1>빠르고 안전한 진료, SkinSeal 병원</h1>
           <p>진료부터 수술, 그리고 진료연계까지 믿고 맡길 수 있는 병원</p>
@@ -88,38 +86,51 @@ function HomePage() {
           </button>
         </section>
 
-        {/* 센터/진료과 소개 */}
         <section className="center-section">
           <h2>전문 센터 안내</h2>
           <div className="center-cards">
-            <div className="center-card">척추센터</div>
-            <div className="center-card">관절센터</div>
-            <div className="center-card">뇌신경센터</div>
-            <div className="center-card">내과</div>
-            <div className="center-card">건강검진센터</div>
+            <Link to="/diagnosis/1" className="center-card">
+              여드름
+            </Link>
+            <Link to="/diagnosis/2" className="center-card">
+              양성 종양
+            </Link>
+            <Link to="/diagnosis/3" className="center-card">
+              수포성 질환
+            </Link>
+            <Link to="/diagnosis/4" className="center-card">
+              습진
+            </Link>
+            <Link to="/diagnosis/5" className="center-card">
+              루푸스
+            </Link>
+            <Link to="/diagnosis/6" className="center-card">
+              피부암
+            </Link>
+            <Link to="/diagnosis/7" className="center-card">
+              백반증
+            </Link>
           </div>
         </section>
 
-        {/* 소셜채널/언론보도/블로그 콘텐츠 */}
         <section className="social-section">
           <h2>소셜채널 & 언론보도</h2>
           <div className="social-cards">
-            <div className="social-card">유튜브 콘텐츠</div>
-            <div className="social-card">블로그 소식</div>
-            <div className="social-card">언론보도</div>
+            <a href="http://www.youtube.com" className="social-card">유튜브 콘텐츠</a>
+            <a href="http://www.naver.com" className="social-card">블로그 소식</a>
+            <a href="http://google.com" className="social-card">언론보도</a>
           </div>
         </section>
 
-        {/* 빠른 예약/상담/오시는 길 등 바로가기 */}
         <section className="quick-links">
-          <button>진료 예약</button>
+          <button onClick={() => navigate("reservation/consult")}>진료 예약</button>
           <button>의료 상담</button>
-          <button>오시는 길</button>
+          <button onClick={() => navigate("/directions")}>오시는 길</button>
         </section>
 
         
       </div>
-      <RightSidebar /> {/* ← 바깥에 추가하면 오른쪽 고정 */}
+      <RightSidebar />
     </>
   );
 }

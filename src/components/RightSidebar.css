@@ -1,30 +1,87 @@
+/* ==================================== */
+/* 1. 사이드바 컨테이너 (Fixed Position) */
+/* ==================================== */
 .right-sidebar {
   position: fixed;
-  top: 25%;
-  right: 0;              /* 왼쪽에서 오른쪽으로 변경 */
-  left: auto;            /* left 속성 제거 또는 auto로 */
-  z-index: 1000;
+  top: 30%;
+  right: 0;
+  left: auto;
+  z-index: 900;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(255,255,255,0.95);
-  border-radius: 24px 24px 0 24px; /* 오른쪽에 맞게 둥글림 변경 */
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  padding: 12px 0;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-right: none;
+  border-radius: 8px 0 0 8px; /* 상단 좌측 8px만 둥글림 */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 0;
   width: 90px;
+  transition: right 0.3s ease-in-out;
 }
 
+/* ==================================== */
+/* 2. 버튼 스타일 (줄 바꿈 및 중앙 정렬 적용) */
+/* ==================================== */
 .sidebar-btn {
-  width: 80px;
-  height: 60px;
-  margin: 8px 0;
+  width: 100%;
+  height: 60px; /* 버튼 높이 증가 (55px -> 60px) */
+  margin: 0;
+  
+  /* 버튼 간 명확한 구분선 */
   border: none;
-  background: #f5f5f5;
-  border-radius: 12px;
-  font-size: 1em;
+  border-bottom: 1px solid #cccccc; /* 구분선 색상을 #eee -> #ccc로 더 진하게 변경 */
+  
+  background: #ffffff;
+  border-radius: 0;
+  
+  font-size: 0.85em;
+  font-weight: 600;
+  color: #333333;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s ease;
+  padding: 0 5px; /* 수직 정렬을 위해 수직 패딩 제거 */
+
+  /* 텍스트 줄 바꿈 및 중앙 정렬 */
+  display: flex; /* Flexbox 활성화 */
+  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: center; /* 수평 중앙 정렬 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+  
+  white-space: normal;
+  word-break: keep-all;
+  line-height: 1.3; /* 행간 조정 */
 }
+
+/* 마지막 버튼의 구분선 제거 */
+/* AI상담 버튼은 특별히 border-top을 가지므로, AI상담 바로 윗 버튼의 border-bottom을 제거합니다. */
+.right-sidebar > .sidebar-btn:nth-last-child(2) {
+    border-bottom: none;
+}
+
+/* 호버 스타일 (기존 컨셉 유지) */
 .sidebar-btn:hover {
-  background: #ffe066;
+  background: #3b82f6;
+  color: #ffffff;
+}
+
+/* ==================================== */
+/* 3. AI상담 버튼 강조 스타일 */
+/* ==================================== */
+.sidebar-btn.ai-btn {
+  /* AI 버튼은 배경색과 텍스트를 강조합니다. */
+  background: #3b82f6;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.9em;
+  
+  /* AI 버튼 위쪽에 구분선 추가 (다른 버튼과 분리) */
+  border-top: 1px solid #ffffff; /* 흰색 구분선으로 상단 버튼과 분리 강조 */
+  
+  /* 사이드바 자체의 하단 둥글림 적용 */
+  border-radius: 0 0 0 8px;
+}
+
+.sidebar-btn.ai-btn:hover {
+  background: #2563eb;
 }
