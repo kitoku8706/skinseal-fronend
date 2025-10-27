@@ -33,15 +33,18 @@ export default defineConfig({
       'localhost',
       localIp
     ],
-    proxy: {
-      // history 엔드포인트는 Spring Boot로 전달 (정확 매칭)
+    proxy: {      // history 및 latest 엔드포인트는 Spring Boot로 전달 (정확 매칭)
       "/api/diagnosis/history": {
+        target: "http://localhost:8090",
+        changeOrigin: true,
+      },
+      "/api/diagnosis/latest": {
         target: "http://localhost:8090",
         changeOrigin: true,
       },
 
       // /api/diagnosis (prefix)로 들어오는 모든 요청은 Python AI 서버로 전달
-      // 위의 history 정규식이 먼저 매칭되므로 history는 Spring으로 전달됩니다.
+      // 위의 history, latest 정규식이 먼저 매칭되므로 해당 요청들은 Spring으로 전달됩니다.
       "/api/diagnosis": {
         target: "http://localhost:5000",
         changeOrigin: true,
