@@ -72,15 +72,29 @@ export default function SelfDiagnosisResults() {
     }
     setLoading(true);
     setError(null);
+
+    // AbortController를 사용해 타임아웃 처리 (예: 8초)
+    const ctl = new AbortController();
+    const timeoutMs = 8000;
+    const to = setTimeout(() => ctl.abort(), timeoutMs);
+
     try {
-      const res = await fetch(`/api/diagnosis/history?userId=${encodeURIComponent(userId)}`);
+      const res = await fetch(`/api/diagnosis/history?userId=${encodeURIComponent(userId)}`, { signal: ctl.signal });
+      clearTimeout(to);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       setItems(Array.isArray(data) ? data : []);
     } catch (e) {
-      setError('이력 조회 실패: ' + (e.message || e.toString()));
+      if (e.name === 'AbortError') {
+        setError(`이력 조회 타임아웃(${timeoutMs}ms). 서버가 응답하지 않거나 네트워크 문제가 있습니다.`);
+      } else {
+        setError('이력 조회 실패: ' + (e.message || e.toString()));
+      }
+      setItems([]);
+    } finally {
+      clearTimeout(to);
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {

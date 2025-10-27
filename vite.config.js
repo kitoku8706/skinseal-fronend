@@ -29,6 +29,16 @@ export default defineConfig({
       localIp
     ],
     proxy: {
+      // route history queries to Spring Boot
+      [/^\/api\/diagnosis\/history$/]: {
+        target: "http://localhost:8090",
+        changeOrigin: true,
+      },
+      // route other /api/diagnosis/* requests to Python AI server
+      [/^\/api\/diagnosis\/(?!history).*$/]: {
+        target: "http://localhost:5000",
+        changeOrigin: true,
+      },
       "/api/diagnosis": {
         target: "http://localhost:5000", 
         changeOrigin: true,
