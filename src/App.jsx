@@ -32,7 +32,7 @@ import DiagnosisLayout from "./pages/DiagnosisLayout.jsx";
 import ReservationConsultPage from "./pages/ReservationConsultPage";
 import SelfDiagnosisResults from "./pages/SelfDiagnosisResults";
 import TimeTable from "./pages/Timetable.jsx";
-
+import Check from "./pages/Check";
 
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
@@ -127,7 +127,10 @@ function App() {
             <Route path="/ai/diagnose" element={<AiDiagnosisPage />} />
             <Route path="/diagnosis" element={<DiagnosisPage />} />
             <Route path="/diagnosis/:id" element={<DiagnosisPage />} />
-            <Route path="/diagnosis/result" element={<SelfDiagnosisResults />} />
+            <Route
+              path="/diagnosis/result"
+              element={<SelfDiagnosisResults />}
+            />
           </Route>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<UserLoginPage />} />
@@ -147,7 +150,14 @@ function App() {
               </ProtectedRoute>
             }
           />
-
+          <Route
+            path="/reservation/check"
+            element={
+              <ProtectedRoute>
+                <Check />
+              </ProtectedRoute>
+            }
+          />
           {/* MyPage와 관련 없으므로 유지 */}
           <Route
             path="/mypage"
