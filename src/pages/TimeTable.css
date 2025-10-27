@@ -7,7 +7,7 @@
   background-color: #fff;
   display: flex;
   flex-direction: column;
-  align-items: center; /* ✅ 중앙 기준 정렬 */
+  align-items: center;
 }
 
 /* ✅ 주간 이동 버튼 */
@@ -43,7 +43,7 @@
 .timetable-grid {
   display: flex;
   flex-direction: column;
-  align-items: center; /* ✅ 중앙 정렬 */
+  align-items: center;
   gap: 25px;
 }
 
@@ -54,31 +54,34 @@
   padding: 15px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   display: flex;
-  justify-content: center; /* ✅ 박스 안에서도 가운데 정렬 */
+  justify-content: center;
+  overflow: hidden; /* ✅ 프로필이 박스 밖으로 침범하지 않게 */
 }
 
 /* ✅ 프로필 + 표 정렬 */
 .counselor-wrapper {
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* ✅ 위쪽 기준 정렬 → 겹침 방지 */
   justify-content: center;
-  gap: var(--pw-gap); /* 현재 0px이면 그대로 둬도 됩니다 */
+  gap: 40px; /* ✅ 표와 이미지 간격 확보 */
 }
 
 /* ✅ 상담사 프로필 */
 .counselor-info {
   text-align: center;
   width: 140px;
-  margin-top: 25px;
+  margin-top: 15px; /* ✅ 표보다 살짝 아래 위치 */
 }
 
 .counselor-info img {
-  width: 160px; /* ✅ 확대 유지 */
+  width: 160px;
   height: 160px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #f3f3f3;
   margin-bottom: 10px;
+  position: relative;
+  top: 10px; /* ✅ 이미지 살짝 아래로 내려서 표와 간섭 방지 */
 }
 
 .counselor-info h3 {
@@ -90,9 +93,10 @@
 /* ✅ 표 크기 및 셀 폭 */
 .schedule-table {
   border-collapse: collapse;
-  width: 780px; /* ✅ 셀 크기 그대로 유지 */
+  width: 780px;
   table-layout: fixed;
-  margin: 0; /* ✅ 중앙정렬은 flex로 처리되므로 margin 제거 */
+  margin: 0;
+  overflow: hidden; /* ✅ 프로필 이미지 침범 방지 */
 }
 
 /* ✅ 셀 공통 */
@@ -144,55 +148,16 @@
   margin-top: 15px;
 }
 
-/* ✅ 제목 + 버튼 중앙 정렬 */
-/* 제목+버튼이 표의 '가운데'와 정확히 일치하도록 이동 */
-.header-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: var(--table-width); /* 표와 동일 폭 */
-  margin-bottom: 20px;
-  transform: translateX(250px);
-  /* 프로필+간격 만큼 오른쪽으로 보정 */
-}
-
-/* 제목 스타일 */
-.header-section h2 {
-  font-size: 20px;
-  font-weight: 700;
-  color: #2c3e50;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 10px;
-}
-
-/* 버튼 그룹 중앙 정렬 유지 */
-.header-section .week-navigation {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-:root {
-  --table-width: 780px; /* .schedule-table width 그대로 */
-  --profile-width: 140px; /* .counselor-info width 그대로 */
-  --pw-gap: 0px; /* .counselor-wrapper 의 gap 값과 동일 */
-}
-
-/* ✅ 제목 + 버튼 묶음 오른쪽 이동 */
 /* ✅ 제목 + 버튼 묶음 오른쪽 이동 */
 .header-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  left: 60px; /* 👉 오른쪽 이동 정도 (조정 가능) */
+  left: 60px;
   margin-bottom: 20px;
 }
 
-/* 필요 시 제목 스타일 */
 .header-wrapper h2 {
   font-size: 20px;
   font-weight: 700;
