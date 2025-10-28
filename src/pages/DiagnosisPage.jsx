@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 import '../styles/DiagnosisPage.css';
 
 import AcneImage from '../assets/disease/1_Acne_image.jpg';

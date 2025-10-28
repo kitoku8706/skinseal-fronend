@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './SelfDiagnosisResults.css';
 
+
 // API base URL from environment. Set VITE_API_BASE to e.g. 'http://localhost:8090' on other machines.
 const API_BASE = import.meta.env.VITE_API_BASE || '';
+
 
 function decodeJwt(token) {
   try {
@@ -13,6 +15,7 @@ function decodeJwt(token) {
     return null;
   }
 }
+
 
 function extractUser() {
   let uid = '';
@@ -44,6 +47,7 @@ function extractUser() {
   return { uid: String(uid || ''), uname: String(uname || '') };
 }
 
+
 // 질환명을 한국어로 변환하는 유틸
 function translateDiseaseName(name) {
   if (!name) return '알 수 없음';
@@ -64,6 +68,7 @@ function translateDiseaseName(name) {
   return map[key] || name;
 }
 
+
 export default function SelfDiagnosisResults() {
   const [userId, setUserId] = useState('');
   const [username, setUsername] = useState('');
@@ -74,17 +79,20 @@ export default function SelfDiagnosisResults() {
   const [overlayOpacity, setOverlayOpacity] = useState(0.6);
   const [selectedModel, setSelectedModel] = useState('efficientnet');
 
+
   useEffect(() => {
     const { uid, uname } = extractUser();
     if (uid) setUserId(uid);
     if (uname) setUsername(uname);
   }, []);
 
+
   const normalizeModelName = (s) => (String(s || '').toLowerCase().replace(/\s|[-_]/g, ''));
   const matchesModel = (it, modelKey) => {
     const modelCandidates = [it.modelName, it.model, it.model_name, it.aiResult?.modelName, it.aiResult?.model];
     return modelCandidates.some(m => normalizeModelName(m) === normalizeModelName(modelKey));
   };
+
 
   const getCreatedTime = (it) => {
     const created = it.createdAt || it.created_at || it.created || it.createdDate || '';
@@ -120,6 +128,7 @@ export default function SelfDiagnosisResults() {
     document.body.removeChild(link);
   };
 
+
   const fetchHistory = async () => {
     if (!userId) {
       setError('사용자 ID가 없습니다. 로그인 후 다시 시도하세요.');
@@ -128,9 +137,11 @@ export default function SelfDiagnosisResults() {
     setLoading(true);
     setError(null);
 
+
     const ctl = new AbortController();
     const timeoutMs = 30000; // 30s
     const to = setTimeout(() => ctl.abort(), timeoutMs);
+
 
     try {
       // Use the new lightweight endpoint that returns the single latest record
@@ -138,8 +149,10 @@ export default function SelfDiagnosisResults() {
       const res = await fetch(url, { signal: ctl.signal });
       clearTimeout(to);
 
+
       const text = await res.text();
       console.log('[latest] status', res.status, 'len', text?.length);
+
 
       if (!res.ok) {
         // try to surface server error message
@@ -147,6 +160,7 @@ export default function SelfDiagnosisResults() {
         try { parsedErr = JSON.parse(text); } catch (e) { parsedErr = text; }
         throw new Error(`HTTP ${res.status} ${JSON.stringify(parsedErr)}`);
       }
+
 
       let parsed = null;
       try {
@@ -160,6 +174,7 @@ export default function SelfDiagnosisResults() {
         }
       }
 
+
       let outItems = [];
       if (parsed && !Array.isArray(parsed)) {
         // single-object response expected
@@ -169,6 +184,7 @@ export default function SelfDiagnosisResults() {
       } else {
         outItems = [];
       }
+
 
       setItems(outItems);
     } catch (e) {
@@ -184,9 +200,11 @@ export default function SelfDiagnosisResults() {
     }
   };
 
+
   useEffect(() => {
     if (userId) fetchHistory();
   }, [userId, selectedModel]);
+
 
   return (
     <div className="sdr-container" style={{ fontSize: '110%' }}>
@@ -195,6 +213,7 @@ export default function SelfDiagnosisResults() {
         <strong>사용자:</strong> {username || userId || '알 수 없음'}
         <button onClick={fetchHistory} className="sdr-button">새로고침</button>
       </div>
+
 
       <div className="sdr-controls">
         <label><strong>모델 선택:</strong></label>
@@ -205,16 +224,20 @@ export default function SelfDiagnosisResults() {
         </select>
       </div>
 
+
       {loading && <div>로딩 중...</div>}
       {error && <div style={{ color: 'red' }}>{error}</div>}
 
+
       {!loading && items.length === 0 && <div>저장된 진단 결과가 없습니다.</div>}
+
 
       <div className="sdr-results">
         {(!loading && items.length > 0) ? (() => {
           const filtered = items.filter(it => matchesModel(it, selectedModel));
           if (filtered.length === 0) return <div>{selectedModel} 모델로 저장된 진단 결과가 없습니다.</div>;
           const sorted = filtered.slice().sort((a, b) => getCreatedTime(b) - getCreatedTime(a));
+
 
           return (
             <div>
@@ -225,11 +248,13 @@ export default function SelfDiagnosisResults() {
                 <div style={{ width: 110 }}></div>
               </div>
 
+
               {sorted.map((it, idx) => {
                 const modelName = it.modelName || it.model || 'unknown';
                 const createdRaw = it.createdAt || it.created_at || it.created || it.createdDate || '';
                 const created = formatDateTime(createdRaw);
                 const resultArrRaw = Array.isArray(it.result) ? it.result : (it?.aiResult?.result || it?.result);
+
 
                 // 저장 구조가 [ { userId:..., result:[{class,probability}, ...], modelName:... } ] 처럼
                 // wrapper 배열 안에 실제 result 배열이 들어있는 경우를 처리합니다.
@@ -266,6 +291,7 @@ export default function SelfDiagnosisResults() {
                   resString = '결과 없음';
                 }
 
+
                 return (
                   <div className="sdr-row-wrapper" key={idx}>
                     <div className="sdr-row">
@@ -289,6 +315,7 @@ export default function SelfDiagnosisResults() {
                       </button>
                     </div>
 
+
                     {expanded === idx && (
                       <div className="sdr-details">
                         <div style={{ marginBottom: 8 }}>
@@ -306,11 +333,13 @@ export default function SelfDiagnosisResults() {
                           </div>
                         </div>
 
+
                         {(() => {
                           const grad = it.gradcam || it.aiResult?.gradcam || (typeof it === 'object' && it.gradcam ? it.gradcam : null);
                           const overlayB64 = grad?.overlay_base64 || it.overlay_base64 || it.overlayBase64 || null;
                           const heatmapB64 = grad?.heatmap_base64 || it.heatmap_base64 || it.heatmapBase64 || null;
                           if (!overlayB64 && !heatmapB64) return null;
+
 
                           return (
                             <div className="sdr-gradcam">
@@ -337,6 +366,7 @@ export default function SelfDiagnosisResults() {
                           );
                         })()}
 
+
                         <div>
                           <details>
                             <summary>원본 JSON 보기</summary>
@@ -355,3 +385,6 @@ export default function SelfDiagnosisResults() {
     </div>
   );
 }
+
+
+

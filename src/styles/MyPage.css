@@ -57,5 +57,10 @@
 .mypage-content h2 {
     border-bottom: 2px solid #ccc;
     padding-bottom: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+}
+
+/* MyPage.css (또는 전역 CSS 파일) */
+.mypage-container .mypage-content .check-card .check-title-inner {
+    display: none;
 }
