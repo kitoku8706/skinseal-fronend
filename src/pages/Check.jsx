@@ -41,6 +41,7 @@ export default function Check() {
     fetchLatestReservation();
   }, [navigate]);
 
+  // ✅ 예약 취소
   const handleCancel = async () => {
     if (!reservation) return;
     if (!window.confirm("예약을 취소하시겠습니까?")) return;
@@ -60,6 +61,7 @@ export default function Check() {
     }
   };
 
+  // ✅ 날짜/시간 변경 페이지로 이동
   const handleModify = () => {
     navigate("/reservation/consult");
   };
@@ -84,6 +86,7 @@ export default function Check() {
               <div className="table-header">
                 <div>예약번호</div>
                 <div>예약날짜</div>
+                <div>예약시간</div> {/* ✅ 새 컬럼 추가 */}
                 <div>상담사명</div>
                 <div>상태</div>
                 <div>관리</div>
@@ -92,6 +95,7 @@ export default function Check() {
               <div className="table-row">
                 <div>{reservation.appointmentId}</div>
                 <div>{reservation.appointmentDate}</div>
+                <div>{reservation.appointmentTime}</div> {/* ✅ 시간 표시 */}
                 <div>
                   {consultants[reservation.counselorId] || "알 수 없음"}
                 </div>
@@ -115,7 +119,7 @@ export default function Check() {
               </div>
             </div>
 
-            {/* ✅ 안내 문구 추가 */}
+            {/* ✅ 안내 문구 */}
             <p className="notice-text">
               💡 예약 변경은 <b>예약 취소 후</b> 가능합니다.
             </p>
