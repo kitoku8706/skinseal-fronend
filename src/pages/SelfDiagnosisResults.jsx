@@ -41,6 +41,26 @@ function extractUser() {
   return { uid: String(uid || ''), uname: String(uname || '') };
 }
 
+// 질환명을 한국어로 변환하는 유틸
+function translateDiseaseName(name) {
+  if (!name) return '알 수 없음';
+  const key = String(name).toLowerCase().replace(/[^a-z0-9]/g, '');
+  const map = {
+    'acne': '여드름',
+    'nonacne': '비여름',
+    'eczema': '습진',
+    'lupus': '루푸스',
+    'bullous': '수포성 질환',
+    'vitiligo': '백반증',
+    'rosacea': '주사(로사케아)',
+    'actinickeratosis': '광선각화증',
+    'benigntumors': '양성 종양',
+    'skincancer': '피부암',
+    'skincancerjpg': '피부암'
+  };
+  return map[key] || name;
+}
+
 export default function SelfDiagnosisResults() {
   const [userId, setUserId] = useState('');
   const [username, setUsername] = useState('');
@@ -209,14 +229,16 @@ export default function SelfDiagnosisResults() {
                 if (Array.isArray(resultArr) && resultArr.length > 0) {
                   const top = resultArr[0];
                   const cls = top?.class || top?.name || top?.label || '알 수 없음';
+                  const clsKorean = translateDiseaseName(cls);
                   const prob = top?.probability || top?.prob || '';
-                  resText = `판단명 : ${cls}  가능성 : ${prob}`;
+                  resText = `판단명 : ${clsKorean}  가능성 : ${prob}`;
                 } else if (typeof resultArr === 'string' && resultArr.trim()) {
                   resText = resultArr;
                 } else if (resultArr && typeof resultArr === 'object') {
                   const cls = resultArr.class || resultArr.name || resultArr.label || '알 수 없음';
+                  const clsKorean = translateDiseaseName(cls);
                   const prob = resultArr.probability || resultArr.prob || '';
-                  resText = `판단명 : ${cls}  가능성 : ${prob}`;
+                  resText = `판단명 : ${clsKorean}  가능성 : ${prob}`;
                 } else {
                   resText = '결과 없음';
                 }
@@ -240,7 +262,7 @@ export default function SelfDiagnosisResults() {
                             {Array.isArray(resultArr) ? (
                               resultArr.map((r, i) => (
                                 <div key={i} style={{ marginBottom: 6 }}>
-                                  <div><strong>{r.class || r.label || r.name}</strong> <span style={{ color: '#666' }}>{r.probability || r.prob}</span></div>
+                                  <div><strong>{translateDiseaseName(r.class || r.label || r.name)}</strong> <span style={{ color: '#666' }}>{r.probability || r.prob}</span></div>
                                 </div>
                               ))
                             ) : (
