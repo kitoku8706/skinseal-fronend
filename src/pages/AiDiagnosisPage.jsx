@@ -7,6 +7,9 @@ function AiDiagnosisPage() {
     const [selectedModel, setSelectedModel] = useState("efficientnet"); // 기본 모델 설정
     const [userId, setUserId] = useState("");
     const [username, setUsername] = useState("");
+    const [overlayB64, setOverlayB64] = useState(null);
+    const [heatmapB64, setHeatmapB64] = useState(null);
+    const [combinedOverlay, setCombinedOverlay] = useState(null);
     const fileInputRef = useRef();
     const videoRef = useRef();
     const canvasRef = useRef();
@@ -76,6 +79,9 @@ function AiDiagnosisPage() {
 
         setSelectedImage(null);
         setResult(null);
+        setOverlayB64(null);
+        setHeatmapB64(null);
+        setCombinedOverlay(null);
         setLoading(false);
 
         // clear file input value so the same file can be re-selected if needed
@@ -166,6 +172,9 @@ function AiDiagnosisPage() {
     const handleDiagnose = async () => {
         setLoading(true);
         setResult(null);
+        setOverlayB64(null);
+        setHeatmapB64(null);
+        setCombinedOverlay(null);
 
         // resolve numeric userId
         const resolvedId = await resolveUserId(userId, username);
@@ -222,16 +231,71 @@ function AiDiagnosisPage() {
                 console.error('[DEBUG] diagnosis response error', response.status, text);
                 // 서버가 에러 메시지를 텍스트로 반환하는 경우도 있어 사용자가 볼 수 있게 포함
                 setResult(data?.error ? { error: data.error } : { error: `진단 요청 실패: ${text}` });
+                // 에러일 때는 Grad-CAM 상태 초기화
+                setOverlayB64(null);
+                setHeatmapB64(null);
             } else {
                 console.log('[DEBUG] diagnosis success', data || text);
+                    // 응답 객체 전체를 탐색하여 overlay/heatmap을 찾음
+                    const found = findNestedValues(data);
+                    setOverlayB64(found.overlay || null);
+                    setHeatmapB64(found.heatmap || null);
                 setResult(Object.keys(data || {}).length ? data : { raw: text });
             }
         } catch (err) {
             console.error('[DEBUG] diagnosis request failed', err);
             setResult({ error: "진단 요청 실패" });
+            setOverlayB64(null);
+            setHeatmapB64(null);
         }
         setLoading(false);
     };
+
+    // heatmap만 있는 경우 원본 이미지와 합성하여 overlay 이미지를 생성
+    useEffect(() => {
+        const makeCombined = async () => {
+            try {
+                if (!heatmapB64 || !selectedImage) { setCombinedOverlay(null); return; }
+                // load original image
+                const orig = await new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => resolve(img);
+                    img.onerror = reject;
+                    img.src = selectedImage;
+                });
+                // load heatmap image
+                const heat = await new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => resolve(img);
+                    img.onerror = reject;
+                    img.src = `data:image/png;base64,${heatmapB64}`;
+                });
+
+                // create canvas sized to original
+                const canvas = document.createElement('canvas');
+                canvas.width = orig.naturalWidth || orig.width;
+                canvas.height = orig.naturalHeight || orig.height;
+                const ctx = canvas.getContext('2d');
+                // draw original
+                ctx.drawImage(orig, 0, 0, canvas.width, canvas.height);
+                // draw heatmap on top with blending and alpha
+                ctx.globalAlpha = 0.6;
+                // try overlay composite, fallback to 'lighter'
+                const prev = ctx.globalCompositeOperation;
+                try { ctx.globalCompositeOperation = 'overlay'; } catch (_) { ctx.globalCompositeOperation = 'lighter'; }
+                ctx.drawImage(heat, 0, 0, canvas.width, canvas.height);
+                ctx.globalCompositeOperation = prev;
+                ctx.globalAlpha = 1.0;
+
+                const dataUrl = canvas.toDataURL('image/png');
+                setCombinedOverlay(dataUrl.replace(/^data:image\/png;base64,/, ''));
+            } catch (e) {
+                console.warn('combined overlay failed', e);
+                setCombinedOverlay(null);
+            }
+        };
+        makeCombined();
+    }, [heatmapB64, selectedImage]);
 
     // 결과 렌더링 유틸
     // 영어 레이블을 한국어로 변환하는 매핑
@@ -273,6 +337,35 @@ function AiDiagnosisPage() {
         }
         // 기본 폴백: 언더스코어를 공백으로 바꿔 보여줌
         return s.replace(/_/g, " ");
+    };
+
+    // 응답 객체 내부에서 Grad-CAM 관련 base64 값을 재귀적으로 찾습니다.
+    const findNestedValues = (obj) => {
+        const result = { overlay: null, heatmap: null };
+        const visited = new WeakSet();
+        const keysOverlay = ['overlay_base64', 'overlayBase64', 'overlay'];
+        const keysHeat = ['heatmap_base64', 'heatmapBase64', 'heatmap'];
+
+        const walk = (node) => {
+            if (!node || typeof node !== 'object' || visited.has(node)) return;
+            visited.add(node);
+            // direct keys
+            for (const k of Object.keys(node)) {
+                try {
+                    const val = node[k];
+                    if (!result.overlay && keysOverlay.includes(k) && typeof val === 'string' && val.trim()) result.overlay = val;
+                    if (!result.heatmap && keysHeat.includes(k) && typeof val === 'string' && val.trim()) result.heatmap = val;
+                    if ((k === 'gradcam' || k === 'aiResult' || k === 'ai_result') && typeof val === 'object') {
+                        walk(val);
+                    }
+                    // if value is object or array, descend
+                    if (typeof val === 'object' && val !== null) walk(val);
+                    if (result.overlay && result.heatmap) return;
+                } catch (_) {}
+            }
+        };
+        walk(obj);
+        return result;
     };
 
     const renderResults = () => {
@@ -351,14 +444,25 @@ function AiDiagnosisPage() {
                     <img src={selectedImage} alt="선택된 이미지" style={{ maxWidth: "100%", maxHeight: 300 }} />
                 </div>
             )}
-            {showCamera && (
-                <div style={{ marginBottom: 16 }}>
-                    <video ref={videoRef} autoPlay style={{ width: 300, height: 225, border: "1px solid #ccc" }} />
-                    <br />
-                    <button onClick={handleCapture}>촬영</button>
-                    <canvas ref={canvasRef} style={{ display: "none" }} />
+
+            {/* Grad-CAM(overlay/heatmap)이 있으면 원본과 함께 나란히 표시 (result가 없어도 overlay/heatmap이 세팅되면 표시) */}
+            {(overlayB64 || heatmapB64) && (
+                <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: 16 }}>
+                    <div style={{ flex: 1, textAlign: 'center' }}>
+                        <div style={{ fontSize: 13, color: '#555', marginBottom: 6 }}>원본 이미지</div>
+                        <img src={selectedImage} alt="원본" style={{ maxWidth: '100%', maxHeight: 300, border: '1px solid #ddd', objectFit: 'contain' }} />
+                    </div>
+                    <div style={{ flex: 1, textAlign: 'center' }}>
+                        <div style={{ fontSize: 13, color: '#555', marginBottom: 6 }}>Grad-CAM 반영</div>
+                        { (overlayB64 || combinedOverlay) ? (
+                            <img src={`data:image/png;base64,${overlayB64 || combinedOverlay}`} alt="overlay" style={{ maxWidth: '100%', maxHeight: 300, border: '1px solid #ddd', objectFit: 'contain' }} />
+                        ) : heatmapB64 ? (
+                            <img src={`data:image/png;base64,${heatmapB64}`} alt="heatmap" style={{ maxWidth: '100%', maxHeight: 300, border: '1px solid #ddd', objectFit: 'contain' }} />
+                        ) : null}
+                    </div>
                 </div>
             )}
+
             <div style={{ marginBottom: 16 }}>
                 <button onClick={handleDiagnose} disabled={loading || (!selectedImage && !canvasRef.current)}>
                     {loading ? "진단 중..." : "AI 진단하기"}
