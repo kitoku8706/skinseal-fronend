@@ -100,6 +100,23 @@ export default function SelfDiagnosisResults() {
     return Number.isFinite(t) ? t : 0;
   };
 
+  // 날짜/시간을 'YYYY-MM-DD HH:mm' 형태로 포맷합니다.
+  const formatDateTime = (input) => {
+    try {
+      const s = String(input || '').trim();
+      if (!s) return '';
+      const d = Number.isFinite(Number(s)) ? new Date(Number(s)) : new Date(s);
+      if (isNaN(d.getTime())) return s;
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      const hh = String(d.getHours()).padStart(2, '0');
+      const min = String(d.getMinutes()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+    } catch (e) {
+      return String(input || '');
+    }
+  };
 
   const downloadBase64 = (b64, filename = 'gradcam.png') => {
     if (!b64) return;
@@ -190,7 +207,7 @@ export default function SelfDiagnosisResults() {
 
 
   return (
-    <div className="sdr-container">
+    <div className="sdr-container" style={{ fontSize: '110%' }}>
       <h2 className="sdr-title">자가 진단 결과</h2>
       <div className="sdr-userline">
         <strong>사용자:</strong> {username || userId || '알 수 없음'}
@@ -234,7 +251,8 @@ export default function SelfDiagnosisResults() {
 
               {sorted.map((it, idx) => {
                 const modelName = it.modelName || it.model || 'unknown';
-                const created = it.createdAt || it.created_at || it.created || '';
+                const createdRaw = it.createdAt || it.created_at || it.created || it.createdDate || '';
+                const created = formatDateTime(createdRaw);
                 const resultArrRaw = Array.isArray(it.result) ? it.result : (it?.aiResult?.result || it?.result);
 
 
@@ -253,33 +271,45 @@ export default function SelfDiagnosisResults() {
                   resultArr = resultArrRaw;
                 }
 
-
-                // 상위 1개 결과만 추출하여 요약 문자열 생성
-                let resText = '';
+                // 상위 1개 결과를 분해해서 판단명과 가능성으로 처리
+                let resName = '';
+                let resProb = '';
+                let resIsString = false;
+                let resString = '';
                 if (Array.isArray(resultArr) && resultArr.length > 0) {
                   const top = resultArr[0];
-                  const cls = top?.class || top?.name || top?.label || '알 수 없음';
-                  const clsKorean = translateDiseaseName(cls);
-                  const prob = top?.probability || top?.prob || '';
-                  resText = `판단명 : ${clsKorean}  가능성 : ${prob}`;
+                  resName = translateDiseaseName(top?.class || top?.name || top?.label || '알 수 없음');
+                  resProb = top?.probability || top?.prob || '';
                 } else if (typeof resultArr === 'string' && resultArr.trim()) {
-                  resText = resultArr;
+                  resIsString = true;
+                  resString = resultArr;
                 } else if (resultArr && typeof resultArr === 'object') {
-                  const cls = resultArr.class || resultArr.name || resultArr.label || '알 수 없음';
-                  const clsKorean = translateDiseaseName(cls);
-                  const prob = resultArr.probability || resultArr.prob || '';
-                  resText = `판단명 : ${clsKorean}  가능성 : ${prob}`;
+                  resName = translateDiseaseName(resultArr.class || resultArr.name || resultArr.label || '알 수 없음');
+                  resProb = resultArr.probability || resultArr.prob || '';
                 } else {
-                  resText = '결과 없음';
+                  resIsString = true;
+                  resString = '결과 없음';
                 }
 
 
                 return (
-                  <div key={idx} className="sdr-row">
-                    <div className="sdr-col-created">{created}</div>
-                    <div className="sdr-col-model">{modelName}</div>
-                    <div className="sdr-col-result">{resText}</div>
-                    <div className="sdr-actions">
+                  <div className="sdr-row-wrapper" key={idx}>
+                    <div className="sdr-row">
+                      <div className="sdr-col-created">{created}</div>
+                      <div className="sdr-col-model">{modelName}</div>
+                      <div className="sdr-col-result">
+                        {resIsString ? (
+                          <div style={{ whiteSpace: 'pre-wrap' }}>{resString}</div>
+                        ) : (
+                          <>
+                            <div>판단명 : {resName}</div>
+                            <div>가능성 : {resProb}</div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="sdr-row-footer">
                       <button className="sdr-button" onClick={() => setExpanded(expanded === idx ? null : idx)}>
                         {expanded === idx ? '닫기' : '상세 보기'}
                       </button>
