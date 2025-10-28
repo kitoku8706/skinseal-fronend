@@ -1,0 +1,29 @@
+/* Styles for SelfDiagnosisResults page */
+.sdr-container{
+  max-width:900px;
+  margin:0 auto;
+  padding:24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+.sdr-title{ font-size:28px; margin-bottom:12px; color:#243b53; }
+.sdr-userline{ margin-bottom:12px; display:flex; align-items:center; gap:12px; }
+.sdr-controls{ margin-bottom:12px; display:flex; gap:8px; align-items:center; }
+.sdr-results{ border:1px solid #e5e7eb; padding:12px; border-radius:8px; margin-bottom:12px; }
+.sdr-results-header{ display:flex; gap:12px; padding:8px 4px; border-bottom:1px solid #eee; font-weight:700; }
+.sdr-row{ display:flex; gap:12px; align-items:center; padding:10px 4px; border-bottom:1px solid #f5f5f5; }
+.sdr-row:last-child{ border-bottom:none; }
+.sdr-col-created{ flex:2; font-size:13px; color:#333; }
+.sdr-col-model{ flex:1; font-size:13px; }
+.sdr-col-result{ flex:3; font-size:13px; color:#555; overflow:hidden; }
+.sdr-actions{ width:110px; text-align:right; }
+.sdr-button{ padding:8px 12px; border-radius:8px; border:1px solid #ddd; background:#fff; cursor:pointer; }
+.sdr-button:hover{ background:#f7f7f7; }
+.sdr-details{ width:100%; margin-top:12px; }
+.sdr-gradcam{ margin-top:12px; display:flex; gap:12px; align-items:flex-start; }
+.sdr-imgbox{ position:relative; width:320px; height:320px; background:#fafafa; border:1px solid #eee; }
+.sdr-controls select, .sdr-controls button{ padding:6px 8px; }
+/* responsive */
+@media (max-width:720px){
+  .sdr-results-header, .sdr-row{ flex-direction:column; align-items:flex-start; }
+  .sdr-actions{ width:auto; }
+}
