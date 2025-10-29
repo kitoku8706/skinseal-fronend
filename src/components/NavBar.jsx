@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./NavBar.css"; 
+import "./NavBar.css";
 
 // 🚨🚨 사용자 정보를 가져오거나 토큰 유효성을 체크하는 API 엔드포인트로 변경하세요.
-const CHECK_AUTH_API = "/api/user/info"; 
+const CHECK_AUTH_API = "/api/user/info";
 
 function NavBar() {
   const navigate = useNavigate();
@@ -33,22 +33,23 @@ function NavBar() {
 
     // ⭐️ 토큰이 로컬에 존재하는 경우, 서버에 유효성 검사를 요청 ⭐️
     if (tokenExists) {
-      axios.get(CHECK_AUTH_API, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      .then(() => {
-        // 성공적으로 인증됨 (isLoggedIn = true 유지)
-      })
-      .catch(error => {
-        // 401 Unauthorized 또는 기타 인증 실패 응답을 받은 경우
-        if (error.response && error.response.status === 401) {
-          console.log("토큰 만료 감지, 강제 로그아웃 처리");
-          // 토큰을 삭제하고 UI 상태를 변경합니다.
-          // navigate를 호출하면 React Hook 규칙 위반이므로, 상태만 변경하거나 handleLogout 함수를 직접 호출합니다.
-          handleLogout(); 
-        }
-        // 다른 오류는 무시하고 현재 상태 유지
-      });
+      axios
+        .get(CHECK_AUTH_API, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(() => {
+          // 성공적으로 인증됨 (isLoggedIn = true 유지)
+        })
+        .catch((error) => {
+          // 401 Unauthorized 또는 기타 인증 실패 응답을 받은 경우
+          if (error.response && error.response.status === 401) {
+            console.log("토큰 만료 감지, 강제 로그아웃 처리");
+            // 토큰을 삭제하고 UI 상태를 변경합니다.
+            // navigate를 호출하면 React Hook 규칙 위반이므로, 상태만 변경하거나 handleLogout 함수를 직접 호출합니다.
+            handleLogout();
+          }
+          // 다른 오류는 무시하고 현재 상태 유지
+        });
     }
 
     // 기존 질병 목록 API 호출 로직
@@ -83,7 +84,7 @@ function NavBar() {
         { label: "상담 예약", link: "/reservation/consult" },
         { label: "상담 시간표", link: "/reservation/timetable" },
         { label: "예약 조회", link: "/reservation/check" },
-        { label: "AI 챗봇 간편상담", link: "/reservation/chatbot" },
+        { label: "챗봇 간편상담", link: "/reservation/chatbot" },
       ],
     },
     {
@@ -100,7 +101,7 @@ function NavBar() {
     <div className="main-nav">
       <div className="nav-center">
         <span className="logo" onClick={() => navigate("/")}>
-          로고
+          SKINSEAL
         </span>
         <ul className="nav-menu">
           {menuItems.map((item, idx) => (

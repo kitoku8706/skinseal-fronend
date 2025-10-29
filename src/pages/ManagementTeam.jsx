@@ -6,7 +6,7 @@ const teamMembers = [
     id: 1,
     name: "김충만",
     role: "상담사",
-    description: "피부 상담 전문가로서 고객 맞춤형 상담을 제공합니다.",
+    description: "상담 전문가로 고객 맞춤형 상담을 제공합니다.",
     img: "/images/profile1.png", // ✅ public/images
   },
   {

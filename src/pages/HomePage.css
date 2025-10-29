@@ -1,156 +1,330 @@
 /* ==================================== */
-/* 1. 컨테이너 및 기본 스타일 */
+/* 1. 컨테이너 및 기본 스타일 (화면 전체 틀) */
 /* ==================================== */
 .homepage-container {
- width: 100%;
- min-height: 100vh;
- background: #ffffff; /* 흰색 배경 */
- padding: 0 0 40px 0;
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff;
+  padding: 0 0 40px 0;
 }
 
 /* ==================================== */
-/* 2. 메인 배너 (Dark/Black 컨셉 적용) */
+/* 2. 공지 배너 (NavBar 아래) */
+/* ==================================== */
+.notice-banner-container {
+  position: relative; /* ✅ 기준점 지정 */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+/* ✅ 배너 이미지 */
+.notice-banner {
+  width: 1920px;
+  height: auto;
+  max-height: 650px;
+  object-fit: cover;
+  display: block;
+  margin: -60px;
+  padding: 0;
+  top: -24px;
+  opacity: 0.5; /* ✅ 투명도 */
+}
+
+/* ✅ 흰색 반투명 박스 (텍스트 배경용) */
+.notice-overlay-box {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.9); /* ✅ 반투명 흰색 */
+  padding: 80px 80px;
+  border-radius: 2px;
+  text-align: center;
+  z-index: 2;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* ✅ 상단 제목 */
+.notice-overlay-box strong {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #000;
+  display: block;
+  margin-bottom: 2px; /* ✅ 요청 반영: 간격 좁힘 */
+  line-height: 1.2; /* ✅ 줄 간격 압축 */
+  text-shadow: none;
+}
+
+/* ✅ 하단 문구 (작게 표시) */
+.notice-subtext {
+  font-size: 1.9rem; /* ✅ 오타 수정 (S 제거) */
+  font-weight: 600;
+  color: #111;
+  display: inline-block;
+  line-height: 1.3; /* ✅ 자연스러운 간격 */
+  margin-top: 0; /* ✅ 불필요한 상단 여백 제거 */
+}
+
+.notice-overlay-box:hover {
+  background-color: rgba(255, 255, 255, 0.95); /* 살짝 강조 */
+  transition: background-color 0.2s ease-in-out;
+}
+/* ==================================== */
+/* 3. 전문 센터 안내 (여드름 ~ 백반증, 이미지 포함 버전) */
+/* ==================================== */
+.center-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 100px auto;
+  padding: 0 16px;
+}
+
+.center-section h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #222;
+  text-align: center;
+  border-bottom: 2px solid #eeeeee;
+  padding-bottom: 10px;
+  display: inline-block;
+  margin-bottom: 70px;
+}
+
+/* ✅ 4 + 3 구조 고정형 중앙정렬 */
+.center-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 240px);
+  justify-content: center;
+  gap: 40px 60px;
+  row-gap: 80px; /* ✅ 세로 간격 ↑ 기존보다 넓게 */
+  column-gap: 80px; /* ✅ 가로 간격 */
+  margin: 0 auto;
+}
+
+/* ✅ 하단 줄(루푸스 ~ 백반증)을 정확히 가운데로 이동 */
+.center-cards a:nth-child(5) {
+  grid-column-start: 1;
+}
+
+.center-cards a:nth-child(n + 5) {
+  justify-self: center;
+  margin-left: 250px; /* ✅ 중앙 보정값 — 네가 말한 핵심 */
+}
+
+/* ✅ 카드 박스 */
+.center-card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: 240px;
+  height: 240px; /* ✅ 전체 카드 크기 일정하게 */
+}
+
+/* ✅ 이미지 — 비율 유지하면서 일정 높이 */
+.center-card img {
+  width: 100%;
+  height: 160px; /* ✅ 일정 높이 유지 */
+  object-fit: contain; /* ✅ 원본 비율 유지하며 여백 포함 */
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eee;
+  display: block;
+}
+
+/* ✅ 텍스트 */
+.center-card span {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222;
+  padding: 25px 0 20px 0; /* ✅ 위아래 여백을 늘림 (기존 12px → 20px) */
+  text-align: center;
+}
+/* ✅ hover 효과 */
+.center-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* ==================================== */
+/* 4. 메인 배너 (가운데 큰 문구 + 버튼) */
 /* ==================================== */
 .main-banner {
- max-width: 100%; /* 너비를 꽉 채우도록 설정 */
- margin: 0 auto; /* 상하 마진 제거, 중앙 정렬 */
- padding: 80px 16px; /* 여백 확대 */
- background: #111111; /* 짙은 검은색 배경 */
- border-radius: 0; /* 둥근 모서리 제거 */
- box-shadow: none; /* 그림자 제거 */
- text-align: center;
+  position: relative;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 80px 16px;
+  background-color: #ffffff;
+  text-align: center;
+  border-top: 2px solid #f7b3b0;
+  border-bottom: 2px solid #f7b3b0;
+  overflow: hidden;
+}
+
+/* 배경 패턴 */
+.main-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../assets/skinseal-logo.png");
+  background-repeat: repeat;
+  background-size: 220px auto;
+  background-position: center;
+  opacity: 0.3;
+  z-index: 0;
+}
+
+/* 배너 텍스트 */
+.main-banner h1,
+.main-banner p,
+.banner-btn {
+  position: relative;
+  z-index: 1;
 }
 
 .main-banner h1 {
- font-size: 2.8rem;
- font-weight: 700;
- color: #ffffff; /* 흰색 글자 */
- margin-bottom: 16px;
- letter-spacing: -0.05em; /* 전문적인 느낌을 위한 자간 조정 */
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 16px;
+  text-shadow: 0px 3px 20px rgba(0, 0, 0, 0.5);
+  letter-spacing: -0.05em;
 }
 
 .main-banner p {
- font-size: 1.2rem;
- color: #cccccc; /* 밝은 회색 글자 */
- margin-bottom: 30px;
+  font-size: 1.3rem;
+  color: #000;
+  margin-bottom: 30px;
+  text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.5);
 }
 
-/* 버튼 스타일 (전문적인 느낌을 위해 기본 디자인 수정) */
+/* 배너 버튼 */
 .banner-btn {
- background: #3b82f6; /* 강조를 위해 파란색 유지 */
- color: #ffffff;
- border: 1px solid #3b82f6;
- border-radius: 4px;
- padding: 14px 40px;
- font-size: 1.1rem;
- font-weight: 600;
- cursor: pointer;
- transition: all 0.2s;
+  background: #3b82f6;
+  color: #ffffff;
+  border: 1px solid #3b82f6;
+  border-radius: 4px;
+  padding: 14px 40px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
 }
+
 .banner-btn:hover {
- background: #2563eb;
- border-color: #2563eb;
+  background: #2563eb;
+  border-color: #2563eb;
 }
 
 /* ==================================== */
-/* 3. 섹션 공통 및 카드 스타일 */
+/* 5. 소셜채널 & 언론보도 */
 /* ==================================== */
-.center-section, .social-section, .quick-links {
- max-width: 1100px;
- margin: 60px auto 0 auto;
- padding: 0 16px;
+.social-section {
+  max-width: 1100px;
+  margin: 60px auto 0 auto;
+  padding: 0 16px;
+  margin-bottom: 60px;
 }
 
-.center-section h2, .social-section h2 {
- font-size: 1.8rem;
- font-weight: 700;
- margin-bottom: 24px;
- color: #222222; /* 진한 검은색 제목 */
- text-align: left; /* 왼쪽 정렬 */
- border-bottom: 2px solid #eeeeee; /* 구분선 추가 */
- padding-bottom: 10px;
-}
-
-/* 카드 레이아웃 (Grid를 사용하여 깔끔하게 배치) */
-.center-cards {
-    /* 4칸/3칸 레이아웃을 위해 4열로 고정 */
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+.social-section h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 60px;
+  color: #222222;
+  text-align: center;
+  border-bottom: 2px solid #eeeeee;
+  padding-bottom: 10px;
+  display: inline-block;
+  width: auto;
+  margin-left: 50%;
+  transform: translateX(-50%);
 }
 
 .social-cards {
-    /* 기존의 유연한 레이아웃 유지 */
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
 }
 
-.center-card, .social-card {
- background: #ffffff; /* 흰색 배경 */
- border: 1px solid #e0e0e0; /* 연한 경계선 */
- border-radius: 6px;
- padding: 30px 20px;
- font-size: 1.1rem;
- font-weight: 500;
- color: #222222;
- box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* 은은한 그림자 */
- text-align: center;
- transition: transform 0.2s, box-shadow 0.2s;
-}
-.center-card:hover, .social-card:hover {
- transform: translateY(-5px); /* 호버 시 약간 뜸 */
- box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-}
-
-/* 소셜카드 색상 구분 (옵션) */
 .social-card {
- background: #f8f8f8; /* 소셜 카드는 약간 더 밝게 */
+  flex: 0 0 180px; /* 카드 폭 조절 */
+  background: #eef5ff;
+  border: 1px solid #dbe4f0;
+  border-radius: 6px;
+  padding: 30px 20px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222222;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.social-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 /* ==================================== */
-/* 4. 빠른 링크 버튼 */
+/* 6. 빠른 링크 버튼 (진료예약 등) */
 /* ==================================== */
 .quick-links {
- margin-top: 60px;
- display: flex;
- gap: 18px;
- justify-content: center;
+  margin-top: 60px;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
 }
 
 .quick-links button {
- background: #ffffff;
- border: 1px solid #cccccc; /* 경계선 색상 변경 */
- color: #555555;
- border-radius: 4px;
- padding: 12px 30px;
- font-size: 1rem;
- font-weight: 600;
- cursor: pointer;
- transition: all 0.2s;
+  background: #ffffff;
+  border: 1px solid #cccccc;
+  color: #555555;
+  border-radius: 4px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
 }
+
 .quick-links button:hover {
- background: #3b82f6; /* 호버 시 강조색 사용 */
- color: #fff;
- border-color: #3b82f6;
+  background: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
 }
 
 /* ==================================== */
-/* 5. 모바일 반응형 */
+/* 7. 반응형 설정 */
 /* ==================================== */
 @media (max-width: 768px) {
- .main-banner h1 {
- font-size: 2rem;
- }
- .center-section h2, .social-section h2 {
- font-size: 1.5rem;
- }
-  /* 모바일에서는 center-cards도 1열로 변경 */
- .center-cards, .social-cards {
- grid-template-columns: 1fr; /* 모바일에서 1열로 변경 */
- gap: 12px;
- }
- .quick-links {
- flex-direction: column;
- }
+  .main-banner h1 {
+    font-size: 2rem;
+  }
+
+  .center-section h2,
+  .social-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .center-cards,
+  .social-cards {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .quick-links {
+    flex-direction: column;
+  }
 }

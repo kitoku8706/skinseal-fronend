@@ -3,8 +3,8 @@
 /* ==================================== */
 .right-sidebar {
   position: fixed;
-  top: 30%;
-  right: 0;
+  top: 45%;
+  right: 25px; /* ✅ 화면 오른쪽에서 25px 떨어짐 */
   left: auto;
   z-index: 900;
   display: flex;
@@ -13,11 +13,13 @@
   background: #ffffff;
   border: 1px solid #e0e0e0;
   border-right: none;
-  border-radius: 8px 0 0 8px; /* 상단 좌측 8px만 둥글림 */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: 12px 0 0 12px; /* ✅ 둥근 모서리로 부드러운 느낌 */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15); /* ✅ 입체감 강조 */
   padding: 0;
-  width: 90px;
-  transition: right 0.3s ease-in-out;
+  width: auto;
+  min-width: 110px; /* 🔹 너무 좁아지지 않게 최소폭 설정 */
+  padding: 0 6px; /* 🔹 여백 살짝 추가 */
+  transition: all 0.3s ease-in-out;
 }
 
 /* ==================================== */
@@ -25,63 +27,68 @@
 /* ==================================== */
 .sidebar-btn {
   width: 100%;
-  height: 60px; /* 버튼 높이 증가 (55px -> 60px) */
+  height: 60px; /* 버튼 높이 */
   margin: 0;
-  
-  /* 버튼 간 명확한 구분선 */
+
+  /* 버튼 간 구분선 */
   border: none;
-  border-bottom: 1px solid #cccccc; /* 구분선 색상을 #eee -> #ccc로 더 진하게 변경 */
-  
+  border-bottom: 1px solid #cccccc;
+
+  /* 배경 및 폰트 */
   background: #ffffff;
   border-radius: 0;
-  
   font-size: 0.85em;
   font-weight: 600;
   color: #333333;
   cursor: pointer;
-  transition: background 0.2s ease;
-  padding: 0 5px; /* 수직 정렬을 위해 수직 패딩 제거 */
+  transition: background 0.2s ease, transform 0.2s ease;
+  padding: 0 5px;
 
-  /* 텍스트 줄 바꿈 및 중앙 정렬 */
-  display: flex; /* Flexbox 활성화 */
-  align-items: center; /* 수직 중앙 정렬 */
-  justify-content: center; /* 수평 중앙 정렬 */
-  text-align: center; /* 텍스트 중앙 정렬 */
-  
+  /* 텍스트 중앙 정렬 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  /* 줄바꿈 처리 */
   white-space: normal;
   word-break: keep-all;
-  line-height: 1.3; /* 행간 조정 */
+  line-height: 1.3;
+
+  overflow: visible; /* ✅ 글자 잘리지 않게 */
+  text-overflow: unset; /* ✅ '...' 말줄임 제거 */
+  white-space: nowrap; /* ✅ 줄바꿈 없이 한 줄 표시 */
 }
 
-/* 마지막 버튼의 구분선 제거 */
-/* AI상담 버튼은 특별히 border-top을 가지므로, AI상담 바로 윗 버튼의 border-bottom을 제거합니다. */
-.right-sidebar > .sidebar-btn:nth-last-child(2) {
-    border-bottom: none;
-}
-
-/* 호버 스타일 (기존 컨셉 유지) */
+/* ✅ 버튼 hover 시 약간 위로 뜨는 효과 */
 .sidebar-btn:hover {
   background: #3b82f6;
   color: #ffffff;
+  transform: translateY(-2px); /* 살짝 위로 이동 */
+}
+
+/* ✅ 마지막에서 두 번째 버튼 구분선 제거 (AI상담 전 버튼) */
+.right-sidebar > .sidebar-btn:nth-last-child(2) {
+  border-bottom: none;
 }
 
 /* ==================================== */
 /* 3. AI상담 버튼 강조 스타일 */
 /* ==================================== */
 .sidebar-btn.ai-btn {
-  /* AI 버튼은 배경색과 텍스트를 강조합니다. */
   background: #3b82f6;
   color: #ffffff;
   font-weight: 700;
   font-size: 0.9em;
-  
-  /* AI 버튼 위쪽에 구분선 추가 (다른 버튼과 분리) */
-  border-top: 1px solid #ffffff; /* 흰색 구분선으로 상단 버튼과 분리 강조 */
-  
-  /* 사이드바 자체의 하단 둥글림 적용 */
-  border-radius: 0 0 0 8px;
+
+  /* 위쪽 구분선 추가 */
+  border-top: 1px solid #ffffff;
+
+  /* 하단 둥근 모서리 */
+  border-radius: 0 0 0 12px;
 }
 
+/* ✅ AI상담 버튼 hover */
 .sidebar-btn.ai-btn:hover {
   background: #2563eb;
 }
