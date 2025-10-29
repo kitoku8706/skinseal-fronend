@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import "./NavBar.css";
 
 // 🚨🚨 사용자 정보를 가져오거나 토큰 유효성을 체크하는 API 엔드포인트로 변경하세요.
-const CHECK_AUTH_API = "/api/user/info";
+
+const CHECK_AUTH_API = "/member/info"; 
 
 function NavBar() {
   const navigate = useNavigate();

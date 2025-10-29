@@ -12,10 +12,17 @@ function UserLoginPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!loginId || !password) {
-            setError('아이디와 비밀번호를 모두 입력하세요.');
+        
+        if (!loginId) {
+            setError('아이디를 확인해주세요.');
             return;
         }
+        
+        if (!password) {
+            setError('비밀번호를 확인해주세요.');
+            return;
+        }
+        
         setError('');
         
         try {
@@ -47,7 +54,7 @@ function UserLoginPage() {
     return (
         <div className="login-container">
             <h2>로그인</h2>
-            <form onSubmit={handleSubmit} className="login-form">
+            <form onSubmit={handleSubmit} className="login-form" noValidate>
                 <input
                     type="text" 
                     placeholder="아이디" 
@@ -66,7 +73,7 @@ function UserLoginPage() {
                 {error && <div className="error-msg">{error}</div>}
             </form>
             <div className="login-links">
-                <a href="/join">회원가입</a> | <a href="#">비밀번호 찾기</a>
+                <a href="/join">회원가입</a>
             </div>
         </div>
     );
