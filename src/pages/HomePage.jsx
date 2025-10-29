@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { pingBackend, getUsersFromBackend, getChatbotCategories } from "../api/testApi";
+import {
+  pingBackend,
+  getUsersFromBackend,
+  getChatbotCategories,
+} from "../api/testApi";
 import NoticeListPage from "./NoticeListPage";
-import NavBar from "../components/NavBar";
 import "./HomePage.css";
 import RightSidebar from "../components/RightSidebar";
+import noticeBanner from "../assets/notice-banner.png";
 
 function HomePage() {
   const [result, setResult] = useState("");
@@ -15,7 +19,6 @@ function HomePage() {
   const navigate = useNavigate();
 
   const [openMenu, setOpenMenu] = useState(null);
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -62,78 +65,104 @@ function HomePage() {
 
   return (
     <>
-      <div className="homepage-container">
+      {/* ✅ 공지사항 배너 + 오버레이 문구 추가 */}
+      <div className="notice-banner-container">
+        <img
+          src={noticeBanner}
+          alt="공지사항 바로가기"
+          className="notice-banner"
+        />
 
-        {/* 공지사항 바로가기 버튼의 상단 마진을 48px로 설정 */}
-        <div style={{ width: "100%", display: "flex", justifyContent: "center", margin: "48px 0 0 0" }}>
-          <button
-            className="banner-btn"
-            style={{ minWidth: 180 }}
-            onClick={() => navigate("/notice")}
-          >
-            공지사항 바로가기
-          </button>
+        {/* ✅ 박스 전체를 클릭 가능하게 */}
+        <div
+          className="notice-overlay-box"
+          onClick={() => navigate("/notice")}
+          style={{ cursor: "pointer" }} // ✅ 마우스 커서 변경
+        >
+          <strong>SKINSEAL 11월 공지사항</strong>
+          <span className="notice-subtext">
+            해당 베너를 클릭해 공지사항을 확인해주세요.
+          </span>
         </div>
+      </div>
 
+      <div className="homepage-container">
+        {/* ✅ 전문 센터 안내 (이미지 + 텍스트 카드) */}
         <section className="center-section">
-          <h2>전문 센터 안내</h2>
+          <h2>질환 진단 안내</h2>
           <div className="center-cards">
             <Link to="/diagnosis/1" className="center-card">
-              여드름
+              <img src="/src/assets/disease/1_Acne_image.jpg" alt="여드름" />
+              <span>여드름</span>
             </Link>
             <Link to="/diagnosis/2" className="center-card">
-              양성 종양
+              <img
+                src="/src/assets/disease/2_Benign_tumors.png"
+                alt="양성 종양"
+              />
+              <span>양성 종양</span>
             </Link>
             <Link to="/diagnosis/3" className="center-card">
-              수포성 질환
+              <img src="/src/assets/disease/3_Bullous.png" alt="수포성 질환" />
+              <span>수포성 질환</span>
             </Link>
             <Link to="/diagnosis/4" className="center-card">
-              습진
+              <img src="/src/assets/disease/4_Eczema.png" alt="습진" />
+              <span>습진</span>
             </Link>
             <Link to="/diagnosis/5" className="center-card">
-              루푸스
+              <img src="/src/assets/disease/5_Lupus.jpg" alt="루푸스" />
+              <span>루푸스</span>
             </Link>
             <Link to="/diagnosis/6" className="center-card">
-              피부암
+              <img src="/src/assets/disease/6_SkinCancer.jpg" alt="피부암" />
+              <span>피부암</span>
             </Link>
             <Link to="/diagnosis/7" className="center-card">
-              백반증
+              <img src="/src/assets/disease/7_Vitiligo.png" alt="백반증" />
+              <span>백반증</span>
             </Link>
           </div>
         </section>
 
-      
-        <section className="main-banner" style={{marginTop:"30px"}}>
-          <h1>빠르고 안전한 진료, SkinSeal 병원</h1>
-          <p>진료부터 수술, 그리고 진료연계까지 믿고 맡길 수 있는 병원</p>
+        <section className="main-banner" style={{ marginTop: "30px" }}>
+          <h1>정확도 90%이상의 판독, SkinSeal</h1>
+          <p>진단부터 수술,진료연계까지 믿고 맡길 수 있는 스킨씰</p>
           <button
             className="banner-btn"
             onClick={() => navigate("/reservation/consult")}
           >
-            진료 예약 바로가기
+            상담 예약 바로가기
           </button>
         </section>
-
 
         <section className="social-section">
           <h2>소셜채널 & 언론보도</h2>
           <div className="social-cards">
-            <a href="http://www.youtube.com" className="social-card">유튜브 콘텐츠</a>
-            <a href="http://www.naver.com" className="social-card">블로그 소식</a>
-            <a href="http://google.com" className="social-card">언론보도</a>
+            <a href="http://www.youtube.com" className="social-card">
+              유튜브 콘텐츠
+            </a>
+            <a href="http://www.naver.com" className="social-card">
+              블로그 소식
+            </a>
+            <a href="http://google.com" className="social-card">
+              언론보도
+            </a>
           </div>
         </section>
 
-        <section className="quick-links">
-          <button onClick={() => navigate("reservation/consult")}>진료 예약</button>
+        {/* <section className="quick-links">
+          <button onClick={() => navigate("reservation/consult")}>
+            진료 예약
+          </button>
           <button>의료 상담</button>
           <button onClick={() => navigate("/directions")}>오시는 길</button>
-        </section>
-
-        
+        </section> */}
       </div>
+
       <RightSidebar />
     </>
   );
 }
+
 export default HomePage;

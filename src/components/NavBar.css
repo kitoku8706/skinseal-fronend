@@ -1,127 +1,219 @@
 /* ==================================== */
-/* 1. 메인 내비게이션 바 (Dark Header) */
+/* 1. 메인 내비게이션 바 */
 /* ==================================== */
 .main-nav {
   width: 100vw;
-  min-width: 0;
   margin: 0;
-  background: #222222; /* 배경을 어두운 검은색으로 변경 */
+  background: #ffffff;
   display: flex;
   align-items: center;
-  padding: 0 40px; /* 좌우 여백 확대 */
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  padding: 0 80px;
   box-sizing: border-box;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 강조 */
-  min-height: 70px; /* 높이 약간 증가 */
-  position: sticky; /* 상단 고정을 원할 경우 */
+  min-height: 90px;
+  position: sticky;
   top: 0;
   z-index: 1000;
-  /* ✅ 추가 부분: 메뉴 아래 여백 */
-  margin-bottom: 50px;
+  margin-bottom: 60px;
+  border-bottom: 1.5px solid #e5e5e5;
+  border-top: 1.5px solid #e5e5e5;
 }
 
+/* ✅ 로고와 메뉴 사이 거리 */
 .nav-center {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   flex: 1;
+  margin-left: 60px;
 }
 
-.logo {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #ffffff; /* 로고 글자색 흰색 */
-  cursor: pointer;
-  margin-right: 40px;
-  letter-spacing: 0.05em; /* 로고에 약간의 자간 적용 */
+@media (min-width: 1600px) {
+  .nav-center {
+    margin-left: 30px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .nav-center {
+    margin-left: 80px;
+  }
 }
 
 /* ==================================== */
-/* 2. 메인 메뉴 스타일 */
+/* 2. 로고 */
+/* ==================================== */
+.logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #000000;
+  cursor: pointer;
+  margin-right: auto;
+  letter-spacing: 0.05em;
+  margin-left: 300px;
+}
+
+@media (max-width: 1600px) {
+  .logo {
+    margin-left: 120px;
+  }
+}
+
+@media (max-width: 1300px), (max-width: 1100px), (max-width: 900px) {
+  .logo {
+    margin-left: 0px;
+  }
+}
+
+/* ==================================== */
+/* 3. 메뉴 컨테이너 */
+/* ==================================== */
+.nav-center {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+  margin-right: 30px;
+}
+
+/* ==================================== */
+/* 4. 메인 메뉴 스타일 */
 /* ==================================== */
 .nav-menu {
   display: flex;
   align-items: center;
   flex-direction: row;
-  justify-content: center;
-  width: auto;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  white-space: nowrap;
   padding: 0;
   margin: 0;
   list-style: none;
 }
 
+/* ✅ hover 감지 범위 확대 & 색상 고정 */
 .nav-item {
   position: relative;
-  flex: none;
-  margin: 0 25px; /* 좌우 간격 조정 */
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: #dddddd; /* 메뉴 글자색을 밝은 회색으로 변경 */
+  margin: 0 45px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #000000;
   cursor: pointer;
-  transition: color 0.2s;
-  box-sizing: border-box;
+  transition: border-bottom 0.2s ease;
+  padding: 22px 28px; /* ✅ hover 감지 영역을 더 넓힘 */
+  border-radius: 6px;
 }
 
-.nav-item:hover > span {
-  color: #ffffff; /* 호버 시 완전한 흰색으로 변경 */
-  text-decoration: none; /* 밑줄 제거 */
+/* ✅ hover 시 색상 유지 (파란색 안되게) */
+.nav-item:hover {
+  /* background: rgba(0, 0, 0, 0.03); ✅ 살짝 회색톤 배경만 */
+  color: #000000; /* ✅ 파랗게 변하지 않음 */
+}
+
+/* ✅ 텍스트 밑줄 효과 (드롭다운 구분용) */
+.nav-item span {
+  display: inline-block;
+  padding-bottom: 6px;
+  border-bottom: 2px solid transparent;
 }
 
 /* ==================================== */
-/* 3. 드롭다운 메뉴 스타일 */
+/* 5. 드롭다운 메뉴 */
 /* ==================================== */
 .dropdown-menu {
+  display: none;
   position: absolute;
   top: 100%;
-  left: 50%;
-  transform: translateX(-20%); /* 중앙 정렬 */
-  background: #ffffff; /* 드롭다운 배경은 흰색 */
-  border: 1px solid #eeeeee;
-  border-top: 2px solid #3b82f6; /* 강조색으로 상단 경계선 추가 */
-  min-width: 180px;
+  left: 0;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-top: 3px solid #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 0 0 6px 6px;
   z-index: 10;
-  list-style: none !important;
-  padding: 8px 0;
+  padding: 12px 0;
+  width: 140px;
+  min-width: max-content;
   margin-top: 0;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); /* 그림자 강조 */
-  border-radius: 4px;
-  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, top 0.2s ease;
 }
 
+/* ✅ 드롭다운 hover 표시 */
+.nav-item:hover > .dropdown-menu {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  top: calc(100% + 5px);
+}
+
+/* ✅ hover 유지 범위 확장 */
+.nav-item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -20px;
+  width: 100%;
+  height: 25px;
+  background: transparent;
+}
+
+/* ✅ 드롭다운 내부 항목 */
 .dropdown-item {
+  display: block;
   padding: 10px 20px;
-  cursor: pointer;
-  white-space: nowrap;
-  color: #444444;
-  list-style: none !important;
   font-size: 0.95rem;
+  color: #000000;
+  text-align: left;
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
 }
 
+/* ✅ 드롭다운 내부 hover만 파랗게 */
 .dropdown-item:hover {
-  background: #f5f5f5; /* 호버 시 매우 밝은 회색 */
-  color: #3b82f6; /* 강조색으로 텍스트 변경 */
+  background: #f3f6ff;
+  border-left: 3px solid #3b82f6;
+  color: #2563eb;
+}
+
+.dropdown-menu::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 0;
+  width: 100%;
+  height: 12px;
+  background: transparent;
 }
 
 /* ==================================== */
-/* 4. 로그인/액션 버튼 스타일 */
+/* 6. 로그인/회원가입 버튼 */
 /* ==================================== */
 .nav-actions {
-  margin-left: auto;
+  margin-left: 40px;
   display: flex;
+  flex-direction: row;
   align-items: center;
+  justify-content: flex-end;
   gap: 10px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
 }
+
 .nav-actions button {
   padding: 8px 16px;
   font-size: 0.95rem;
   font-weight: 600;
   border-radius: 4px;
-  border: 1px solid #ffffff; /* 흰색 테두리 */
-  background: transparent; /* 투명 배경 */
-  color: #ffffff; /* 흰색 텍스트 */
+  border: 1px solid #3b82f6;
+  background: #3b82f6;
+  color: #ffffff;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
-/* 회원가입/마이페이지 버튼 강조 (옵션) */
+
 .nav-actions button:last-child {
   border-color: #3b82f6;
   background: #3b82f6;
@@ -132,6 +224,7 @@
   color: #ffffff;
   border-color: #3b82f6;
 }
+
 .nav-actions button:last-child:hover {
   background: #2563eb;
   border-color: #2563eb;
@@ -140,16 +233,4 @@
 .nav-actions span {
   color: #ffffff;
   font-size: 0.95rem;
-}
-
-/* ==================================== */
-/* 5. 반응형 (모바일) */
-/* ==================================== */
-@media (max-width: 1100px) {
-  .nav-menu {
-    display: none; /* 작은 화면에서는 메뉴 숨기기 (햄버거 메뉴 구현 필요) */
-  }
-  .nav-center {
-    justify-content: flex-start;
-  }
 }

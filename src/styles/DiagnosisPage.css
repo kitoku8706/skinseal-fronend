@@ -1,193 +1,183 @@
-/* src/styles/DiagnosisPage.css */
-
-/* 전체 레이아웃 컨테이너 */
+/* ==================================== */
+/* 1. 전체 레이아웃 컨테이너 */
+/* ==================================== */
 .diagnosis-layout {
-    display: flex;
-    gap: 2rem; /* 사이드바와 컨텐츠 사이 간격 */
-    max-width: 1200px;
-    margin: 2rem auto; /* 페이지 중앙 정렬 및 상하 여백 */
-    padding: 0 1rem; /* 모바일 화면을 위한 좌우 여백 */
-    align-items: flex-start; /* 사이드바와 컨텐츠가 상단에 정렬되도록 */
+  display: flex;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  align-items: flex-start;
 }
 
-/* 사이드바 스타일 */
+/* ==================================== */
+/* 2. 사이드바 스타일 */
+/* ==================================== */
 .diagnosis-sidebar {
-    flex: 0 0 240px; /* 사이드바 너비 고정 */
-    background-color: #f8f9fa; /* 밝은 회색 배경 */
-    padding: 1.5rem; /* 내부 여백 */
-    border-radius: 12px; /* 둥근 모서리 */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* 부드러운 그림자 */
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem; /* 버튼 사이 간격 */
+  flex: 0 0 240px;
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-/* 사이드바 제목 */
+/* ==================================== */
+/* 3. 사이드바 제목 */
+/* ==================================== */
 .sidebar-title {
-    font-size: 1.25rem; /* 글자 크기 */
-    font-weight: 600; /* 글자 두께 */
-    color: #343a40; /* 어두운 글자색 */
-    margin-bottom: 1.5rem; /* 제목 아래 여백 */
-    padding-bottom: 0.75rem; /* 하단 경계선과 텍스트 사이 여백 */
-    border-bottom: 1px solid #dee2e6; /* 하단 경계선 */
-    text-align: left; /* 왼쪽 정렬 */
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #343a40;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #dee2e6;
+  text-align: left;
 }
 
-/* 사이드바 버튼 공통 스타일 */
+/* ==================================== */
+/* 4. 사이드바 버튼 */
+/* ==================================== */
 .sidebar-btn {
-    display: block;
-    width: 100%; /* 너비를 100%로 설정 */
-    padding: 0.8rem 1rem; /* 내부 여백 */
-    border: none; /* 테두리 없음 */
-    background-color: transparent; /* 배경 투명 */
-    text-align: left; /* 텍스트 왼쪽 정렬 */
-    font-size: 1rem; /* 글자 크기 */
-    color: #495057; /* 기본 글자색 */
-    cursor: pointer; /* 마우스 오버 시 포인터 변경 */
-    border-radius: 8px; /* 둥근 모서리 */
-    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease; /* 부드러운 전환 효과 */
-    white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 */
-    overflow: hidden; /* 넘치는 텍스트 숨김 */
-    text-overflow: ellipsis; /* 넘치는 텍스트 ... 처리 */
+  display: block;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: none;
+  background-color: transparent;
+  text-align: left;
+  font-size: 1rem;
+  color: #495057;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
-/* 사이드바 버튼 호버 시 스타일 */
 .sidebar-btn:hover {
-    background-color: #e9ecef; /* 호버 시 배경색 */
-    color: #000; /* 호버 시 글자색 */
-    transform: translateX(3px); /* 약간 오른쪽으로 이동하는 효과 */
+  background-color: #e9ecef;
+  color: #000;
+  transform: translateX(3px);
 }
 
-/* 활성화된 사이드바 버튼 스타일 */
 .sidebar-btn.active {
-    background-color: #0d6efd; /* 활성화 시 파란색 배경 */
-    color: white; /* 활성화 시 흰색 글자 */
-    font-weight: 600; /* 활성화 시 글자 두께 */
-    box-shadow: 0 2px 5px rgba(13, 110, 253, 0.3); /* 활성화 시 그림자 */
+  background-color: #0d6efd;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(13, 110, 253, 0.3);
 }
 
-/* 메인 컨텐츠 영역 */
+/* ==================================== */
+/* 5. 메인 컨텐츠 영역 */
+/* ==================================== */
 .diagnosis-content {
-    flex: 1; /* 남은 공간을 모두 차지 */
-    background-color: #ffffff; /* 흰색 배경 */
-    padding: 2rem; /* 내부 여백 */
-    border-radius: 12px; /* 둥근 모서리 */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* 부드러운 그림자 */
-    display: flex;
-    flex-direction: column; /* 이미지와 설명을 세로로 배치 */
-    align-items: flex-start; /* 좌측 정렬 */
+  flex: 1;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-/* 컨텐츠 내 이미지 */
+/* ==================================== */
+/* 6. 질병 이미지 */
+/* ==================================== */
 .content-image {
-    width: 100%; /* 너비를 부모 컨테이너에 맞춤 */
-    max-width: 450px; /* 최대 너비 설정 (너무 커지지 않도록) */
-    height: auto; /* 높이는 자동으로 조절 */
-    object-fit: contain; /* 이미지 비율을 유지하면서 컨테이너에 맞게 */
-    border-radius: 8px; /* 둥근 모서리 */
-    margin-bottom: 2rem; /* 이미지 아래 여백 */
-    border: 1px solid #e0e0e0; /* 이미지 테두리 추가 (깔끔하게) */
-    padding: 10px; /* 이미지 내부 여백 */
-    box-sizing: border-box; /* 패딩이 너비에 포함되도록 */
+  display: block;
+  margin: 0 auto 2rem auto;
+  max-width: 480px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e5e5;
+  padding: 10px;
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 25px;
 }
 
-/* 컨텐츠 내 설명 */
+/* ==================================== */
+/* 7. 컨텐츠 설명 */
+/* ==================================== */
 .content-desc {
-    color: #333; /* 기본 글자색 */
-    line-height: 1.6; /* 줄 간격 */
-    width: 100%; /* 너비를 100%로 설정 */
+  color: #333;
+  line-height: 1.6;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding-bottom: 30px;
 }
 
 .content-desc > div {
-    margin-bottom: 1.25rem; /* 각 설명 블록 아래 여백 */
+  padding-bottom: 30px;
 }
 
-.content-desc b {
-    color: #000; /* 볼드 텍스트 색상 */
-    margin-right: 0.5rem; /* 볼드 텍스트 뒤 여백 */
+/* ==================================== */
+/* 8. 구분선 (위·아래 동일) */
+/* ==================================== */
+.content-divider,
+.content-divider-bottom {
+  width: 100%;
+  height: 1px;
+  background-color: #e0e0e0;
+  border: none;
+  margin: 0px 0 25px 0;
 }
 
-/* 반응형 웹 디자인 */
-@media (max-width: 992px) {
-    .diagnosis-layout {
-        gap: 1.5rem; /* 태블릿 환경에서 간격 조절 */
-    }
-    .diagnosis-sidebar {
-        flex: 0 0 200px; /* 태블릿 환경에서 사이드바 너비 조절 */
-        padding: 1rem;
-    }
-    .sidebar-title {
-        font-size: 1.15rem;
-        margin-bottom: 1rem;
-        padding-bottom: 0.5rem;
-    }
-    .sidebar-btn {
-        padding: 0.7rem 0.8rem;
-        font-size: 0.95rem;
-    }
-    .diagnosis-content {
-        padding: 1.5rem;
-    }
-    .content-image {
-        max-height: 300px; /* 태블릿 환경에서 이미지 높이 조절 */
-        margin-bottom: 1.5rem;
-    }
-    .content-desc > div {
-        margin-bottom: 1rem;
-    }
+/* ==================================== */
+/* 9. 제목(질병명) 및 소제목 정렬 */
+/* ==================================== */
+.disease-name {
+  text-align: center; /* 중앙 정렬 */
+  font-size: 2.2rem; /* 크기 확대 */
+  font-weight: 700; /* 진한 글씨 */
+  margin-top: 40px; /* ✅ 위쪽 간격 추가 */
+  margin-bottom: 25px; /* 아래 간격 */
+  color: #222; /* 조금 진한 색 */
 }
 
-@media (max-width: 768px) {
-    .diagnosis-layout {
-        flex-direction: column; /* 모바일 환경에서 세로로 배치 */
-        gap: 1.5rem;
-        margin-top: 1.5rem;
-        padding: 0 0.75rem;
-    }
-    .diagnosis-sidebar {
-        flex: 0 0 auto; /* 너비 고정 해제 */
-        width: 100%; /* 전체 너비 차지 */
-        order: 1; /* 사이드바가 먼저 오도록 (스크롤 시 상단) */
-        padding: 1rem;
-    }
-    .sidebar-title {
-        text-align: center; /* 모바일에서 제목 중앙 정렬 */
-        margin-bottom: 1rem;
-    }
-    .sidebar-btn {
-        font-size: 0.9rem;
-        padding: 0.6rem 0.8rem;
-        text-align: center; /* 모바일에서 버튼 텍스트 중앙 정렬 */
-    }
-    .diagnosis-content {
-        order: 2; /* 컨텐츠가 사이드바 다음으로 오도록 */
-        padding: 1.25rem;
-    }
-    .content-image {
-        max-width: 100%; /* 모바일에서 이미지 최대 너비 */
-        max-height: 250px; /* 모바일에서 이미지 높이 조절 */
-        margin-bottom: 1.25rem;
-    }
-    .content-desc {
-        font-size: 0.95rem;
-    }
-    .content-desc > div {
-        margin-bottom: 0.8rem;
-    }
+.desc-item {
+  margin-bottom: 25px;
 }
 
-/* 추가 스타일 */
-/* 이미지 테두리나 배경을 좀 더 명확하게 */
-.content-image[src=""] {
-    background-color: #e9ecef; /* 이미지가 없을 때 회색 배경 */
-    border: 1px dashed #ced4da; /* 이미지가 없을 때 점선 테두리 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #6c757d;
-    font-size: 1rem;
-    text-align: center;
+.desc-title {
+  display: block;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 30px 0 10px 0;
+  text-align: center;
+  color: #222;
 }
-.content-image[src=""]::after {
-    content: "이미지를 불러올 수 없습니다.";
+
+.desc-text {
+  display: block;
+  line-height: 1.8;
+  color: #333;
+  white-space: pre-line;
+  text-align: center;
+}
+
+/* ==================================== */
+/* 10. 자가진단 버튼 (로그인 버튼 스타일 + 중앙 정렬) */
+/* ==================================== */
+.diagnosis-btn {
+  display: block; /* 중앙 정렬 가능하게 */
+  margin: 25px auto 0 auto; /* 좌우 auto로 가운데 */
+  padding: 22px 25px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #4285f4; /* 로그인 버튼과 동일 색상 */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 2px 6px rgba(66, 133, 244, 0.3);
+}
+
+.diagnosis-btn:hover {
+  background-color: #357ae8;
+  transform: translateY(-2px);
 }
