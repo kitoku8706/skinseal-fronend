@@ -24,7 +24,7 @@
 .card {
   background-color: #fff;
   border-radius: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); */
   width: 360px; /* 기존 280px → 크게 */
   height: 500px; /* 카드 세로 길이 추가 */
   overflow: hidden;
