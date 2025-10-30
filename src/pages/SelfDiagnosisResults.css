@@ -5,7 +5,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 30px 45px 100px 45px; /* 위아래 여백만 */
+  padding: 70px 35px 100px 45px; /* 위아래 여백만 */
   font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, "Helvetica Neue", Arial;
   box-sizing: border-box;
@@ -186,4 +186,10 @@
 
 .sdr-delete-btn:hover {
   background-color: #ef4444;
+}
+
+.sdr-controls {
+  padding-top: 40px; /* ✅ 이걸로 문구 자체가 아래로 내려감 */
+  margin-bottom: 0px;
+  text-align: center;
 }
