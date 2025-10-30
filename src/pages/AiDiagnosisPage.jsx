@@ -5,7 +5,7 @@ function AiDiagnosisPage() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [selectedModel, setSelectedModel] = useState("efficientnet");
+  const [selectedModel, setSelectedModel] = useState("skin_model");
   const [userId, setUserId] = useState("");
   const [username, setUsername] = useState("");
   const [agree, setAgree] = useState(false);
@@ -286,9 +286,9 @@ function AiDiagnosisPage() {
           value={selectedModel}
           onChange={(e) => setSelectedModel(e.target.value)}
         >
-          <option value="efficientnet">EfficientNet(8)</option>
+          {/* <option value="efficientnet">EfficientNet(8)</option> */}
           <option value="skin_model">Skin Model(21)</option>
-          <option value="acne">Acne (Binary)</option>
+          {/* <option value="acne">Acne (Binary)</option> */}
         </select>
       </div>
 
@@ -303,27 +303,47 @@ function AiDiagnosisPage() {
       {result && (
         <div className="result-box">
           <h4>진단 결과</h4>
-          {result.results ? (
-            <ul>
-              {result.results.map((r, i) => (
-                <li key={i}>
-                  {translateLabel(r.class)} — {(r.probability * 100).toFixed(2)}
-                  %
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <pre
-              style={{
-                background: "#f9f9f9",
-                padding: "12px",
-                borderRadius: "8px",
-                whiteSpace: "pre-wrap",
-              }}
-            >
-              {JSON.stringify(result, null, 2)}
-            </pre>
-          )}
+          {(() => {
+            const list = Array.isArray(result)
+              ? result
+              : Array.isArray(result?.results)
+              ? result.results
+              : null;
+            if (!list || list.length === 0) {
+              return (
+                <pre
+                  style={{
+                    background: "#f9f9f9",
+                    padding: "12px",
+                    borderRadius: "8px",
+                    whiteSpace: "pre-wrap",
+                  }}
+                >
+                  {JSON.stringify(result, null, 2)}
+                </pre>
+              );
+            }
+            return (
+              <ul>
+                {list.map((r, i) => {
+                  const raw = r?.probability ?? r?.prob ?? r?.score;
+                  const num =
+                    typeof raw === "string" ? parseFloat(raw) : Number(raw);
+                  const pct = Number.isFinite(num)
+                    ? num > 1
+                      ? num
+                      : num * 100
+                    : 0;
+                  return (
+                    <li key={i}>
+                      {translateLabel(r?.class || r?.label || r?.name)} —
+                      {` ${pct.toFixed(2)}%`}
+                    </li>
+                  );
+                })}
+              </ul>
+            );
+          })()}
         </div>
       )}
     </div>
