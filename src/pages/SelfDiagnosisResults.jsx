@@ -88,11 +88,11 @@ export default function SelfDiagnosisResults() {
   const [selectedModel, setSelectedModel] = useState("efficientnet");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const { uid, uname } = extractUser();
-    if (uid) setUserId(uid);
-    if (uname) setUsername(uname);
-  }, []);
+  useEffect(() => {
+    const { uid, uname } = extractUser();
+    if (uid) setUserId(uid);
+    if (uname) setUsername(uname);
+  }, []);
 
   const normalizeModelName = (s) =>
     String(s || "")
