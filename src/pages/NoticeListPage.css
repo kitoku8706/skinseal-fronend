@@ -4,7 +4,7 @@
   margin: 40px auto 0; /* 위 40px, 좌우 auto로 가운데 정렬 */
   background: #fff;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); */
   padding: 0 0 16px 0;
 }
 
@@ -115,7 +115,7 @@
 .search-container select:focus {
   outline: none;
   border-color: #007bff;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  /* box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25); */
 }
 
 .search-container input[type="text"] {
