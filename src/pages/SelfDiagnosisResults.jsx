@@ -85,7 +85,7 @@ export default function SelfDiagnosisResults() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [selectedModel, setSelectedModel] = useState("efficientnet");
+  const [selectedModel, setSelectedModel] = useState("skin_model");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -212,9 +212,9 @@ export default function SelfDiagnosisResults() {
           value={selectedModel}
           onChange={(e) => setSelectedModel(e.target.value)}
         >
-          <option value="efficientnet">efficientnet</option>
+          {/* <option value="efficientnet">efficientnet</option> */}
           <option value="skin_model">skin_model</option>
-          <option value="acne">acne</option>
+          {/* <option value="acne">acne</option> */}
         </select>
       </div>
 
