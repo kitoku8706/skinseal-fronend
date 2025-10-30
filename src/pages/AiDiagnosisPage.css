@@ -1,0 +1,250 @@
+/* =========================================
+   1. 전체 레이아웃
+========================================= */
+.ai-diagnosis-container {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 30px 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  font-family: "Pretendard", sans-serif;
+  position: relative;
+  top: -40px; /* ✅ 페이지 전체를 위로 40px 이동 */
+}
+
+/* 제목 */
+.ai-diagnosis-container h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* =========================================
+   2. 업로드 / 카메라 영역 (#1)
+========================================= */
+.upload-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.upload-box {
+  width: 320px;
+  height: 320px;
+  border: 2px dashed #f7b3b0;
+  border-radius: 12px;
+  background-color: #fff8f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  color: #999;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+
+.upload-box:hover {
+  border-color: #f56c6c;
+  color: #f56c6c;
+}
+
+.upload-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.upload-buttons button {
+  background-color: #ffe4e1;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #333;
+  transition: 0.2s ease;
+}
+
+.upload-buttons button:hover {
+  background-color: #f7b3b0;
+  color: #fff;
+}
+
+/* =========================================
+   3. 개인정보 및 주의사항 영역 (#2)
+========================================= */
+/* ✅ 주의사항 박스 — 완전 플랫하게, 그림자/입체 효과 제거 */
+.info-section {
+  background: #fff5f5;
+  border-radius: 10px;
+  padding: 20px 100px 25px 28px;
+  margin: 0 auto 30px auto;
+  width: 100%; /* ✅ 기존 90% → 95%로 확장 (조금 더 넓게) */
+  max-width: 1200px; /* ✅ 화면이 넓을 때 최대 1100px까지만 확장 */
+  color: #444;
+  line-height: 1.6;
+  font-size: 15px;
+  box-shadow: none;
+  border: 1px solid #f7b3b0;
+  outline: none;
+  box-sizing: border-box;
+}
+
+/* ✅ 아이콘과 텍스트 수평 정렬 */
+.info-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* ✅ 리스트 기본 정렬 */
+.info-section ul {
+  margin: 8px 0 0 0;
+  padding-left: 20px;
+}
+
+/* =========================================
+   4. 모델 선택 영역 (#3)
+========================================= */
+.model-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 35px;
+}
+
+.model-section label {
+  font-weight: 600;
+  color: #333;
+}
+
+.model-section select {
+  width: 250px;
+  padding: 8px 10px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+/* =========================================
+   5. 진단 버튼 및 결과 보기 (#4)
+========================================= */
+.diagnosis-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.diagnosis-button button {
+  background-color: #f7b3b0;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.diagnosis-button button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.diagnosis-button button:hover:not(:disabled) {
+  background-color: #f56c6c;
+}
+
+/* =========================================
+   6. 결과 영역
+========================================= */
+.result-box {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 30px;
+}
+
+.result-box h4 {
+  margin-bottom: 15px;
+  color: #333;
+  font-weight: 700;
+}
+
+/* ✅ 모델 선택 1줄 정렬 */
+.model-center {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.model-center label {
+  font-weight: 400;
+  color: #333;
+  font-size: 33px;
+}
+
+.model-center select {
+  width: 250px;
+  padding: 8px 10px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+/* ✅ 클릭 가능한 업로드박스 hover 효과 */
+.upload-box:hover {
+  border-color: #f56c6c;
+  color: #f56c6c;
+  background-color: #fff2f2;
+}
+
+/* ✅ 카메라 촬영 버튼 숨김 */
+.upload-buttons button:nth-child(2) {
+  display: none !important;
+}
+
+/* ✅ 개인정보 수집 동의 체크박스 */
+.agree-box {
+  margin-top: 15px;
+  font-size: 15px;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.agree-box input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #f7b3b0; /* 체크 색상 통일 */
+  cursor: pointer;
+}
+
+/* ✅ 박스와 모델 선택 사이의 개인정보 동의 체크라인 */
+.agree-line {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 가운데 정렬 */
+  gap: 8px;
+  margin: 15px 0 25px 0; /* 위(박스)와 아래(모델 선택) 사이 간격 */
+  font-size: 15px;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.agree-line input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #4b7bec; /* 체크 색상 */
+  cursor: pointer;
+}

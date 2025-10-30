@@ -1,105 +1,189 @@
-/* Styles for SelfDiagnosisResults page */
-.sdr-container{
+/* ✅ 전체 배경: 연핑크 */
+.sdr-container {
+  background-color: #fff5f5; /* 💗 연핑크 배경 */
   display: flex;
   flex-direction: column;
-  align-items: center; /* 가운데 정렬 */
-  max-width:900px;
-  margin:0 auto;
-  padding:24px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-  box-sizing: border-box;
-}
-.sdr-title{ font-size:28px; margin-bottom:12px; color:#243b53; }
-.sdr-userline{ margin-bottom:12px; display:flex; align-items:center; gap:12px; }
-.sdr-controls{ margin-bottom:12px; display:flex; gap:8px; align-items:center; }
-.sdr-results{ 
-  width: 80%;            /* 화면 대비 크기(필요 시 조정) */
-  max-width: 980px;     /* 최대 너비 고정 */
-  margin: 18px 0;       /* 상하 여백 */
-  border:1px solid #e5e7eb; 
-  padding:12px; 
-  border-radius:8px; 
-  box-sizing: border-box;
-}
-.sdr-results > div {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.03);
-  padding: 8px 12px;
-}
-.sdr-results-header{ 
-  display:flex; 
   align-items: center;
-  gap:12px; 
-  padding: 12px 8px; 
-  border-bottom:1px solid #eee; 
-  font-weight:700; 
+  justify-content: flex-start;
+  padding: 30px 45px 100px 45px; /* 위아래 여백만 */
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial;
+  box-sizing: border-box;
+  border-radius: 16px;
 }
-.sdr-results-header div {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
+/* ✅ 제목 */
+.sdr-title {
+  font-size: 35px;
+  margin-bottom: 20px;
+  color: #000000;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ✅ 사용자 + 모델 한 줄 */
+.sdr-userinfo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
   color: #333;
-  font-weight: 600;
-  font-size: 0.95rem;
+  margin-bottom: 40px;
 }
-.sdr-row{ 
-  display:flex; 
-  align-items: center;
-  gap:12px; 
-  padding:12px 8px; 
-  border-top:1px solid #f0f0f0; 
+
+/* ✅ 표 박스 */
+.sdr-results {
+  width: 850px;
+  background: transparent; /* 💗 표 배경 흰색 제거해서 연핑크랑 완전 일체화 */
+  border: none; /* 💗 테두리 완전 제거 */
 }
-.sdr-row:last-child{ border-bottom:none; }
-.sdr-col-created{ 
-  width: 22%;          /* 진단일시 컬럼 너비 */
-  min-width: 140px;
-  font-size:13px; 
-  color:#333; 
-}
-.sdr-col-model{ 
-  width: 22%;
-  min-width: 120px;
-  text-align: left;
-  font-size:13px; 
-}
-.sdr-col-result{ 
-  flex: 1;             /* 남은 영역을 차지 */
-  min-width: 220px;
-  font-size:13px; 
-  color:#555; 
-  overflow:hidden; 
-}
-.sdr-actions{ 
-  width: 110px;        /* 버튼 칸 너비 고정 */
+/* ✅ 표 헤더 */
+.sdr-results-header {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  text-align:right; 
+  justify-content: space-between;
+  text-align: center;
+  /* 살짝 회색 느낌의 헤더 */
+  font-weight: 700;
+  color: #222;
+  border-bottom: 2.5px solid #eee;
+  padding: 12px 0;
 }
-.sdr-button{ 
-  padding:8px 12px; 
-  border-radius:8px; 
-  border:1px solid #ddd; 
-  background:#fff; 
-  cursor:pointer; 
+
+/* ✅ 표 행 */
+.sdr-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  background-color: #fff;
+  padding: 20px 0;
+  border-bottom: 1px solid #e4e7eb; /* 예약표와 동일한 라인색 */
 }
-.sdr-button:hover{ background:#f7f7f7; }
-.sdr-details{ 
-  width:100%; 
-  margin-top:8px; 
-  padding: 12px; 
-  background: #fafafa; 
-  border-radius: 6px; 
+
+/* ✅ 마지막 줄 테두리 제거 */
+.sdr-row:last-child {
+  border-bottom: none;
 }
-.sdr-gradcam{ margin-top:12px; display:flex; gap:12px; align-items:flex-start; }
-.sdr-imgbox{ position:relative; width:320px; height:320px; background:#fafafa; border:1px solid #eee; }
-.sdr-controls select, .sdr-controls button{ padding:6px 8px; }
-/* responsive */
-@media (max-width:720px){
-  .sdr-results { width: 100%; padding: 0 12px; }
-  .sdr-results-header, .sdr-row{ flex-direction:column; align-items:flex-start; }
-  .sdr-col-created, .sdr-col-model { width: 32%; min-width: 100px; }
-  .sdr-actions { width: 90px; }
-  .sdr-results-header div { font-size: 0.9rem; }
+
+/* ✅ 각 컬럼 비율 고정 */
+.sdr-col-created {
+  width: 20%;
+  color: #333;
+  font-size: 14px;
+  text-align: left; /* 정렬은 그대로 */
+  padding-left: 30px; /* 👉 오른쪽으로 이동 (값 조정 가능: 20~40px 정도 추천) */
+}
+
+.sdr-col-model {
+  width: 20%;
+  font-size: 14px;
+}
+.sdr-col-result {
+  width: 30%;
+  font-size: 14px;
+  color: #000000;
+  text-align: left; /* 좌측 정렬로 정돈 */
+  padding-left: 10px;
+}
+.sdr-col-detail {
+  width: 30%;
+  font-size: 14px;
+  color: #333;
+  text-align: left;
+  padding-left: 10px;
+}
+
+/* ✅ 내부 텍스트 간격 통일 */
+.sdr-col-result div,
+.sdr-col-detail div {
+  margin: 2px 0;
+  line-height: 1.6;
+}
+/* ✅ 진단결과 줄 두께 확실히 표시 */
+.sdr-row {
+  position: relative;
+}
+
+.sdr-row::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-bottom: 1.5px solid #e4e7eb; /* ✅ 줄 두께 변경 가능 */
+}
+
+.latest-result {
+  margin-top: 18px;
+  font-size: 15px; /* ✅ 글자 크기 더 크게 */
+  font-weight: 500; /* ✅ 글자 두껍게 (400=보통, 500=중간, 600~700=굵게) */
+  color: #333; /* ✅ 약간 진한 회색으로 바꿔도 좋음 */
+
+  padding: 10px 18px;
+  border-radius: 8px;
+  text-align: center;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ✅ 버튼 영역 */
+.sdr-button-area {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+/* ✅ 1:1 상담 버튼 */
+.sdr-consult-btn {
+  background-color: #357ae8;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 26px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.sdr-consult-btn:hover {
+  background-color: #000000;
+}
+
+/* ✅ 뒤로가기 버튼 */
+.sdr-back-btn {
+  background-color: #f3f4f6;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 26px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.sdr-back-btn:hover {
+  background-color: #e5e7eb;
+}
+
+/* ✅ 결과 삭제 버튼 */
+.sdr-delete-btn {
+  background-color: #f87171;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 26px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.sdr-delete-btn:hover {
+  background-color: #ef4444;
 }
