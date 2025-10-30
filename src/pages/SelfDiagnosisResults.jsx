@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ 추가
+import { useNavigate } from "react-router-dom";
 import "./SelfDiagnosisResults.css";
 
+// API base URL from environment. Set VITE_API_BASE to e.g. 'http://localhost:8090' on other machines.
 const API_BASE = import.meta.env.VITE_API_BASE || "";
 
 function decodeJwt(token) {
@@ -56,6 +57,7 @@ function extractUser() {
   return { uid: String(uid || ""), uname: String(uname || "") };
 }
 
+// 질환명을 한국어로 변환하는 유틸
 function translateDiseaseName(name) {
   if (!name) return "알 수 없음";
   const key = String(name)
@@ -84,7 +86,7 @@ export default function SelfDiagnosisResults() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedModel, setSelectedModel] = useState("efficientnet");
-  const navigate = useNavigate(); // ✅ 추가
+  const navigate = useNavigate();
 
   useEffect(() => {
     const { uid, uname } = extractUser();
@@ -116,6 +118,7 @@ export default function SelfDiagnosisResults() {
     return Number.isFinite(t) ? t : 0;
   };
 
+  // 날짜/시간을 'YYYY-MM-DD HH:mm' 형태로 포맷합니다.
   const formatDateTime = (input) => {
     try {
       const s = String(input || "").trim();
@@ -145,19 +148,35 @@ export default function SelfDiagnosisResults() {
       const url = `${API_BASE}/api/diagnosis/latest?userId=${encodeURIComponent(
         userId
       )}&modelName=${encodeURIComponent(selectedModel)}`;
+
+      // 1번 코드에서는 AbortController와 타임아웃 처리가 제거되었음을 반영
       const res = await fetch(url);
       const text = await res.text();
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const parsed = JSON.parse(text);
 
-      // ✅ 프론트에서 최신(createdAt) 데이터만 표시하도록 수정
+      let parsed = null;
+      try {
+        parsed = JSON.parse(text);
+      } catch (e) {
+        // 방어적 파싱 로직 추가
+        try {
+          const compact = text.replace(/\n|\r/g, "");
+          parsed = JSON.parse(compact);
+        } catch (e2) {
+          parsed = null;
+        }
+      }
+
+      // 프론트에서 최신(createdAt) 데이터만 표시하도록 처리
       if (Array.isArray(parsed) && parsed.length > 0) {
         const sorted = parsed.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
-        setItems([sorted[0]]); // ✅ 가장 최근 1건만 유지
-      } else {
+        setItems([sorted[0]]); // 가장 최근 1건만 유지
+      } else if (parsed && !Array.isArray(parsed)) {
         setItems([parsed]);
+      } else {
+        setItems([]);
       }
     } catch (e) {
       setError("이력 조회 실패: " + (e.message || e.toString()));
@@ -175,7 +194,6 @@ export default function SelfDiagnosisResults() {
     <div className="sdr-container" style={{ fontSize: "110%" }}>
       <h2 className="sdr-title">자가 진단 결과</h2>
 
-      {/* ✅ 사용자 + 모델 한 줄 */}
       <div className="sdr-userinfo">
         <span>
           <strong>사용자:</strong> {username || userId || "알 수 없음"}
@@ -183,6 +201,21 @@ export default function SelfDiagnosisResults() {
         <span>
           <strong>모델:</strong> {selectedModel}
         </span>
+      </div>
+
+      {/* 모델 선택 컨트롤 추가 (1번 깃허브 버전에는 없지만 기능상 필요하여 유지) */}
+      <div className="sdr-controls" style={{ marginTop: "10px" }}>
+        <label>
+          <strong>모델 선택:</strong>
+        </label>
+        <select
+          value={selectedModel}
+          onChange={(e) => setSelectedModel(e.target.value)}
+        >
+          <option value="efficientnet">efficientnet</option>
+          <option value="skin_model">skin_model</option>
+          <option value="acne">acne</option>
+        </select>
       </div>
 
       {loading && <div>로딩 중...</div>}
@@ -217,22 +250,85 @@ export default function SelfDiagnosisResults() {
                   {sorted.map((it, idx) => {
                     const modelName = it.modelName || it.model || "unknown";
                     const created = formatDateTime(it.createdAt);
-                    const resultArr = Array.isArray(it.result)
+
+                    // ✅ 2번 코드의 방어적 파싱 로직 적용 시작
+                    const resultArrRaw = Array.isArray(it.result)
                       ? it.result
-                      : it?.aiResult?.result || [];
-                    const top = resultArr[0] || {};
+                      : it?.aiResult?.result || it?.result;
+                    let resultArr = null;
+                    if (Array.isArray(resultArrRaw)) {
+                      if (
+                        resultArrRaw.length > 0 &&
+                        Array.isArray(resultArrRaw[0]?.result)
+                      ) {
+                        resultArr = resultArrRaw[0].result;
+                      } else {
+                        resultArr = resultArrRaw;
+                      }
+                    } else if (
+                      resultArrRaw &&
+                      Array.isArray(resultArrRaw.result)
+                    ) {
+                      resultArr = resultArrRaw.result;
+                    } else {
+                      // 배열이 아닌 문자열이나 객체 형태의 결과도 처리 가능
+                      resultArr = resultArrRaw;
+                    }
+                    // ✅ 2번 코드의 방어적 파싱 로직 적용 끝
+
+                    const top =
+                      Array.isArray(resultArr) && resultArr.length > 0
+                        ? resultArr[0]
+                        : {};
+
+                    let resIsString = false;
+                    let resString = "";
+                    let resName = translateDiseaseName(
+                      top?.class || top?.name || top?.label || "알 수 없음"
+                    );
+                    let resProb = top?.probability || top?.prob || "-";
+
+                    // 문자열 결과 처리 (2번 코드에서 가져옴)
+                    if (
+                      !Array.isArray(resultArr) &&
+                      typeof resultArr === "string" &&
+                      resultArr.trim()
+                    ) {
+                      resIsString = true;
+                      resString = resultArr;
+                      resName = "결과:";
+                      resProb = resString;
+                    } else if (
+                      !Array.isArray(resultArr) &&
+                      resultArr &&
+                      typeof resultArr === "object"
+                    ) {
+                      // 배열이 아닌 단일 객체 결과 처리 (2번 코드에서 가져옴)
+                      resName = translateDiseaseName(
+                        resultArr.class ||
+                          resultArr.name ||
+                          resultArr.label ||
+                          "알 수 없음"
+                      );
+                      resProb = resultArr.probability || resultArr.prob || "-";
+                    }
+
                     return (
                       <div className="sdr-row-wrapper" key={idx}>
                         <div className="sdr-row">
                           <div className="sdr-col-created">{created}</div>
                           <div className="sdr-col-model">{modelName}</div>
                           <div className="sdr-col-result">
-                            판단명 :{" "}
-                            {translateDiseaseName(
-                              top.class || top.name || top.label
+                            {resIsString ? (
+                              <div style={{ whiteSpace: "pre-wrap" }}>
+                                {resString}
+                              </div>
+                            ) : (
+                              <>
+                                <div>판단명 : {resName}</div>
+                                <div>가능성 : {resProb}</div>
+                              </>
                             )}
-                            <br />
-                            가능성 : {top.probability || top.prob || "-"}
                           </div>
                           <div className="sdr-col-detail">
                             {Array.isArray(resultArr) &&
@@ -259,12 +355,10 @@ export default function SelfDiagnosisResults() {
           : null}
       </div>
 
-      {/* ✅ 기존 문구 유지 */}
       <p className="latest-result">
         💡 사용자의 <b>가장 최근 진단결과</b>를 불러옵니다.
       </p>
 
-      {/* ✅ 추가: 버튼 3개 (오류 안전버전 포함) */}
       <div className="sdr-button-area">
         <button
           className="sdr-consult-btn"
@@ -280,7 +374,6 @@ export default function SelfDiagnosisResults() {
           뒤로가기
         </button>
 
-        {/* ✅ 추가: 결과 삭제 (오류 안전버전) */}
         <button
           className="sdr-delete-btn"
           onClick={() => {
