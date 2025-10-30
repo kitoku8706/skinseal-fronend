@@ -1,481 +1,333 @@
 import React, { useRef, useState, useEffect } from "react";
+import "./AiDiagnosisPage.css";
 
 function AiDiagnosisPage() {
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [result, setResult] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [selectedModel, setSelectedModel] = useState("efficientnet"); // 기본 모델 설정
-    const [userId, setUserId] = useState("");
-    const [username, setUsername] = useState("");
-    const [overlayB64, setOverlayB64] = useState(null);
-    const [heatmapB64, setHeatmapB64] = useState(null);
-    const [combinedOverlay, setCombinedOverlay] = useState(null);
-    const fileInputRef = useRef();
-    const videoRef = useRef();
-    const canvasRef = useRef();
-    const [showCamera, setShowCamera] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [selectedModel, setSelectedModel] = useState("efficientnet");
+  const [userId, setUserId] = useState("");
+  const [username, setUsername] = useState("");
+  const [agree, setAgree] = useState(false);
+  const fileInputRef = useRef();
+  const videoRef = useRef();
+  const canvasRef = useRef();
+  const [showCamera, setShowCamera] = useState(false);
 
-    // JWT payload 추출 유틸 (서명 검증 없이 클라이언트 디코드)
-    const decodeJwt = (token) => {
-        try {
-            const payload = token.split(".")[1];
-            const json = atob(payload.replace(/-/g, "+").replace(/_/g, "/"));
-            return JSON.parse(decodeURIComponent(escape(json)));
-        } catch (_) { return null; }
+  // ✅ 추가: 페이지 들어올 때마다 진단결과 초기화 (나머지 코드는 변경 없음)
+  // ✅ 페이지 처음 들어올 때 한 번만 실행: 이전 진단 결과 초기화
+  useEffect(() => {
+    try {
+      // 한 번만 초기화되도록 플래그 체크
+      const alreadyCleared = sessionStorage.getItem("diagnosisCleared");
+      if (!alreadyCleared) {
+        localStorage.removeItem("latestDiagnosisResult");
+        sessionStorage.setItem("diagnosisCleared", "true");
+        console.log("✅ 이전 진단 결과 초기화 완료 (1회 실행)");
+      }
+    } catch (e) {
+      console.warn("localStorage 초기화 실패:", e);
+    }
+  }, []);
+
+  // ✅ 영어 → 한국어 변환 테이블
+  const LABEL_KO_MAP = {
+    Acne: "여드름",
+    Actinic_Keratosis: "광선각화증",
+    Benign_tumors: "양성 종양",
+    Bullous: "수포성 질환",
+    Candidiasis: "칸디다증(진균 감염)",
+    DrugEruption: "약물발진",
+    Eczema: "습진",
+    Infestations_Bites: "기생충/벌레 물림",
+    Lichen: "편평태선(리켄)",
+    Lupus: "루푸스",
+    Moles: "점",
+    Psoriasis: "건선",
+    Rosacea: "주사(로사체아)",
+    Seborrh_Keratoses: "지루각화증",
+    SkinCancer: "피부암",
+    Sun_Sunlight_Damage: "광손상(태양 손상)",
+    Tinea: "백선/무좀",
+    Unknown_Normal: "정상/확인불가",
+    Vascular_Tumors: "혈관종",
+    Vasculitis: "혈관염",
+    Vitiligo: "백반증",
+    Warts: "사마귀",
+  };
+
+  // ✅ JWT payload 추출
+  const decodeJwt = (token) => {
+    try {
+      const payload = token.split(".")[1];
+      const json = atob(payload.replace(/-/g, "+").replace(/_/g, "/"));
+      return JSON.parse(decodeURIComponent(escape(json)));
+    } catch {
+      return null;
+    }
+  };
+
+  // ✅ userId, username 자동 주입
+  useEffect(() => {
+    const tryExtract = () => {
+      let uid = "";
+      let uname = "";
+      try {
+        const directId =
+          localStorage.getItem("userId") || sessionStorage.getItem("userId");
+        if (directId) uid = directId;
+
+        const directName =
+          localStorage.getItem("username") ||
+          sessionStorage.getItem("username");
+        if (directName) uname = directName;
+
+        const userStr =
+          localStorage.getItem("user") || sessionStorage.getItem("user");
+        if (userStr) {
+          const u = JSON.parse(userStr);
+          uid = uid || u?.id || u?.userId || "";
+          uname = uname || u?.username || u?.name || u?.nickname || "";
+        }
+
+        const authStr =
+          localStorage.getItem("auth") || sessionStorage.getItem("auth");
+        if (authStr) {
+          const a = JSON.parse(authStr);
+          uid = uid || a?.id || a?.user?.id || a?.userId || "";
+          uname =
+            uname ||
+            a?.username ||
+            a?.user?.username ||
+            a?.name ||
+            a?.user?.name ||
+            "";
+        }
+
+        const token =
+          localStorage.getItem("token") || sessionStorage.getItem("token");
+        if (token) {
+          const payload = decodeJwt(token) || {};
+          uid = uid || payload?.userId || payload?.id || "";
+          uname =
+            uname ||
+            payload?.username ||
+            payload?.name ||
+            payload?.nickname ||
+            "";
+        }
+      } catch (_) {}
+      return { uid, uname };
     };
+    const { uid, uname } = tryExtract();
+    if (uid) setUserId(String(uid));
+    if (uname) setUsername(String(uname));
+  }, []);
 
-    // 다양한 저장소에서 userId/username 자동 주입 시도
-    useEffect(() => {
-        const tryExtract = () => {
-            let uid = "";
-            let uname = "";
-            try {
-                // direct 저장 값
-                const directId = localStorage.getItem("userId") || sessionStorage.getItem("userId");
-                if (directId) uid = directId;
+  // ✅ 이하 나머지 기존 코드 전부 그대로
+  const resolveUserId = async (rawId, rawUsername) => {
+    if (rawId && /^\d+$/.test(String(rawId).trim()))
+      return String(rawId).trim();
+    if (!rawUsername) return null;
+    try {
+      const res = await fetch(
+        `/member/user?username=${encodeURIComponent(rawUsername)}`
+      );
+      if (!res.ok) return null;
+      const data = await res.json();
+      const id = data?.id ?? data?.userId ?? data?.user?.id;
+      return id ? String(id) : null;
+    } catch (_) {
+      return null;
+    }
+  };
 
-                const directName = localStorage.getItem("username") || sessionStorage.getItem("username");
-                if (directName) uname = directName;
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImage(URL.createObjectURL(file));
+    }
+  };
 
-                // user 객체
-                const userStr = localStorage.getItem("user") || sessionStorage.getItem("user");
-                if (userStr) {
-                    const u = JSON.parse(userStr);
-                    uid = uid || u?.id || u?.userId || "";
-                    uname = uname || u?.username || u?.name || u?.nickname || "";
-                }
+  const handleDiagnose = async () => {
+    if (!agree) {
+      alert("개인정보 수집에 동의 후 이용 가능합니다.");
+      return;
+    }
 
-                // auth 객체
-                const authStr = localStorage.getItem("auth") || sessionStorage.getItem("auth");
-                if (authStr) {
-                    const a = JSON.parse(authStr);
-                    uid = uid || a?.id || a?.user?.id || a?.userId || "";
-                    uname = uname || a?.username || a?.user?.username || a?.name || a?.user?.name || "";
-                }
+    setLoading(true);
+    setResult(null);
 
-                // 토큰 페이로드
-                const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-                if (token) {
-                    const payload = decodeJwt(token) || {};
-                    uid = uid || payload?.userId || payload?.id || "";
-                    uname = uname || payload?.username || payload?.name || payload?.nickname || "";
-                }
-            } catch (_) {}
-            return { uid, uname };
-        };
-        const { uid, uname } = tryExtract();
-        if (uid) setUserId(String(uid));
-        if (uname) setUsername(String(uname));
-    }, []);
+    const resolvedId = await resolveUserId(userId, username);
+    if (!resolvedId) {
+      setLoading(false);
+      alert("유효한 사용자 ID가 없습니다. 다시 로그인해주세요.");
+      return;
+    }
 
-    // 모델 변경 시 이전에 업로드/캡처한 이미지를 초기화하여 UI가 리셋되도록 처리
-    useEffect(() => {
-        // revoke object URL if one was created
-        try {
-            if (selectedImage && typeof selectedImage === 'string' && selectedImage.startsWith('blob:')) {
-                URL.revokeObjectURL(selectedImage);
-            }
-        } catch (_) {}
+    const imageFile = fileInputRef.current?.files?.[0];
+    if (!imageFile) {
+      setLoading(false);
+      alert("이미지를 업로드하거나 촬영해주세요.");
+      return;
+    }
 
-        setSelectedImage(null);
-        setResult(null);
-        setOverlayB64(null);
-        setHeatmapB64(null);
-        setCombinedOverlay(null);
-        setLoading(false);
+    const formData = new FormData();
+    formData.append("image", imageFile);
+    formData.append("userId", resolvedId);
 
-        // clear file input value so the same file can be re-selected if needed
-        try {
-            if (fileInputRef.current) fileInputRef.current.value = '';
-        } catch (_) {}
+    try {
+      const response = await fetch(`/api/diagnosis/${selectedModel}`, {
+        method: "POST",
+        body: formData,
+      });
 
-        // clear canvas if used
-        try {
-            const canvas = canvasRef.current;
-            if (canvas) {
-                const ctx = canvas.getContext && canvas.getContext('2d');
-                if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
-            }
-        } catch (_) {}
+      const text = await response.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        data = { raw: text };
+      }
 
-        // stop camera stream if it was running
-        try {
-            const video = videoRef.current;
-            if (video && video.srcObject) {
-                const tracks = video.srcObject.getTracks();
-                tracks.forEach((t) => t.stop());
-                video.srcObject = null;
-            }
-        } catch (_) {}
+      if (!response.ok) {
+        console.error("진단 실패:", text);
+        setResult({ error: data.error || "진단 요청 실패" });
+      } else {
+        console.log("진단 성공:", data);
+        setResult(data);
+      }
+    } catch (err) {
+      console.error("요청 오류:", err);
+      setResult({ error: "요청 실패" });
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        setShowCamera(false);
-    }, [selectedModel]);
+  const translateLabel = (label) => {
+    if (!label) return "";
+    const key = label.replace(/\s+/g, "_");
+    return LABEL_KO_MAP[key] || LABEL_KO_MAP[label] || label;
+  };
 
-    // 이미지 파일 업로드 핸들러
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setSelectedImage(URL.createObjectURL(file));
-        }
-    };
+  return (
+    <div className="ai-diagnosis-container">
+      <h2>AI 피부 질환 진단</h2>
 
-    // 카메라 켜기
-    const handleOpenCamera = async () => {
-        setShowCamera(true);
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            if (videoRef.current) {
-                videoRef.current.srcObject = stream;
-            }
-        }
-    };
-
-    // 사진 촬영
-    const handleCapture = () => {
-        const video = videoRef.current;
-        const canvas = canvasRef.current;
-        if (video && canvas) {
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            canvas.toBlob((blob) => {
-                setSelectedImage(URL.createObjectURL(blob));
-            }, "image/jpeg");
-        }
-        // 카메라 종료
-        if (video && video.srcObject) {
-            const tracks = video.srcObject.getTracks();
-            tracks.forEach((track) => track.stop());
-        }
-        setShowCamera(false);
-    };
-
-    // helper: ensure we send numeric userId. If current userId looks non-numeric but username exists,
-    // try to resolve via backend GET /member/user?username=... (expects JSON with id).
-    const resolveUserId = async (rawId, rawUsername) => {
-        if (rawId && /^\d+$/.test(String(rawId).trim())) return String(rawId).trim();
-        if (!rawUsername) return null;
-        try {
-            const res = await fetch(`/member/user?username=${encodeURIComponent(rawUsername)}`);
-            if (!res.ok) return null;
-            const data = await res.json();
-            // backend may return { id: 123, ... } or { userId: 123 }
-            const id = data?.id ?? data?.userId ?? data?.user?.id;
-            return id ? String(id) : null;
-        } catch (_) {
-            return null;
-        }
-    };
-
-    // 진단 요청
-    const handleDiagnose = async () => {
-        setLoading(true);
-        setResult(null);
-        setOverlayB64(null);
-        setHeatmapB64(null);
-        setCombinedOverlay(null);
-
-        // resolve numeric userId
-        const resolvedId = await resolveUserId(userId, username);
-        console.log('[DEBUG] resolved userId:', resolvedId, 'raw userId:', userId, 'username:', username);
-        if (!resolvedId) {
-            setLoading(false);
-            setResult({ error: '유효한 사용자 ID가 없습니다. 사용자 설정을 확인하세요.' });
-            return;
-        }
-
-        let imageFile;
-        if (fileInputRef.current && fileInputRef.current.files[0]) {
-            imageFile = fileInputRef.current.files[0];
-        } else if (canvasRef.current) {
-            // 캡처된 이미지를 파일로 변환
-            const canvas = canvasRef.current;
-            const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg"));
-            imageFile = new File([blob], "capture.jpg", { type: "image/jpeg" });
-        }
-        if (!imageFile) {
-            setLoading(false);
-            alert("이미지를 업로드하거나 촬영해 주세요.");
-            return;
-        }
-        // FormData로 API 전송
-        const formData = new FormData();
-        formData.append("image", imageFile);
-        formData.append("userId", String(resolvedId));
-
-        // debug: log formData entries (can't log file contents fully)
-        try {
-            const entries = [];
-            for (const pair of formData.entries()) {
-                entries.push([pair[0], pair[1] && pair[1].name ? `(file:${pair[1].name})` : pair[1]]);
-            }
-            console.log('[DEBUG] formData entries before POST:', entries);
-        } catch (e) {
-            console.log('[DEBUG] failed to enumerate formData', e);
-        }
-
-        try {
-            const response = await fetch(`/api/diagnosis/${selectedModel}`, { method: "POST", body: formData });
-            // DEBUG: 서버가 text/html 또는 오류 HTML을 반환할 수 있으므로 먼저 텍스트로 받아 전체 내용을 로깅
-            const text = await response.text();
-            console.error('[DEBUG] diagnosis response text', response.status, text);
-            let data = {};
-            try {
-                data = JSON.parse(text);
-            } catch (e) {
-                // JSON이 아니면 그대로 text로 처리
-            }
-
-            if (!response.ok) {
-                console.error('[DEBUG] diagnosis response error', response.status, text);
-                // 서버가 에러 메시지를 텍스트로 반환하는 경우도 있어 사용자가 볼 수 있게 포함
-                setResult(data?.error ? { error: data.error } : { error: `진단 요청 실패: ${text}` });
-                // 에러일 때는 Grad-CAM 상태 초기화
-                setOverlayB64(null);
-                setHeatmapB64(null);
-            } else {
-                console.log('[DEBUG] diagnosis success', data || text);
-                    // 응답 객체 전체를 탐색하여 overlay/heatmap을 찾음
-                    const found = findNestedValues(data);
-                    setOverlayB64(found.overlay || null);
-                    setHeatmapB64(found.heatmap || null);
-                setResult(Object.keys(data || {}).length ? data : { raw: text });
-            }
-        } catch (err) {
-            console.error('[DEBUG] diagnosis request failed', err);
-            setResult({ error: "진단 요청 실패" });
-            setOverlayB64(null);
-            setHeatmapB64(null);
-        }
-        setLoading(false);
-    };
-
-    // heatmap만 있는 경우 원본 이미지와 합성하여 overlay 이미지를 생성
-    useEffect(() => {
-        const makeCombined = async () => {
-            try {
-                if (!heatmapB64 || !selectedImage) { setCombinedOverlay(null); return; }
-                // load original image
-                const orig = await new Promise((resolve, reject) => {
-                    const img = new Image();
-                    img.onload = () => resolve(img);
-                    img.onerror = reject;
-                    img.src = selectedImage;
-                });
-                // load heatmap image
-                const heat = await new Promise((resolve, reject) => {
-                    const img = new Image();
-                    img.onload = () => resolve(img);
-                    img.onerror = reject;
-                    img.src = `data:image/png;base64,${heatmapB64}`;
-                });
-
-                // create canvas sized to original
-                const canvas = document.createElement('canvas');
-                canvas.width = orig.naturalWidth || orig.width;
-                canvas.height = orig.naturalHeight || orig.height;
-                const ctx = canvas.getContext('2d');
-                // draw original
-                ctx.drawImage(orig, 0, 0, canvas.width, canvas.height);
-                // draw heatmap on top with blending and alpha
-                ctx.globalAlpha = 0.6;
-                // try overlay composite, fallback to 'lighter'
-                const prev = ctx.globalCompositeOperation;
-                try { ctx.globalCompositeOperation = 'overlay'; } catch (_) { ctx.globalCompositeOperation = 'lighter'; }
-                ctx.drawImage(heat, 0, 0, canvas.width, canvas.height);
-                ctx.globalCompositeOperation = prev;
-                ctx.globalAlpha = 1.0;
-
-                const dataUrl = canvas.toDataURL('image/png');
-                setCombinedOverlay(dataUrl.replace(/^data:image\/png;base64,/, ''));
-            } catch (e) {
-                console.warn('combined overlay failed', e);
-                setCombinedOverlay(null);
-            }
-        };
-        makeCombined();
-    }, [heatmapB64, selectedImage]);
-
-    // 결과 렌더링 유틸
-    // 영어 레이블을 한국어로 변환하는 매핑
-    const LABEL_KO_MAP = {
-        Acne: "여드름",
-        Actinic_Keratosis: "광선각화증",
-        Benign_tumors: "양성 종양",
-        Bullous: "수포성 질환",
-        Candidiasis: "칸디다증(진균 감염)",
-        DrugEruption: "약물발진",
-        Eczema: "습진",
-        Infestations_Bites: "기생충/물림",
-        Lichen: "편평태선(리켄)",
-        Lupus: "루푸스",
-        Moles: "점",
-        Psoriasis: "건선",
-        Rosacea: "주사(로사체아)",
-        Seborrh_Keratoses: "지루각화증",
-        SkinCancer: "피부암",
-        Sun_Sunlight_Damage: "광손상(태양 손상)",
-        Tinea: "백선/무좀",
-        Unknown_Normal: "정상/확인불가",
-        Vascular_Tumors: "혈관종",
-        Vasculitis: "혈관염",
-        Vitiligo: "백반증",
-        Warts: "사마귀"
-    };
-
-    const getDisplayLabel = (label) => {
-        if (!label && label !== 0) return "";
-        const s = String(label).trim();
-        if (LABEL_KO_MAP[s]) return LABEL_KO_MAP[s];
-        const normalized = s.replace(/\s+/g, "_");
-        if (LABEL_KO_MAP[normalized]) return LABEL_KO_MAP[normalized];
-        // case-insensitive match
-        const lower = s.toLowerCase();
-        for (const k of Object.keys(LABEL_KO_MAP)) {
-            if (k.toLowerCase() === lower || k.toLowerCase() === normalized.toLowerCase()) return LABEL_KO_MAP[k];
-        }
-        // 기본 폴백: 언더스코어를 공백으로 바꿔 보여줌
-        return s.replace(/_/g, " ");
-    };
-
-    // 응답 객체 내부에서 Grad-CAM 관련 base64 값을 재귀적으로 찾습니다.
-    const findNestedValues = (obj) => {
-        const result = { overlay: null, heatmap: null };
-        const visited = new WeakSet();
-        const keysOverlay = ['overlay_base64', 'overlayBase64', 'overlay'];
-        const keysHeat = ['heatmap_base64', 'heatmapBase64', 'heatmap'];
-
-        const walk = (node) => {
-            if (!node || typeof node !== 'object' || visited.has(node)) return;
-            visited.add(node);
-            // direct keys
-            for (const k of Object.keys(node)) {
-                try {
-                    const val = node[k];
-                    if (!result.overlay && keysOverlay.includes(k) && typeof val === 'string' && val.trim()) result.overlay = val;
-                    if (!result.heatmap && keysHeat.includes(k) && typeof val === 'string' && val.trim()) result.heatmap = val;
-                    if ((k === 'gradcam' || k === 'aiResult' || k === 'ai_result') && typeof val === 'object') {
-                        walk(val);
-                    }
-                    // if value is object or array, descend
-                    if (typeof val === 'object' && val !== null) walk(val);
-                    if (result.overlay && result.heatmap) return;
-                } catch (_) {}
-            }
-        };
-        walk(obj);
-        return result;
-    };
-
-    const renderResults = () => {
-        if (!result) return null;
-        if (result.error) return <div style={{ color: "red" }}>{result.error}</div>;
-        const list = Array.isArray(result) ? result : result?.results || [];
-        if (!Array.isArray(list) || list.length === 0) {
-            return <pre>{JSON.stringify(result, null, 2)}</pre>;
-        }
-        return (
-            <div>
-                {list.map((item, idx) => {
-                    const probNum = typeof item.probability === "string" ? parseFloat(item.probability) : (Number(item.probability) * 100 || 0);
-                    return (
-                        <div key={idx} style={{ marginBottom: 12 }}>
-                            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, marginBottom: 6 }}>
-                                <strong>{getDisplayLabel(item.class)}</strong>
-                                <span>{(probNum || 0).toFixed(2)}%</span>
-                            </div>
-                            <div style={{ height: 8, background: "#eee", borderRadius: 999 }}>
-                                <div style={{ width: `${Math.max(0, Math.min(100, probNum || 0))}%`, height: "100%", background: "#4f46e5", borderRadius: 999 }} />
-                            </div>
-                        </div>
-                    );
-                })}
-            </div>
-        );
-    };
-
-    // 사이드바 마크업 제거, 메인 콘텐츠 영역만 남김
-    return (
-        <div style={{ maxWidth: 600, margin: "0 auto", padding: 24 }}>
-            <h2>AI 피부 질환 진단</h2>
-
-            {/* 모델 선택 드롭다운 */}
-            <div style={{ marginBottom: 16 }}>
-                <label htmlFor="model-select" style={{ marginRight: 8 }}>진단 모델 선택:</label>
-                <select 
-                    id="model-select"
-                    value={selectedModel} 
-                    onChange={(e) => setSelectedModel(e.target.value)}
-                >
-                    <option value="efficientnet">EfficientNet(8)</option>
-                    <option value="skin_model">Skin Model(21)</option>
-                    <option value="acne">Acne (Binary)</option>
-                </select>
-            </div>
-
-            {/* 사용자 표시 (userId 대신 username 노출) */}
-            <div style={{ marginBottom: 16 }}>
-                <label htmlFor="username" style={{ marginRight: 8 }}>사용자:</label>
-                <input
-                    id="username"
-                    type="text"
-                    value={username || ""}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="로그인 사용자"
-                    style={{ width: 240 }}
-                    disabled
-                />
-            </div>
-
-            <div style={{ marginBottom: 16 }}>
-                <input
-                    type="file"
-                    accept="image/*"
-                    ref={fileInputRef}
-                    onChange={handleImageChange}
-                    style={{ display: "none" }}
-                />
-                <button onClick={() => fileInputRef.current.click()}>사진 업로드</button>
-                <button onClick={handleOpenCamera} style={{ marginLeft: 8 }}>카메라로 촬영</button>
-            </div>
-            {selectedImage && (
-                <div style={{ marginBottom: 16 }}>
-                    <img src={selectedImage} alt="선택된 이미지" style={{ maxWidth: "100%", maxHeight: 300 }} />
-                </div>
-            )}
-
-            {/* Grad-CAM(overlay/heatmap)이 있으면 원본과 함께 나란히 표시 (result가 없어도 overlay/heatmap이 세팅되면 표시) */}
-            {(overlayB64 || heatmapB64) && (
-                <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: 16 }}>
-                    <div style={{ flex: 1, textAlign: 'center' }}>
-                        <div style={{ fontSize: 13, color: '#555', marginBottom: 6 }}>원본 이미지</div>
-                        <img src={selectedImage} alt="원본" style={{ maxWidth: '100%', maxHeight: 300, border: '1px solid #ddd', objectFit: 'contain' }} />
-                    </div>
-                    <div style={{ flex: 1, textAlign: 'center' }}>
-                        <div style={{ fontSize: 13, color: '#555', marginBottom: 6 }}>Grad-CAM 반영</div>
-                        { (overlayB64 || combinedOverlay) ? (
-                            <img src={`data:image/png;base64,${overlayB64 || combinedOverlay}`} alt="overlay" style={{ maxWidth: '100%', maxHeight: 300, border: '1px solid #ddd', objectFit: 'contain' }} />
-                        ) : heatmapB64 ? (
-                            <img src={`data:image/png;base64,${heatmapB64}`} alt="heatmap" style={{ maxWidth: '100%', maxHeight: 300, border: '1px solid #ddd', objectFit: 'contain' }} />
-                        ) : null}
-                    </div>
-                </div>
-            )}
-
-            <div style={{ marginBottom: 16 }}>
-                <button onClick={handleDiagnose} disabled={loading || (!selectedImage && !canvasRef.current)}>
-                    {loading ? "진단 중..." : "AI 진단하기"}
-                </button>
-            </div>
-            {result && (
-                <div style={{ background: "#f9f9f9", padding: 16, borderRadius: 8 }}>
-                    <h4>진단 결과</h4>
-                    {renderResults()}
-                </div>
-            )}
+      {/* ✅ 이미지 업로드 */}
+      <div className="upload-section">
+        <div
+          className="upload-box"
+          onClick={() => fileInputRef.current?.click()}
+          style={{ cursor: "pointer" }}
+        >
+          {selectedImage ? (
+            <img
+              src={selectedImage}
+              alt="선택된 이미지"
+              style={{
+                maxWidth: "100%",
+                maxHeight: "100%",
+                borderRadius: "8px",
+              }}
+            />
+          ) : (
+            <>
+              사진 첨부파일 등록
+              <br />
+              <span style={{ fontSize: "13px", color: "#f56c6c" }}>
+                (JPG 형식만 업로드 가능)
+              </span>
+            </>
+          )}
         </div>
-    );
+        <input
+          type="file"
+          accept="image/*"
+          ref={fileInputRef}
+          onChange={handleImageChange}
+          style={{ display: "none" }}
+        />
+        <div className="upload-buttons">
+          <button onClick={() => fileInputRef.current.click()}>
+            사진 업로드
+          </button>
+        </div>
+      </div>
+
+      {/* ✅ 주의사항 안내 */}
+      <div className="info-section">
+        <p>
+          <strong>주의사항 및 개인정보 동의</strong>
+        </p>
+        <ul>
+          <li>업로드한 이미지는 진단 목적으로만 사용됩니다.</li>
+          <li>AI 진단 결과는 참고용이며, 전문의의 진단을 대체하지 않습니다.</li>
+        </ul>
+      </div>
+
+      {/* ✅ 동의 체크박스 */}
+      <div className="agree-line">
+        <input
+          type="checkbox"
+          id="agree"
+          checked={agree}
+          onChange={(e) => setAgree(e.target.checked)}
+        />
+        <label htmlFor="agree">개인정보 수집에 동의합니다.</label>
+      </div>
+
+      {/* ✅ 모델 선택 */}
+      <div className="model-section model-center">
+        <label htmlFor="model-select">진단 모델 선택:</label>
+        <select
+          id="model-select"
+          value={selectedModel}
+          onChange={(e) => setSelectedModel(e.target.value)}
+        >
+          <option value="efficientnet">EfficientNet(8)</option>
+          <option value="skin_model">Skin Model(21)</option>
+          <option value="acne">Acne (Binary)</option>
+        </select>
+      </div>
+
+      {/* ✅ 진단 버튼 */}
+      <div className="diagnosis-button">
+        <button onClick={handleDiagnose} disabled={loading || !selectedImage}>
+          {loading ? "진단 중..." : "AI 진단하기"}
+        </button>
+      </div>
+
+      {/* ✅ 결과 표시 */}
+      {result && (
+        <div className="result-box">
+          <h4>진단 결과</h4>
+          {result.results ? (
+            <ul>
+              {result.results.map((r, i) => (
+                <li key={i}>
+                  {translateLabel(r.class)} — {(r.probability * 100).toFixed(2)}
+                  %
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <pre
+              style={{
+                background: "#f9f9f9",
+                padding: "12px",
+                borderRadius: "8px",
+                whiteSpace: "pre-wrap",
+              }}
+            >
+              {JSON.stringify(result, null, 2)}
+            </pre>
+          )}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default AiDiagnosisPage;

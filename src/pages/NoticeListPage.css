@@ -1,10 +1,10 @@
 .notice-list-container {
   width: 100%;
-  max-width: 700px;      /* 최대 너비 지정 */
-  margin: 40px auto 0;   /* 위 40px, 좌우 auto로 가운데 정렬 */
+  max-width: 700px; /* 최대 너비 지정 */
+  margin: 40px auto 0; /* 위 40px, 좌우 auto로 가운데 정렬 */
   background: #fff;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   padding: 0 0 16px 0;
 }
 
@@ -16,13 +16,14 @@
   background: #fff;
 }
 
-.notice-table th, .notice-table td {
+.notice-table th,
+.notice-table td {
   padding: 12px 10px;
   text-align: center;
 }
 
 .notice-table th {
-  background: #f8f8f8;
+  background: #f8fafc;
   font-weight: 600;
   border-bottom: 2px solid #eee;
   color: #222;
@@ -159,27 +160,28 @@
 }
 
 /* 반응형 디자인 */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .search-container > div {
     flex-direction: column;
     gap: 10px !important;
   }
-  
+
   .search-container input[type="text"] {
     min-width: 100%;
   }
-  
+
   .search-container button {
     width: 100%;
   }
 }
 
 @media (max-width: 600px) {
-  .notice-table th, .notice-table td {
+  .notice-table th,
+  .notice-table td {
     padding: 8px 4px;
     font-size: 0.95rem;
   }
   .notice-title {
     max-width: 120px;
   }
-}
+} */

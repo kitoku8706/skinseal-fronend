@@ -1,0 +1,127 @@
+/* ==================================== */
+/* 1. 전체 레이아웃 */
+/* ==================================== */
+.diagnosis-layout {
+  display: flex;
+  gap: 2rem; /* 사이드바와 컨텐츠 사이 간격 */
+  max-width: 1200px;
+  margin: 2rem auto; /* 페이지 중앙 정렬 */
+  padding: 0 1rem;
+  align-items: flex-start;
+  font-family: "Pretendard", sans-serif;
+  background: transparent;
+}
+
+/* ==================================== */
+/* 2. 사이드바 */
+/* ==================================== */
+.diagnosis-sidebar {
+  width: 240px;
+  background: #f9fafb;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* ✅ 가운데 정렬 */
+  text-align: center; /* ✅ 글자 가운데 정렬 */
+}
+
+.sidebar-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+/* ✅ 버튼 스타일 */
+.sidebar-btn {
+  width: 100%;
+  font-size: 16px; /* ✅ 글자 크기 유지 */
+  font-weight: 600;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0; /* ✅ 버튼 높이 줄임 (기존 18px → 10px) */
+  margin: 0px 0; /* ✅ 버튼 간 여백 최소화 */
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* hover 효과 */
+.sidebar-btn:hover {
+  background: #eef2ff;
+  color: #2563eb;
+}
+
+/* 활성 상태 */
+.sidebar-btn.active {
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ==================================== */
+/* 3. 메인 콘텐츠 */
+/* ==================================== */
+.diagnosis-content {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); */
+}
+
+/* ✅ 사이드바 제목 (‘바로가기’) 글자 크기 & 두께 조정 */
+.sidebar-title {
+  font-size: 20px; /* 기존보다 큼 */
+  font-weight: 800; /* 두껍게 */
+  text-align: center; /* 가운데 정렬 */
+  margin-bottom: 20px;
+  color: #222;
+}
+
+/* ✅ 버튼 텍스트 크게 & 가운데 정렬 유지 */
+.sidebar-btn {
+  font-size: 17px; /* ✅ 글자 크기 ↑ */
+  font-weight: 600; /* ✅ 조금 더 두껍게 */
+  text-align: center; /* ✅ 텍스트 가운데 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 0; /* ✅ 버튼 높이 살짝 증가 */
+}
+
+/* ✅ 활성화 버튼 스타일 유지 */
+.sidebar-btn.active {
+  background-color: #2563eb;
+  color: white;
+  font-weight: 700;
+}
+
+/* ========================================= */
+/* 사이드바와 본문 간 간격 조정 */
+/* ========================================= */
+
+.diagnosis-layout {
+  display: flex;
+  gap: 100px; /* ✅ 사이드바와 본문 사이 간격 (기존 20~30px → 넓게 60px로 조정) */
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px 60px; /* ✅ 좌우 패딩 살짝 추가해서 여유감 줌 */
+}
+
+/* 사이드바 고정 크기 유지 */
+.diagnosis-sidebar {
+  flex-shrink: 0;
+  width: 220px; /* ✅ 사이드바 폭 고정 */
+}

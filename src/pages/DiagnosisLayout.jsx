@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-
+import "./DiagnosisLayout.css";
 const staticMenus = [
   { label: "자가 진단", link: "/ai/diagnose" },
   { label: "진단 결과", link: "/diagnosis/result" },

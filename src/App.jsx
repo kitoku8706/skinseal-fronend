@@ -26,7 +26,7 @@ import ChatbotConsultPage from "./pages/ChatbotConsultPage";
 import NoticeDetailPage from "./pages/NoticeDetailPage";
 import MyInfoEdit from "./pages/MyInfoEdit.jsx";
 import UserWithdrawal from "./pages/UserWithdrawal.jsx";
-import ReservationQuery from "./pages/ReservationQuery.jsx";
+// import ReservationQuery from "./pages/ReservationQuery.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DiagnosisLayout from "./pages/DiagnosisLayout.jsx";
 import ReservationConsultPage from "./pages/ReservationConsultPage";
@@ -170,12 +170,7 @@ function App() {
             <Route index element={<MyInfoEdit />} />
             <Route path="withdraw" element={<UserWithdrawal />} />
             <Route path="reservation" element={<Check />} />
-            <Route
-              path="diagnosis"
-              element={
-                  <SelfDiagnosisResults />
-              }
-            />
+            <Route path="diagnosis" element={<SelfDiagnosisResults />} />
           </Route>
           <Route
             path="/notice/edit/:id"
