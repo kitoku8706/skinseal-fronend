@@ -88,11 +88,11 @@ export default function SelfDiagnosisResults() {
   const [selectedModel, setSelectedModel] = useState("skin_model");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const { uid, uname } = extractUser();
-    if (uid) setUserId(uid);
-    if (uname) setUsername(uname);
-  }, []);
+  useEffect(() => {
+    const { uid, uname } = extractUser();
+    if (uid) setUserId(uid);
+    if (uname) setUsername(uname);
+  }, []);
 
   const normalizeModelName = (s) =>
     String(s || "")
@@ -149,7 +149,6 @@ export default function SelfDiagnosisResults() {
         userId
       )}&modelName=${encodeURIComponent(selectedModel)}`;
 
-      // 1번 코드에서는 AbortController와 타임아웃 처리가 제거되었음을 반영
       const res = await fetch(url);
       const text = await res.text();
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -158,21 +157,15 @@ export default function SelfDiagnosisResults() {
       try {
         parsed = JSON.parse(text);
       } catch (e) {
-        // 방어적 파싱 로직 추가
-        try {
-          const compact = text.replace(/\n|\r/g, "");
-          parsed = JSON.parse(compact);
-        } catch (e2) {
-          parsed = null;
-        }
+        const compact = text.replace(/\n|\r/g, "");
+        parsed = JSON.parse(compact);
       }
 
-      // 프론트에서 최신(createdAt) 데이터만 표시하도록 처리
       if (Array.isArray(parsed) && parsed.length > 0) {
         const sorted = parsed.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
-        setItems([sorted[0]]); // 가장 최근 1건만 유지
+        setItems([sorted[0]]);
       } else if (parsed && !Array.isArray(parsed)) {
         setItems([parsed]);
       } else {
@@ -194,28 +187,11 @@ export default function SelfDiagnosisResults() {
     <div className="sdr-container" style={{ fontSize: "110%" }}>
       <h2 className="sdr-title">자가 진단 결과</h2>
 
-      <div className="sdr-userinfo">
-        {/* <span>
-          <strong>사용자:</strong> {username || userId || "알 수 없음"}
-        </span>
-        <span>
-          <strong>모델:</strong> {selectedModel}
-        </span> */}
-      </div>
-
-      {/* 모델 선택 컨트롤 추가 (1번 깃허브 버전에는 없지만 기능상 필요하여 유지) */}
+      {/* ✅ 수정: 모델선택 제거, 이름 문구 표시 */}
       <div className="sdr-controls" style={{ marginTop: "10px" }}>
-        <label>
-          <strong>모델 선택:</strong>
-        </label>
-        <select
-          value={selectedModel}
-          onChange={(e) => setSelectedModel(e.target.value)}
-        >
-          {/* <option value="efficientnet">efficientnet</option> */}
-          <option value="skin_model">skin_model</option>
-          {/* <option value="acne">acne</option> */}
-        </select>
+        <strong style={{ fontSize: "18px", color: "#222" }}>
+          {username || userId || "사용자"}님 의 결과입니다.
+        </strong>
       </div>
 
       {loading && <div>로딩 중...</div>}
@@ -250,8 +226,6 @@ export default function SelfDiagnosisResults() {
                   {sorted.map((it, idx) => {
                     const modelName = it.modelName || it.model || "unknown";
                     const created = formatDateTime(it.createdAt);
-
-                    // ✅ 2번 코드의 방어적 파싱 로직 적용 시작
                     const resultArrRaw = Array.isArray(it.result)
                       ? it.result
                       : it?.aiResult?.result || it?.result;
@@ -271,24 +245,19 @@ export default function SelfDiagnosisResults() {
                     ) {
                       resultArr = resultArrRaw.result;
                     } else {
-                      // 배열이 아닌 문자열이나 객체 형태의 결과도 처리 가능
                       resultArr = resultArrRaw;
                     }
-                    // ✅ 2번 코드의 방어적 파싱 로직 적용 끝
 
                     const top =
                       Array.isArray(resultArr) && resultArr.length > 0
                         ? resultArr[0]
                         : {};
-
                     let resIsString = false;
                     let resString = "";
                     let resName = translateDiseaseName(
                       top?.class || top?.name || top?.label || "알 수 없음"
                     );
                     let resProb = top?.probability || top?.prob || "-";
-
-                    // 문자열 결과 처리 (2번 코드에서 가져옴)
                     if (
                       !Array.isArray(resultArr) &&
                       typeof resultArr === "string" &&
@@ -303,7 +272,6 @@ export default function SelfDiagnosisResults() {
                       resultArr &&
                       typeof resultArr === "object"
                     ) {
-                      // 배열이 아닌 단일 객체 결과 처리 (2번 코드에서 가져옴)
                       resName = translateDiseaseName(
                         resultArr.class ||
                           resultArr.name ||
@@ -362,7 +330,7 @@ export default function SelfDiagnosisResults() {
       <div className="sdr-button-area">
         <button
           className="sdr-consult-btn"
-          onClick={() => navigate("/consult")}
+          onClick={() => navigate("/reservation/consult")}
         >
           1:1 상담하기
         </button>
@@ -373,27 +341,6 @@ export default function SelfDiagnosisResults() {
         >
           뒤로가기
         </button>
-
-        {/* <button
-          className="sdr-delete-btn"
-          onClick={() => {
-            if (window.confirm("현재 진단 결과를 삭제하시겠습니까?")) {
-              try {
-                localStorage.removeItem("latestDiagnosisResult");
-                alert("진단 결과가 삭제되었습니다. 새로운 진단을 시작합니다.");
-                setTimeout(() => {
-                  navigate("/ai/diagnose");
-                  setTimeout(() => setItems([]), 0);
-                }, 100);
-              } catch (e) {
-                console.warn("localStorage 접근 실패:", e);
-                alert("삭제 중 오류가 발생했습니다.");
-              }
-            }
-          }}
-        >
-          결과 삭제
-        </button> */}
       </div>
     </div>
   );

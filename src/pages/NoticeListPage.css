@@ -185,3 +185,25 @@
     max-width: 120px;
   }
 } */
+/* ✅ 페이지네이션 버튼 공통 스타일 */
+.pagination-btn {
+  background: #357ae8; /* 💙 기존 상담 버튼 색상 */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.pagination-btn:hover {
+  background: #000000; /* Hover 시 검정으로 통일 */
+}
+
+.pagination-btn:disabled {
+  background: #b0c4de; /* 비활성화 시 연한 회색-푸른톤 */
+  cursor: not-allowed;
+  opacity: 0.7;
+}

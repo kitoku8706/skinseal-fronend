@@ -44,6 +44,7 @@ body {
   font-weight: 700;
   color: #1a1a1a;
   margin-bottom: 10px;
+  text-align: center;
 }
 
 .section-desc {
@@ -244,7 +245,7 @@ body {
   grid-template-columns: repeat(3, 1fr); /* ✅ 1줄에 3명 */
   gap: 10px; /* 카드 간격 */
   justify-items: center; /* 가운데 정렬 */
-  margin-top: 25px;
+  margin-top: 65px;
 }
 
 .consultant-card {
@@ -319,11 +320,12 @@ body {
   flex-direction: column; /* 세로 배치 */
   gap: 8px;
   max-height: 420px;
-  overflow-y: auto;
+  overflow-y: hidden;
+  overflow-x: hidden; /* ✅ 가로 스크롤 완전 제거 */
   padding: 8px;
-  border: 1px solid #e3e7ed;
+  border: transparent;
   border-radius: 10px;
-  background-color: #fafcff;
+  background-color: transparent;
 }
 
 /* -------------------------------
@@ -332,7 +334,7 @@ body {
 .react-calendar {
   width: 100%;
   border: 1px solid #d9e1ec;
-  border-radius: 10px;
+  border-radius: 0px;
   font-size: 12px;
   background-color: #fff;
 }
@@ -375,10 +377,11 @@ body {
 -------------------------------- */
 .react-calendar__tile {
   height: 28px !important;
-  background-color: #fff !important;
+  background-color: #ffffff !important;
   color: #222;
   border: 1px solid #e5e8ee;
   transition: background-color 0.2s;
+  border-radius: 0 !important;
 }
 .react-calendar__tile:hover {
   background-color: #eef3ff !important;
@@ -440,4 +443,13 @@ body {
   background-color: #4b7bec !important;
   color: #fff !important;
   border: 1px solid #4b7bec !important;
+}
+
+.info-text {
+  margin-top: 65px; /* ✅ 텍스트 전체를 아래로 내림 */
+  margin-bottom: 20px;
+  text-align: center; /* ✅ (선택) 문장 중앙 정렬도 가능 */
+  line-height: 1.6; /* ✅ 줄간격 살짝 여유있게 */
+  color: #333;
+  font-size: 14px;
 }

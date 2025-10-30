@@ -122,6 +122,7 @@ function NoticeListPage() {
 
   const handlePrev = () => setPage((prev) => Math.max(prev - 1, 1));
   const handleNext = () => setPage((prev) => Math.min(prev + 1, totalPages));
+
   return (
     <div>
       <div className="notice-list-container">
@@ -286,7 +287,8 @@ function NoticeListPage() {
             )}
           </tbody>
         </table>
-        {/* 페이지네이션 중앙 + 글쓰기 버튼 오른쪽 */}
+
+        {/* ✅ 페이지네이션 중앙 + 글쓰기 버튼 오른쪽 */}
         <div
           style={{
             display: "flex",
@@ -296,31 +298,59 @@ function NoticeListPage() {
           }}
         >
           <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+            {/* ✅ 푸른색 스타일 버튼으로 변경 */}
             <button
               onClick={handlePrev}
               disabled={page === 1}
-              style={{ marginRight: 8 }}
+              style={{
+                marginRight: 8,
+                backgroundColor: "#357ae8",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                padding: "6px 14px",
+                fontSize: "14px",
+                fontWeight: "500",
+                cursor: "pointer",
+                transition: "background 0.2s ease",
+                opacity: page === 1 ? 0.6 : 1,
+              }}
             >
               이전
             </button>
+
             <span
               style={{
                 position: "relative",
-                top: "10px", // 👈 숫자를 아래로 2px 내림
+                top: "3px",
                 fontSize: "1rem",
                 color: "#333",
               }}
             >
               {page} / {totalPages}
             </span>
+
             <button
               onClick={handleNext}
               disabled={page === totalPages}
-              style={{ marginLeft: 8 }}
+              style={{
+                marginLeft: 8,
+                backgroundColor: "#357ae8",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                padding: "6px 14px",
+                fontSize: "14px",
+                fontWeight: "500",
+                cursor: "pointer",
+                transition: "background 0.2s ease",
+                opacity: page === totalPages ? 0.6 : 1,
+              }}
             >
               다음
             </button>
           </div>
+
           {role === "ADMIN" && (
             <button
               className="notice-write-btn"
