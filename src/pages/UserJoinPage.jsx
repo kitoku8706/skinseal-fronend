@@ -143,7 +143,7 @@ function UserJoinPage() {
                         onClick={handleIdCheck}
                         disabled={loginIdChecked} 
                     >
-                        아이디 중복확인
+                        중복확인
                     </button>
                 </div>
                 {loginIdCheckMsg && 
