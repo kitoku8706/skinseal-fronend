@@ -128,3 +128,25 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+/* ✅ 예약하기 버튼 (취소 후 표시용) */
+.reserve-btn {
+  background-color: #2563eb; /* ✅ 로그인 버튼처럼 파란색 */
+  color: #fff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.reserve-btn:hover {
+  background-color: #1e4fd0; /* 호버 시 진한 파란색 */
+  transform: translateY(-1px);
+}
+
+.reserve-btn:active {
+  transform: translateY(0);
+}
