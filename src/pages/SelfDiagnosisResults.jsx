@@ -85,14 +85,14 @@ export default function SelfDiagnosisResults() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [selectedModel, setSelectedModel] = useState("efficientnet");
+  const [selectedModel, setSelectedModel] = useState("skin_model");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const { uid, uname } = extractUser();
-    if (uid) setUserId(uid);
-    if (uname) setUsername(uname);
-  }, []);
+  useEffect(() => {
+    const { uid, uname } = extractUser();
+    if (uid) setUserId(uid);
+    if (uname) setUsername(uname);
+  }, []);
 
   const normalizeModelName = (s) =>
     String(s || "")
@@ -195,12 +195,12 @@ export default function SelfDiagnosisResults() {
       <h2 className="sdr-title">자가 진단 결과</h2>
 
       <div className="sdr-userinfo">
-        <span>
+        {/* <span>
           <strong>사용자:</strong> {username || userId || "알 수 없음"}
         </span>
         <span>
           <strong>모델:</strong> {selectedModel}
-        </span>
+        </span> */}
       </div>
 
       {/* 모델 선택 컨트롤 추가 (1번 깃허브 버전에는 없지만 기능상 필요하여 유지) */}
@@ -212,9 +212,9 @@ export default function SelfDiagnosisResults() {
           value={selectedModel}
           onChange={(e) => setSelectedModel(e.target.value)}
         >
-          <option value="efficientnet">efficientnet</option>
+          {/* <option value="efficientnet">efficientnet</option> */}
           <option value="skin_model">skin_model</option>
-          <option value="acne">acne</option>
+          {/* <option value="acne">acne</option> */}
         </select>
       </div>
 
@@ -374,7 +374,7 @@ export default function SelfDiagnosisResults() {
           뒤로가기
         </button>
 
-        <button
+        {/* <button
           className="sdr-delete-btn"
           onClick={() => {
             if (window.confirm("현재 진단 결과를 삭제하시겠습니까?")) {
@@ -393,7 +393,7 @@ export default function SelfDiagnosisResults() {
           }}
         >
           결과 삭제
-        </button>
+        </button> */}
       </div>
     </div>
   );
