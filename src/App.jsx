@@ -124,12 +124,23 @@ function App() {
               </DiagnosisLayout>
             }
           >
-            <Route path="/ai/diagnose" element={<AiDiagnosisPage />} />
+            <Route
+              path="/ai/diagnose"
+              element={
+                <ProtectedRoute>
+                  <AiDiagnosisPage />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/diagnosis" element={<DiagnosisPage />} />
             <Route path="/diagnosis/:id" element={<DiagnosisPage />} />
             <Route
               path="/diagnosis/result"
-              element={<SelfDiagnosisResults />}
+              element={
+                <ProtectedRoute>
+                  <SelfDiagnosisResults />
+                </ProtectedRoute>
+              }
             />
           </Route>
           <Route path="/" element={<HomePage />} />
