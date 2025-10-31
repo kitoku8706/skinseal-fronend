@@ -26,12 +26,12 @@ import ChatbotConsultPage from "./pages/ChatbotConsultPage";
 import NoticeDetailPage from "./pages/NoticeDetailPage";
 import MyInfoEdit from "./pages/MyInfoEdit.jsx";
 import UserWithdrawal from "./pages/UserWithdrawal.jsx";
-// import ReservationQuery from "./pages/ReservationQuery.jsx";
+// ReservationQuery route is currently unused
 import ProtectedRoute from "./components/ProtectedRoute";
 import DiagnosisLayout from "./pages/DiagnosisLayout.jsx";
 import ReservationConsultPage from "./pages/ReservationConsultPage";
 import SelfDiagnosisResults from "./pages/SelfDiagnosisResults";
-import TimeTable from "./pages/Timetable.jsx";
+import TimeTable from "./pages/TimeTable.jsx";
 import Check from "./pages/Check";
 
 const TestConnection = () => {

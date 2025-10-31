@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import RegisterModal from './components/RegisterModal.jsx';
+import RegisterModal from './RegisterModal.jsx';
 
 function LoginModal() {
   const [open, setOpen] = useState(false);
