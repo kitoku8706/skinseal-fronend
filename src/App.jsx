@@ -38,7 +38,7 @@ const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
 
   // Set your backend API URL here if you want to test connectivity
-  const API_URL = "http://localhost:8090/member/user";
+  const API_URL = "http://18.210.20.169:8090/member/user";
 
   const checkDatabaseConnection = async () => {
     setResponse("API 요청 중...");

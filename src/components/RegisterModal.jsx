@@ -15,7 +15,7 @@ function RegisterModal({ onClose }) {
   // 이메일 중복확인
   const handleEmailCheck = async () => {
     try {
-      const res = await fetch('http://localhost:8090/email-check', {
+      const res = await fetch('http://18.210.20.169:8090/email-check', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
@@ -44,7 +44,7 @@ function RegisterModal({ onClose }) {
       return;
     }
     try {
-      const res = await fetch('http://localhost:8090/register', {
+      const res = await fetch('http://18.210.20.169:8090/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

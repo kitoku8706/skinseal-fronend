@@ -14,7 +14,7 @@ function LoginModal({ onClose }) {
         }
 
         try {
-            const res = await fetch('http://localhost:8090/member/login', {
+            const res = await fetch('http://18.210.20.169:8090/member/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }) 

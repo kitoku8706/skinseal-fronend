@@ -71,7 +71,7 @@ export default function ReservationConsultPage() {
 
     const dateStr = selectedDate.toISOString().split("T")[0];
     axios
-      .get(`http://localhost:8090/api/appointments/date/${dateStr}`, {
+      .get(`http://18.210.20.169:8090/api/appointments/date/${dateStr}`, {
         params: { counselorId: consultant },
       })
       .then((res) => {
@@ -123,7 +123,7 @@ export default function ReservationConsultPage() {
       };
 
       const res = await axios.post(
-        "http://localhost:8090/api/appointments",
+        "http://18.210.20.169:8090/api/appointments",
         dto,
         {
           headers: {

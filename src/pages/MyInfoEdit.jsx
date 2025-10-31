@@ -35,7 +35,7 @@ function MyInfoEdit() {
     }
 
     axios
-      .get("http://localhost:8090/member/info", {
+      .get("http://18.210.20.169:8090/member/info", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -102,7 +102,7 @@ function MyInfoEdit() {
         ...(isPasswordChangeAttempt && { currentPassword, newPassword }),
       };
 
-      await axios.put("http://localhost:8090/member/update", updateData, {
+      await axios.put("http://18.210.20.169:8090/member/update", updateData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

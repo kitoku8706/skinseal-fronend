@@ -12,7 +12,7 @@ function NoticeListPage() {
 
   const ITEMS_PER_PAGE = 5;
   useEffect(() => {
-    fetch("/api/notice")
+    fetch("http://18.210.20.169:8090/api/notice")
       .then((res) => {
         if (!res.ok) {
           throw new Error("API 호출 실패");

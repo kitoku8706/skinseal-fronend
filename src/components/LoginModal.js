@@ -8,7 +8,7 @@ function LoginModal() {
 
   const handleLogin = async () => {
     try {
-      const res = await fetch('http://localhost:8090/login', {
+      const res = await fetch('http://18.210.20.169:8090/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })

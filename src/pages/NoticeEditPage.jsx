@@ -18,7 +18,7 @@ function NoticeEditPage() {
   useEffect(() => {
     if (id) {
       // 전체 공지사항 목록에서 해당 ID 찾기 (백엔드에 개별 조회 API가 없을 경우)
-      fetch("/api/notice")
+      fetch("http://18.210.20.169:8090/api/notice")
         .then((res) => {
           if (!res.ok) {
             throw new Error("네트워크 응답이 올바르지 않습니다");
@@ -99,7 +99,7 @@ function NoticeEditPage() {
         writer: notice.writer.trim() || "관리자",
       };
 
-      const response = await fetch(`/api/notice/${id}`, {
+      const response = await fetch(`http://18.210.20.169:8090/api/notice/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

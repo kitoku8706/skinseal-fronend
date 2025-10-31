@@ -6,7 +6,7 @@ const IntroPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_URL = "http://localhost:8090/api/intro";
+  const API_URL = "http://18.210.20.169:8090/api/intro";
 
   useEffect(() => {
     const fetchIntroData = async () => {
