@@ -177,7 +177,7 @@ function AiDiagnosisPage() {
     formData.append("userId", resolvedId);
 
     try {
-      const response = await fetch(`http://18.210.20.169:8090/api/diagnosis/${selectedModel}`, {
+      const response = await fetch(`/api/diagnosis/${selectedModel}`, {
         method: "POST",
         body: formData,
       });

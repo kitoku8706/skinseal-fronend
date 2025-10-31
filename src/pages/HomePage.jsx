@@ -9,6 +9,13 @@ import NoticeListPage from "./NoticeListPage";
 import "./HomePage.css";
 import RightSidebar from "../components/RightSidebar";
 import noticeBanner from "../assets/notice-banner.png";
+import AcneImage from "../assets/disease/1_Acne_image.jpg";
+import BenignTumorsImage from "../assets/disease/2_Benign_tumors.png";
+import BullousImage from "../assets/disease/3_Bullous.png";
+import EczemaImage from "../assets/disease/4_Eczema.png";
+import LupusImage from "../assets/disease/5_Lupus.jpg";
+import SkinCancerImage from "../assets/disease/6_SkinCancer.jpg";
+import VitiligoImage from "../assets/disease/7_Vitiligo.png";
 
 function HomePage() {
   const [result, setResult] = useState("");
@@ -92,34 +99,31 @@ function HomePage() {
           <h2>질환 진단 안내</h2>
           <div className="center-cards">
             <Link to="/diagnosis/1" className="center-card">
-              <img src="/src/assets/disease/1_Acne_image.jpg" alt="여드름" />
+              <img src={AcneImage} alt="여드름" />
               <span>여드름</span>
             </Link>
             <Link to="/diagnosis/2" className="center-card">
-              <img
-                src="/src/assets/disease/2_Benign_tumors.png"
-                alt="양성 종양"
-              />
+              <img src={BenignTumorsImage} alt="양성 종양" />
               <span>양성 종양</span>
             </Link>
             <Link to="/diagnosis/3" className="center-card">
-              <img src="/src/assets/disease/3_Bullous.png" alt="수포성 질환" />
+              <img src={BullousImage} alt="수포성 질환" />
               <span>수포성 질환</span>
             </Link>
             <Link to="/diagnosis/4" className="center-card">
-              <img src="/src/assets/disease/4_Eczema.png" alt="습진" />
+              <img src={EczemaImage} alt="습진" />
               <span>습진</span>
             </Link>
             <Link to="/diagnosis/5" className="center-card">
-              <img src="/src/assets/disease/5_Lupus.jpg" alt="루푸스" />
+              <img src={LupusImage} alt="루푸스" />
               <span>루푸스</span>
             </Link>
             <Link to="/diagnosis/6" className="center-card">
-              <img src="/src/assets/disease/6_SkinCancer.jpg" alt="피부암" />
+              <img src={SkinCancerImage} alt="피부암" />
               <span>피부암</span>
             </Link>
             <Link to="/diagnosis/7" className="center-card">
-              <img src="/src/assets/disease/7_Vitiligo.png" alt="백반증" />
+              <img src={VitiligoImage} alt="백반증" />
               <span>백반증</span>
             </Link>
           </div>
