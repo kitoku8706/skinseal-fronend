@@ -41,7 +41,7 @@ export default function ManagementTeam() {
               <h2>{member.name}</h2>
               <h4>{member.role}</h4>
               <p>{member.description}</p>
-              <a href="/reservation" className="btn-reserve">
+              <a href="/reservation/consult" className="btn-reserve">
                 상담 예약
               </a>
             </div>
