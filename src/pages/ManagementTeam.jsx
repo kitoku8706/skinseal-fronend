@@ -27,10 +27,9 @@ const teamMembers = [
 ];
 
 export default function ManagementTeam() {
-  const navigate = useNavigate();
-
   const handleReserveClick = () => {
-    navigate("/reservation/consult"); // ✅ 내부 라우팅 (Check.jsx와 동일)
+    // ✅ HashRouter 환경에서도 완벽히 작동
+    window.location.href = "http://98.87.24.151/#/reservation/consult";
   };
 
   return (
@@ -49,7 +48,7 @@ export default function ManagementTeam() {
               <h4>{member.role}</h4>
               <p>{member.description}</p>
 
-              {/* ✅ window.location 대신 navigate 사용 */}
+              {/* ✅ navigate 대신 절대경로로 직접 이동 (HashRouter 대응 버전) */}
               <button className="btn-reserve" onClick={handleReserveClick}>
                 상담 예약
               </button>
