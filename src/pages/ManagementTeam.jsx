@@ -26,6 +26,11 @@ const teamMembers = [
 ];
 
 export default function ManagementTeam() {
+  const handleReserveClick = () => {
+    // ✅ 지정된 외부 주소로 이동
+    window.location.href = "http://98.87.24.151/reservation/consult";
+  };
+
   return (
     <section className="management-team-container">
       <h1>상담사 소개</h1>
@@ -41,9 +46,11 @@ export default function ManagementTeam() {
               <h2>{member.name}</h2>
               <h4>{member.role}</h4>
               <p>{member.description}</p>
-              <a href="reservation/consult" className="btn-reserve">
+
+              {/* ✅ 버튼만 클릭 시 외부 링크로 이동 */}
+              <button className="btn-reserve" onClick={handleReserveClick}>
                 상담 예약
-              </a>
+              </button>
             </div>
           </div>
         ))}
