@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./ManagementTeam.css";
 
 const teamMembers = [
@@ -7,7 +8,7 @@ const teamMembers = [
     name: "김충만",
     role: "상담사",
     description: "상담 전문가로 고객 맞춤형 상담을 제공합니다.",
-    img: "/images/profile1.png", // ✅ public/images
+    img: "/images/profile1.png",
   },
   {
     id: 2,
@@ -26,9 +27,10 @@ const teamMembers = [
 ];
 
 export default function ManagementTeam() {
+  const navigate = useNavigate();
+
   const handleReserveClick = () => {
-    // ✅ 지정된 외부 주소로 이동
-    window.location.href = "http://98.87.24.151/reservation/consult";
+    navigate("/reservation/consult"); // ✅ React Router 내부 경로로 이동
   };
 
   return (
@@ -46,8 +48,6 @@ export default function ManagementTeam() {
               <h2>{member.name}</h2>
               <h4>{member.role}</h4>
               <p>{member.description}</p>
-
-              {/* ✅ 버튼만 클릭 시 외부 링크로 이동 */}
               <button className="btn-reserve" onClick={handleReserveClick}>
                 상담 예약
               </button>
