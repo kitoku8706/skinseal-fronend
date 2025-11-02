@@ -53,7 +53,7 @@ export default function TimeTable() {
         setLoading(true);
         const formattedDate = selectedMonday.toISOString().split("T")[0];
         const res = await axios.get(
-          "http://localhost:8090/api/timetable/week",
+          "http://18.210.20.169:8090/api/timetable/week",
           {
             params: { startDate: formattedDate },
             withCredentials: true,

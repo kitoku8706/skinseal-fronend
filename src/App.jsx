@@ -26,19 +26,19 @@ import ChatbotConsultPage from "./pages/ChatbotConsultPage";
 import NoticeDetailPage from "./pages/NoticeDetailPage";
 import MyInfoEdit from "./pages/MyInfoEdit.jsx";
 import UserWithdrawal from "./pages/UserWithdrawal.jsx";
-// import ReservationQuery from "./pages/ReservationQuery.jsx";
+// ReservationQuery route is currently unused
 import ProtectedRoute from "./components/ProtectedRoute";
 import DiagnosisLayout from "./pages/DiagnosisLayout.jsx";
 import ReservationConsultPage from "./pages/ReservationConsultPage";
 import SelfDiagnosisResults from "./pages/SelfDiagnosisResults";
-import TimeTable from "./pages/Timetable.jsx";
+import TimeTable from "./pages/TimeTable.jsx";
 import Check from "./pages/Check";
 
 const TestConnection = () => {
   const [response, setResponse] = useState("결과 대기 중...");
 
   // Set your backend API URL here if you want to test connectivity
-  const API_URL = "http://localhost:8090/member/user";
+  const API_URL = "http://18.210.20.169:8090/member/user";
 
   const checkDatabaseConnection = async () => {
     setResponse("API 요청 중...");

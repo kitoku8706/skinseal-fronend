@@ -35,38 +35,38 @@ export default defineConfig({
     ],
     proxy: {      // history 및 latest 엔드포인트는 Spring Boot로 전달 (정확 매칭)
       "/api/diagnosis/history": {
-        target: "http://localhost:8090",
+        target: "http://18.210.20.169:8090",
         changeOrigin: true,
       },
       "/api/diagnosis/latest": {
-        target: "http://localhost:8090",
+        target: "http://18.210.20.169:8090",
         changeOrigin: true,
       },
 
       // /api/diagnosis (prefix)로 들어오는 모든 요청은 Python AI 서버로 전달
       // 위의 history, latest 정규식이 먼저 매칭되므로 해당 요청들은 Spring으로 전달됩니다.
       "/api/diagnosis": {
-        target: "http://localhost:5000",
+        target: "http://3.224.61.135:5000",
         changeOrigin: true,
       },
 
       // 업로드된 이미지/정적 자원은 Spring에서 제공하므로 명시적으로 라우트
       "/uploads": {
-        target: "http://localhost:8090",
+        target: "http://18.210.20.169:8090",
         changeOrigin: true,
       },
 
       "/api/health": {
-        target: "http://localhost:5000",
+        target: "http://3.224.61.135:5000",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       },
       "/api": {
-        target: "http://localhost:8090",
+        target: "http://18.210.20.169:8090",
         changeOrigin: true,
       },
       "/management/api": {
-        target: "http://localhost:8090",
+        target: "http://18.210.20.169:8090",
         changeOrigin: true,
       }
     }

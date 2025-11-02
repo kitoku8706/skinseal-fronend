@@ -45,7 +45,7 @@ function UserJoinPage() {
         }
         
         try {
-            const res = await axios.post('http://localhost:8090/member/id-check', { loginId }); 
+            const res = await axios.post('http://18.210.20.169:8090/member/id-check', { loginId }); 
             
             if (res.data.exists) { 
                 setLoginIdCheckMsg('이미 사용 중인 아이디입니다.');
@@ -115,7 +115,7 @@ function UserJoinPage() {
                 phoneNumber: phoneNumber.replace(/-/g, '') 
             };
             
-            const res = await axios.post('http://localhost:8090/member/signup', reqData);
+            const res = await axios.post('http://18.210.20.169:8090/member/signup', reqData);
             
             alert('회원가입 성공!'); 
             navigate('/login');

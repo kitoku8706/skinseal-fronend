@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./ManagementTeam.css";
 
 const teamMembers = [
@@ -7,7 +8,7 @@ const teamMembers = [
     name: "김충만",
     role: "상담사",
     description: "상담 전문가로 고객 맞춤형 상담을 제공합니다.",
-    img: "/images/profile1.png", // ✅ public/images
+    img: "/images/profile1.png",
   },
   {
     id: 2,
@@ -26,6 +27,11 @@ const teamMembers = [
 ];
 
 export default function ManagementTeam() {
+  const handleReserveClick = () => {
+    // ✅ HashRouter 환경에서도 완벽히 작동
+    window.location.href = "http://98.87.24.151/#/reservation/consult";
+  };
+
   return (
     <section className="management-team-container">
       <h1>상담사 소개</h1>
@@ -41,9 +47,11 @@ export default function ManagementTeam() {
               <h2>{member.name}</h2>
               <h4>{member.role}</h4>
               <p>{member.description}</p>
-              <a href="/reservation/consult" className="btn-reserve">
+
+              {/* ✅ navigate 대신 절대경로로 직접 이동 (HashRouter 대응 버전) */}
+              <button className="btn-reserve" onClick={handleReserveClick}>
                 상담 예약
-              </a>
+              </button>
             </div>
           </div>
         ))}

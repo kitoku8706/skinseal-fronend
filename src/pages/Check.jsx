@@ -24,7 +24,7 @@ export default function Check() {
           return;
         }
 
-        const res = await axios.get("http://localhost:8090/api/check/latest", {
+        const res = await axios.get("http://18.210.20.169:8090/api/check/latest", {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         });
@@ -47,7 +47,7 @@ export default function Check() {
     try {
       const token = localStorage.getItem("accessToken");
       await axios.put(
-        `http://localhost:8090/api/check/${reservation.appointmentId}/cancel`,
+        `http://18.210.20.169:8090/api/check/${reservation.appointmentId}/cancel`,
         {},
         { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
       );

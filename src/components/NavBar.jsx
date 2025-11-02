@@ -55,7 +55,7 @@ function NavBar() {
 
     // 기존 질병 목록 API 호출 로직
     axios
-      .get("/api/disease/list")
+      .get("http://18.210.20.169:8090/api/disease/list")
       .then((res) => setDiseaseList(res.data))
       .catch(() =>
         setDiseaseList([

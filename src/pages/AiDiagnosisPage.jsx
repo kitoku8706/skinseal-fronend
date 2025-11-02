@@ -131,7 +131,7 @@ function AiDiagnosisPage() {
     if (!rawUsername) return null;
     try {
       const res = await fetch(
-        `/member/user?username=${encodeURIComponent(rawUsername)}`
+        `http://18.210.20.169:8090/member/user?username=${encodeURIComponent(rawUsername)}`
       );
       if (!res.ok) return null;
       const data = await res.json();

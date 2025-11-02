@@ -35,7 +35,7 @@ function DiagnosisPage() {
 
     setLoading(true);
     axios
-      .get(`/api/disease/${selected}`)
+      .get(`http://18.210.20.169:8090/api/disease/${selected}`)
       .then((res) => setDiseaseInfo(res.data))
       .catch((error) => {
         console.error("질병 정보 로드 실패:", error);

@@ -25,7 +25,7 @@ function NoticeForm() {
   // 수정 폼일 때 기존 데이터 불러오기
   useEffect(() => {
     if (isEdit) {
-      fetch(`http://localhost:8090/api/notice/${id}`)
+      fetch(`http://18.210.20.169:8090/api/notice/${id}`)
         .then(res => res.json())
         .then(data => {
           setTitle(data.title || '');
@@ -47,8 +47,8 @@ function NoticeForm() {
     e.preventDefault();
     try {
       const url = isEdit
-        ? `http://localhost:8090/api/notice/${id}`
-        : 'http://localhost:8090/api/notice';
+        ? `http://18.210.20.169:8090/api/notice/${id}`
+        : 'http://18.210.20.169:8090/api/notice';
       const method = isEdit ? 'PUT' : 'POST';
 
       const res = await fetch(url, {
@@ -193,7 +193,7 @@ function NoticeList() {
   const [notices, setNotices] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8090/api/notice')
+    fetch('http://18.210.20.169:8090/api/notice')
       .then(res => res.json())
       .then(data => setNotices(data))
       .catch(() => setNotices([]));

@@ -13,7 +13,7 @@ function NoticeDetailPage() {
     if (didFetch.current) return;
     didFetch.current = true;
 
-    fetch(`/api/notice/${id}`, { method: 'get' })
+    fetch(`http://18.210.20.169:8090/api/notice/${id}`, { method: 'get' })
       .then(res => res.json())
       .then(data => setNotice(data))
       .catch(() => {

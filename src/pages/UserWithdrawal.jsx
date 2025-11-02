@@ -37,7 +37,7 @@ function UserWithdrawal() {
         }
 
         try {
-            await axios.delete('http://localhost:8090/member/delete', {
+            await axios.delete('http://18.210.20.169:8090/member/delete', {
                 headers: {
                     Authorization: `Bearer ${token}`, 
                     'Content-Type': 'application/json'

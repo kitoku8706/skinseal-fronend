@@ -14,7 +14,7 @@ function DiagnosisLayout({ children }) {
 
   useEffect(() => {
     axios
-      .get("/api/disease/list")
+      .get("http://18.210.20.169:8090/api/disease/list")
       .then((res) => {
         setDiseaseList(res.data);
       })
