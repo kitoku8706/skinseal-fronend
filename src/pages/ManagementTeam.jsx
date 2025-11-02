@@ -30,7 +30,7 @@ export default function ManagementTeam() {
   const navigate = useNavigate();
 
   const handleReserveClick = () => {
-    navigate("/reservation/consult"); // ✅ React Router 내부 경로로 이동
+    navigate("/reservation/consult"); // ✅ 내부 라우팅 (Check.jsx와 동일)
   };
 
   return (
@@ -48,6 +48,8 @@ export default function ManagementTeam() {
               <h2>{member.name}</h2>
               <h4>{member.role}</h4>
               <p>{member.description}</p>
+
+              {/* ✅ window.location 대신 navigate 사용 */}
               <button className="btn-reserve" onClick={handleReserveClick}>
                 상담 예약
               </button>
